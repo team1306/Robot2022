@@ -15,6 +15,7 @@ public class Climber extends SubsystemBase {
 
     /**
      * Moves the robot climber up and down
+     * 
      * @param analogInput the velocity at which the robot will move
      */
     public void extension(double analogInput) {

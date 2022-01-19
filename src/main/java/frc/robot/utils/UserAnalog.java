@@ -10,21 +10,12 @@ public interface UserAnalog {
      * @param falseVal - the output when teh digitalinput is false
      * @return the constructed Analog
      */
-    public static UserAnalog fromDigital(UserDigital digital, double trueVal, double falseVal) {
-        return () -> {
-            if (digital.get()) {
-                return trueVal;
-            } else {
-                return falseVal;
-            }
-        };
-    }
-
-    /**
-     * Binds a double to the expected [-1,1] range
-     */
-    public static double clamp(double val) {
-        return Math.max(-1, Math.min(1, val));
+    public static UserAnalog fromDigital(
+        UserDigital digital,
+        double trueVal,
+        double falseVal
+    ) {
+        return () -> digital.get() ? trueVal : falseVal;
     }
 
     /**

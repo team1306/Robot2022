@@ -34,14 +34,12 @@ public class Controller {
     }
 
     /**
-     * Constructs a UserAnalog that precisely mirrors the axis, with no
-     * tranformation.
+     * Constructs a UserAnalog that precisely mirrors the axis, with no tranformation.
      * 
-     * @param player - one of either PRIMARY or SECONDARY. This value is validated,
-     *               and an invalid parameter will return a UserAnalog that always
-     *               gets 0
-     * @param axis   - The axis on the Xbox controller to grab values from. This
-     *               parameter is not validated, so make sure you have a valid axis!
+     * @param player - one of either PRIMARY or SECONDARY. This value is validated, and an invalid
+     *               parameter will return a UserAnalog that always gets 0
+     * @param axis   - The axis on the Xbox controller to grab values from. This parameter is not
+     *               validated, so make sure you have a valid axis!
      * @return the UserAnalog instance
      */
     public static UserAnalog simpleAxis(int player, int axis) {
@@ -52,29 +50,25 @@ public class Controller {
             joystick = secondaryJoystick;
         } else {
             System.err.println("ERROR: Invalid Player Controller requested");
-            return () -> {
-                return 0;
-            };
+            return () -> 0;
         }
         return () -> {
-            //deadbanding
+            // deadbanding
             double raw = joystick.getRawAxis(axis);
             double sign = Math.signum(raw);
             final double deadband = 0.1;
-            final double multiplier = 1/(1-deadband);
-            return sign * Math.max(0,Math.abs(raw)-deadband)*multiplier;
+            final double multiplier = 1 / (1 - deadband);
+            return sign * Math.max(0, Math.abs(raw) - deadband) * multiplier;
         };
     }
 
     /**
-     * Constructs a UserDigital that precisely mirrors the button value, with no
-     * tranformation.
+     * Constructs a UserDigital that precisely mirrors the button value, with no tranformation.
      * 
-     * @param player - one of either PRIMARY or SECONDARY. This value is validated,
-     *               and an invalid parameter will return a UserDigital that always
-     *               gets false.
-     * @param button   - The button on the Xbox controller to grab values from. This
-     *               parameter is not validated, so make sure you have a valid button!
+     * @param player - one of either PRIMARY or SECONDARY. This value is validated, and an invalid
+     *               parameter will return a UserDigital that always gets false.
+     * @param button - The button on the Xbox controller to grab values from. This parameter is not
+     *               validated, so make sure you have a valid button!
      * @return the UserDigital instance
      */
     public static UserDigital simpleButton(int player, int button) {
@@ -85,13 +79,9 @@ public class Controller {
             joystick = secondaryJoystick;
         } else {
             System.err.println("ERROR: Invalid Player Controller requested");
-            return () -> {
-                return false;
-            };
+            return () -> false;
         }
-        return () -> {
-            return joystick.getRawButton(button);
-        };
+        return () -> joystick.getRawButton(button);
     }
 
     /**
@@ -99,15 +89,20 @@ public class Controller {
      * @param player
      * @param button
      * @param callback
-     * @return the bound button in case other operations need to be done and to protect against trash collection
+     * @return the bound button in case other operations need to be done and to protect against
+     *         trash collection
      */
-    public static JoystickButton bindCallback(int player, int button, Runnable callback){
+    public static JoystickButton bindCallback(
+        int player,
+        int button,
+        Runnable callback
+    ) {
         JoystickButton b = getJoystickButton(player, button);
         b.whenPressed(callback);
         return b;
     }
 
-    public static JoystickButton getJoystickButton(int player, int button){
+    public static JoystickButton getJoystickButton(int player, int button) {
         Joystick joystick;
         if (player == PRIMARY) {
             joystick = primaryJoystick;
@@ -115,9 +110,8 @@ public class Controller {
             joystick = secondaryJoystick;
         } else {
             System.err.println("ERROR: Invalid Player Controller requested");
-            joystick=secondaryJoystick;
+            joystick = secondaryJoystick;
         }
-        JoystickButton b = new JoystickButton(joystick, button);
-        return b;
+        return new JoystickButton(joystick, button);
     }
 }
