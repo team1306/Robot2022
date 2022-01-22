@@ -8,8 +8,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
-
 /**
  * Used by DriveTrain command to move robot Calculates output for each side of the drivetrain
  */
@@ -59,7 +57,7 @@ public class DriveTrain extends SubsystemBase {
 
         /*
          * perhaps make into single if-else statement later, like: if (Math.sign(speed) ==
-         * Math.sign(rotation)) <case 1> else <case2>
+         * Math.signum(rotation)) <case 1> else <case2>
          */
         if (speed >= 0) {
             if (rotation >= 0) {

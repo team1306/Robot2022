@@ -3,6 +3,10 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+
+/**
+ * contains controller mappings and related methods
+ */
 public class Controller {
     // Controller Map:
     public static final int AXIS_RTRIGGER = 3;
@@ -28,6 +32,9 @@ public class Controller {
     public static Joystick primaryJoystick = null;
     public static Joystick secondaryJoystick = null;
 
+    /**
+     * intializes primary and secondary joysticks
+     */
     public static void init() {
         primaryJoystick = new Joystick(PRIMARY);
         secondaryJoystick = new Joystick(SECONDARY);
@@ -85,10 +92,11 @@ public class Controller {
     }
 
     /**
+     * binds callback to given button and retunr it
      * 
-     * @param player
-     * @param button
-     * @param callback
+     * @param player   player id
+     * @param button   button id
+     * @param callback callback to bind to specified button
      * @return the bound button in case other operations need to be done and to protect against
      *         trash collection
      */
@@ -102,6 +110,13 @@ public class Controller {
         return b;
     }
 
+    /**
+     * get joystick button from player and button ids, secondary if invalid player is given
+     * 
+     * @param player player id (secondary by default)
+     * @param button button id
+     * @return the corresponding joystick button
+     */
     public static JoystickButton getJoystickButton(int player, int button) {
         Joystick joystick;
         if (player == PRIMARY) {

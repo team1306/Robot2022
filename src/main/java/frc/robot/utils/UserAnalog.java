@@ -1,5 +1,8 @@
 package frc.robot.utils;
 
+/**
+ * interface for analong inputs to the robot
+ */
 public interface UserAnalog {
 
     /**

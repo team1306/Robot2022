@@ -11,7 +11,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants;
+// import frc.robot.Constants;
 // import frc.robot.subsystems.SwerveDrive;
 
 /**
@@ -22,7 +22,7 @@ import frc.robot.Constants;
  */
 public class Robot extends TimedRobot {
     private Command autoCommand;
-    private static Command testCommand = null;
+    // private static Command testCommand = null;
 
     private RobotContainer m_robotContainer;
 

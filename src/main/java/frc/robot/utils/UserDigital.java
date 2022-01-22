@@ -1,5 +1,8 @@
 package frc.robot.utils;
 
+/**
+ * interface for digital (boolean) inputs to the robot
+ */
 public interface UserDigital {
 
     /**

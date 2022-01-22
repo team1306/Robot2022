@@ -13,6 +13,13 @@ public class DriveCommand extends CommandBase {
     private UserAnalog rotation;
     private DriveTrain driveTrain;
 
+    /**
+     * initalizes drive command from given drivetrain, speed, and rotation
+     * 
+     * @param driveTrain drivetrain to bind
+     * @param speed      initial speed
+     * @param rotation   initial rotation
+     */
     public DriveCommand(
         DriveTrain driveTrain,
         UserAnalog speed,
@@ -25,7 +32,9 @@ public class DriveCommand extends CommandBase {
         this.addRequirements(driveTrain);
     }
 
-    // Called repeatedly when this Command is scheduled to run
+    /**
+     * called repeatedly when command is schedules to run
+     */
     @Override
     public void execute() {
         driveTrain.arcadeDrive(speed.get(), rotation.get());

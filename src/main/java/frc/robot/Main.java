@@ -22,6 +22,8 @@ public final class Main {
 	 *
 	 * <p>
 	 * If you change your main robot class, change the parameter type.
+	 * 
+	 * @param args arguments
 	 */
 	public static void main(String... args) {
 		System.out.println("Robot is Running");
