@@ -22,23 +22,22 @@ public class DriveTrain extends SubsystemBase {
      * Initializing drive train and motor settings
      */
     public DriveTrain() {
-        leftLeader = new TalonFX(DRIVE_LEFT_LEADER_ID);
-        rightLeader = new TalonFX(DRIVE_RIGHT_LEADER_ID);
-        leftFollower = new TalonFX(DRIVE_LEFT_FOLLOWER_ID);
-        rightFollower = new TalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
-        leftLeader.configFactoryDefault();
-        rightLeader.configFactoryDefault();
-        leftFollower.configFactoryDefault();
-        rightFollower.configFactoryDefault();
+        leftLeader = initMotor(DRIVE_LEFT_LEADER_ID);
+        rightLeader = initMotor(DRIVE_RIGHT_LEADER_ID);
+        leftFollower = initMotor(DRIVE_LEFT_FOLLOWER_ID);
+        rightFollower = initMotor(DRIVE_RIGHT_FOLLOWER_ID);
 
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
+    }
 
-        leftLeader.setNeutralMode(NeutralMode.Brake);
-        rightLeader.setNeutralMode(NeutralMode.Brake);
-        leftFollower.setNeutralMode(NeutralMode.Brake);
-        rightFollower.setNeutralMode(NeutralMode.Brake);
+    // helper function to initialize motors w/ basic config given an id
+    private TalonFX initMotor(int motorID) {
+        var self = new TalonFX(motorID);
+        self.configFactoryDefault();
+        self.setNeutralMode(NeutralMode.Brake);
+        return self;
     }
 
     /**

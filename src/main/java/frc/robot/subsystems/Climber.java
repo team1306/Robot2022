@@ -28,7 +28,7 @@ public class Climber extends SubsystemBase {
      * 
      * @param analogInput the velocity at which the robot will move
      */
-    public void extension(double analogInput) {
+    public void extend(double analogInput) {
         motor.set(ControlMode.PercentOutput, analogInput);
     }
 

@@ -27,6 +27,6 @@ public class ClimberCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        climber.extension(speed.get());
+        climber.extend(speed.get());
     }
 }

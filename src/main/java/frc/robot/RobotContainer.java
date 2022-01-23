@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.utils.Controller;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,7 +32,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         autoCommand = null;
-
+        configureButtonBindings();
     }
 
     /**
@@ -41,7 +42,7 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
+        Controller.init();
     }
 
     /**
