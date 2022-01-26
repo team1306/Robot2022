@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.*;
+import static frc.robot.utils.MotorUtils.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,9 +18,7 @@ public class Climber extends SubsystemBase {
      * Initialize climber and configure motors
      */
     public Climber() {
-        motor = new TalonFX(CLIMBER_MOTOR_ID);
-        motor.configFactoryDefault();
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor = initMotor(CLIMBER_MOTOR_ID);
     }
 
     /**

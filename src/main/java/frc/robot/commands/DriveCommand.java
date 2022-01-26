@@ -10,26 +10,30 @@ import frc.robot.subsystems.DriveTrain;
 public class DriveCommand extends CommandBase {
 
     private UserAnalog speed;
-    private UserAnalog rotation;
     private DriveTrain driveTrain;
+    private UserAnalog leftRotation;
+    private UserAnalog rightRotation;
 
     /**
      * initalizes drive command from given drivetrain, speed, and rotation
      * 
-     * @param driveTrain drivetrain to bind
-     * @param speed      initial speed
-     * @param rotation   initial rotation
+     * @param driveTrain    drivetrain to bind
+     * @param speed         initial speed
+     * @param leftRotation  initial left rotation
+     * @param rightRotation initial right rotation
      */
     public DriveCommand(
         DriveTrain driveTrain,
         UserAnalog speed,
-        UserAnalog rotation
+        UserAnalog leftRotation,
+        UserAnalog rightRotation
     ) {
         this.speed = speed;
-        this.rotation = rotation;
         this.driveTrain = driveTrain;
         this.driveTrain.setDefaultCommand(this);
         this.addRequirements(driveTrain);
+        this.leftRotation = leftRotation;
+        this.rightRotation = rightRotation;
     }
 
     /**
@@ -37,6 +41,8 @@ public class DriveCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        driveTrain.arcadeDrive(speed.get(), rotation.get());
+        double spd = speed.get();
+        double rotation = rightRotation.get() - leftRotation.get();
+        driveTrain.arcadeDrive(spd * spd, rotation * rotation);
     }
 }
