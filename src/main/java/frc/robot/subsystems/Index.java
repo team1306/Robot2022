@@ -4,12 +4,12 @@ import static frc.robot.Constants.*;
 import static frc.robot.utils.MotorUtils.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Index extends SubsystemBase {
-    private final TalonFX frontMotor, backMotor;
+    private final TalonSRX frontMotor, backMotor;
 
     // falcon 500 not talon
 

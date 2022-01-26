@@ -26,7 +26,6 @@ public class RobotContainer {
 
     // The robot's inputs that it recieves from the controller are defined here
 
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
