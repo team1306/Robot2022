@@ -10,7 +10,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.IndexCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.Index;
+import frc.robot.subsystems.Shooter;
 import frc.robot.utils.Controller;
+import frc.robot.utils.UserAnalog;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,9 +26,10 @@ import frc.robot.utils.Controller;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final Command autoCommand;
+    private Command autoCommand;
 
     private final boolean runAuto = false;
+    private UserAnalog shooterInput, indexInput;
 
     // The robot's inputs that it recieves from the controller are defined here
 
@@ -31,7 +38,11 @@ public class RobotContainer {
      */
     public RobotContainer() {
         autoCommand = null;
+        Controller.init();
         configureButtonBindings();
+
+        new ShooterCommand(shooterInput, new Shooter());
+        new IndexCommand(indexInput, new Index());
     }
 
     /**
@@ -41,7 +52,14 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        Controller.init();
+        shooterInput = Controller.simpleAxis(
+            Controller.PRIMARY,
+            Controller.AXIS_LY
+        );
+        indexInput = Controller.simpleAxis(
+            Controller.PRIMARY,
+            Controller.AXIS_RY
+        );
     }
 
     /**
