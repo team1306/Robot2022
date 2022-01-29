@@ -25,7 +25,7 @@ public class SomeTest {
     @Test
     public void someTest() {
         System.out.println("test 1");
-        shooter.moveMotor(1);
+        // shooter.moveMainMotor(1);
     }
 
     @Test

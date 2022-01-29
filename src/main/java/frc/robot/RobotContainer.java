@@ -16,6 +16,7 @@ import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.Controller;
 import frc.robot.utils.UserAnalog;
+import frc.robot.utils.UserDigital;
 
 
 /**
@@ -29,7 +30,8 @@ public class RobotContainer {
     private Command autoCommand;
 
     private final boolean runAuto = false;
-    private UserAnalog shooterInput, indexInput;
+    private UserDigital shooterMainInput, shooterSubInput;
+    private UserAnalog indexInput;
 
     // The robot's inputs that it recieves from the controller are defined here
 
@@ -41,8 +43,8 @@ public class RobotContainer {
         Controller.init();
         configureButtonBindings();
 
-        new ShooterCommand(shooterInput, new Shooter());
-        new IndexCommand(indexInput, new Index());
+        new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
+        // new IndexCommand(speedInput, index)
     }
 
     /**
@@ -52,9 +54,13 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        shooterInput = Controller.simpleAxis(
+        shooterMainInput = Controller.simpleButton(
             Controller.PRIMARY,
-            Controller.AXIS_LY
+            Controller.BUTTON_LBUMPER
+        );
+        shooterSubInput = Controller.simpleButton(
+            Controller.PRIMARY,
+            Controller.BUTTON_A
         );
         indexInput = Controller.simpleAxis(
             Controller.PRIMARY,

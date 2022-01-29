@@ -2,13 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
-import frc.robot.utils.UserAnalog;
+import frc.robot.utils.UserDigital;
 
 /**
  * template command for shooter subsystem
  */
 public class ShooterCommand extends CommandBase {
-    private final UserAnalog speedInput;
+    private final UserDigital mainShooterInput;
+    private final UserDigital subShooterInput;
     private final Shooter shooter;
 
     /**
@@ -17,9 +18,16 @@ public class ShooterCommand extends CommandBase {
      * @param shooter    shooter to bind
      * @param speedInput input for shooter speed
      */
-    public ShooterCommand(UserAnalog speedInput, Shooter shooter) {
-        this.speedInput = speedInput;
+    public ShooterCommand(
+        UserDigital mainShooterInput,
+        UserDigital subShooterInput,
+        Shooter shooter
+    ) {
+        this.mainShooterInput = mainShooterInput;
+        this.subShooterInput = subShooterInput;
         this.shooter = shooter;
+        this.addRequirements(shooter);
+        shooter.setDefaultCommand(this);
     }
 
     /**
@@ -27,7 +35,7 @@ public class ShooterCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        shooter.moveMotor(speedInput.get());
+        shooter.moveMotor(mainShooterInput.get(), subShooterInput.get());
     }
 
 }

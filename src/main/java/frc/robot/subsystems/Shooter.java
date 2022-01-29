@@ -6,13 +6,15 @@ import static frc.robot.utils.MotorUtils.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.UserDigital;
 
 /**
  * Used to shoot cargos with the other functionality
  */
 public class Shooter extends SubsystemBase {
-    private final TalonSRX upperMotor, lowerMotor;
+    private final TalonSRX upperMotor, lowerMotor, midMotor;
 
     // falcon 500 not talon
 
@@ -21,6 +23,7 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
         upperMotor = initMotor(SHOOTER_UPPER_MOTOR_ID);
+        midMotor = initMotor(SHOOTER_MID_MOTOR_ID);
         lowerMotor = initMotor(SHOOTER_LOWER_MOTOR_ID);
     }
 
@@ -29,9 +32,13 @@ public class Shooter extends SubsystemBase {
      * 
      * @param speed speed of the motor
      */
-    public void moveMotor(double speed) {
-        lowerMotor.set(ControlMode.PercentOutput, speed);
-        upperMotor.set(ControlMode.PercentOutput, -speed);
+    public void moveMotor(boolean isMain, boolean isSub) {
+        int mainSpeed = isMain ? 1 : 0;
+        int subSpeed = isSub ? 1 : 0;
+        lowerMotor.set(ControlMode.PercentOutput, -mainSpeed);
+        upperMotor.set(ControlMode.PercentOutput, mainSpeed);
+        midMotor.set(ControlMode.PercentOutput, -subSpeed);
+        SmartDashboard.putNumber("Main Shooter Speed", mainSpeed);
+        SmartDashboard.putNumber("Sub Shooter Speed", -subSpeed);
     }
-
 }
