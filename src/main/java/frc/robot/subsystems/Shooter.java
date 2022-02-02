@@ -14,7 +14,8 @@ import frc.robot.utils.UserDigital;
  * Used to shoot cargos with the other functionality
  */
 public class Shooter extends SubsystemBase {
-    private final TalonSRX upperMotor, lowerMotor, midMotor;
+
+    private final TalonSRX backMotor, frontMotor, index;
 
     // falcon 500 not talon
 
@@ -22,23 +23,32 @@ public class Shooter extends SubsystemBase {
      * Initialize Shooter and configure motors
      */
     public Shooter() {
-        upperMotor = initMotor(SHOOTER_UPPER_MOTOR_ID);
-        midMotor = initMotor(SHOOTER_MID_MOTOR_ID);
-        lowerMotor = initMotor(SHOOTER_LOWER_MOTOR_ID);
+        backMotor = initMotor(SHOOTER_UPPER_MOTOR_ID);
+        index = initMotor(SHOOTER_MID_MOTOR_ID);
+        frontMotor = initMotor(SHOOTER_LOWER_MOTOR_ID);
     }
 
     /**
-     * Control the motor with the given speed
      * 
-     * @param speed speed of the motor
+     * @param isShooting
+     * @param isIntaking
      */
-    public void moveMotor(boolean isMain, boolean isSub) {
-        int mainSpeed = isMain ? 1 : 0;
-        int subSpeed = isSub ? 1 : 0;
-        lowerMotor.set(ControlMode.PercentOutput, -mainSpeed);
-        upperMotor.set(ControlMode.PercentOutput, mainSpeed);
-        midMotor.set(ControlMode.PercentOutput, -subSpeed);
-        SmartDashboard.putNumber("Main Shooter Speed", mainSpeed);
-        SmartDashboard.putNumber("Sub Shooter Speed", -subSpeed);
+    public void moveMotor(boolean isShooting, boolean isIntaking) {
+        if (isShooting) {
+            frontMotor.set(ControlMode.PercentOutput, -0.8);
+            backMotor.set(ControlMode.PercentOutput, 0.8);
+        } else {
+            frontMotor.set(ControlMode.PercentOutput, 0);
+            backMotor.set(ControlMode.PercentOutput, 0);
+        }
+
+        if (isIntaking) {
+            index.set(ControlMode.PercentOutput, -0.8);
+        } else {
+            index.set(ControlMode.PercentOutput, 0);
+        }
+
+        SmartDashboard.putNumber("Main Shooter Speed", 0);
+        SmartDashboard.putNumber("Sub Shooter Speed", 0);
     }
 }
