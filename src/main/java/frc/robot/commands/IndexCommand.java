@@ -21,6 +21,7 @@ public class IndexCommand extends CommandBase {
         this.speedInput = speedInput;
         this.index = index;
         this.addRequirements(index);
+        index.setDefaultCommand(this);
     }
 
     /**

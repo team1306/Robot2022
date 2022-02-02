@@ -26,7 +26,7 @@ public class SomeTest {
     @Test
     public void someTest() {
         System.out.println("joe");
-        shooter.moveMotor(1);
+        shooter.moveMotor(true);
         // assertEquals("idk", 1, simMotor.getSpeed(), 1e-5);
     }
 

@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Index extends SubsystemBase {
     private final TalonFX frontMotor, backMotor;
 
-    // falcon 500 not talon
-
     /**
      * Initialize Index and configure motors
      */

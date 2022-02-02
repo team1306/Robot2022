@@ -22,7 +22,7 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Moves the robot climber up and down
+     * Moves the robot climber up and down TODO: does there need to be limit for max extension
      * 
      * @param analogInput the velocity at which the robot will move
      */
