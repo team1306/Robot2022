@@ -8,14 +8,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.UserDigital;
 
 /**
  * Used to shoot cargos with the other functionality
  */
 public class Shooter extends SubsystemBase {
 
-    private final TalonSRX backMotor, frontMotor, index;
+    private final TalonSRX backMotor, frontMotor, kicker;
 
     // falcon 500 not talon
 
@@ -24,7 +23,7 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
         backMotor = initMotor(SHOOTER_UPPER_MOTOR_ID);
-        index = initMotor(SHOOTER_MID_MOTOR_ID);
+        kicker = initMotor(SHOOTER_MID_MOTOR_ID);
         frontMotor = initMotor(SHOOTER_LOWER_MOTOR_ID);
     }
 
@@ -43,9 +42,9 @@ public class Shooter extends SubsystemBase {
         }
 
         if (isIntaking) {
-            index.set(ControlMode.PercentOutput, -0.8);
+            kicker.set(ControlMode.PercentOutput, -0.8);
         } else {
-            index.set(ControlMode.PercentOutput, 0);
+            kicker.set(ControlMode.PercentOutput, 0);
         }
 
         SmartDashboard.putNumber("Main Shooter Speed", 0);
