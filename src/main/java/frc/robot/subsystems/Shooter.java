@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Shooter extends SubsystemBase {
 
-    private final TalonSRX backMotor, frontMotor, kicker;
+    private final TalonSRX frontMotor, backMotor, kicker;
 
     // falcon 500 not talon
 
@@ -22,9 +22,9 @@ public class Shooter extends SubsystemBase {
      * Initialize Shooter and configure motors
      */
     public Shooter() {
-        backMotor = initMotor(SHOOTER_UPPER_MOTOR_ID);
+        frontMotor = initMotor(SHOOTER_UPPER_MOTOR_ID);
         kicker = initMotor(SHOOTER_MID_MOTOR_ID);
-        frontMotor = initMotor(SHOOTER_LOWER_MOTOR_ID);
+        backMotor = initMotor(SHOOTER_LOWER_MOTOR_ID);
     }
 
     /**
@@ -33,16 +33,17 @@ public class Shooter extends SubsystemBase {
      * @param isIntaking
      */
     public void moveMotor(boolean isShooting, boolean isIntaking) {
+        // |F|:|M|:|B| = 1, 0.8, 0.9 Back height: 38.5
         if (isShooting) {
-            frontMotor.set(ControlMode.PercentOutput, -0.8);
-            backMotor.set(ControlMode.PercentOutput, 0.8);
+            backMotor.set(ControlMode.PercentOutput, -0.9);
+            frontMotor.set(ControlMode.PercentOutput, 1);
         } else {
-            frontMotor.set(ControlMode.PercentOutput, 0);
             backMotor.set(ControlMode.PercentOutput, 0);
+            frontMotor.set(ControlMode.PercentOutput, 0);
         }
 
         if (isIntaking) {
-            kicker.set(ControlMode.PercentOutput, -0.8);
+            kicker.set(ControlMode.PercentOutput, .8);
         } else {
             kicker.set(ControlMode.PercentOutput, 0);
         }
