@@ -8,7 +8,8 @@ import frc.robot.utils.UserDigital;
  * template command for shooter subsystem
  */
 public class ShooterCommand extends CommandBase {
-    private final UserDigital isShooting;
+    private final UserDigital mainShooterInput;
+    private final UserDigital subShooterInput;
     private final Shooter shooter;
 
     /**
@@ -17,8 +18,9 @@ public class ShooterCommand extends CommandBase {
      * @param shooter    shooter to bind
      * @param speedInput input for shooter speed
      */
-    public ShooterCommand(UserDigital isShooting, Shooter shooter) {
-        this.isShooting = isShooting;
+    public ShooterCommand(UserDigital mainShooterInput, UserDigital subShooterInput, Shooter shooter) {
+        this.mainShooterInput = mainShooterInput;
+        this.subShooterInput = subShooterInput;
         this.shooter = shooter;
         this.addRequirements(shooter);
         shooter.setDefaultCommand(this);
@@ -29,7 +31,7 @@ public class ShooterCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        shooter.moveMotor(isShooting.get());
+        shooter.moveMotor(mainShooterInput.get(), subShooterInput.get());
     }
 
 }

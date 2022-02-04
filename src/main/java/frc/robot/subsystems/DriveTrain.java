@@ -22,10 +22,10 @@ public class DriveTrain extends SubsystemBase {
      * Initializing drive train and talonmFX settings
      */
     public DriveTrain() {
-        leftLeader = initMotor(DRIVE_LEFT_LEADER_ID);
-        rightLeader = initMotor(DRIVE_RIGHT_LEADER_ID);
-        leftFollower = initMotor(DRIVE_LEFT_FOLLOWER_ID);
-        rightFollower = initMotor(DRIVE_RIGHT_FOLLOWER_ID);
+        leftLeader = initTalonFX(DRIVE_LEFT_LEADER_ID);
+        rightLeader = initTalonFX(DRIVE_RIGHT_LEADER_ID);
+        leftFollower = initTalonFX(DRIVE_LEFT_FOLLOWER_ID);
+        rightFollower = initTalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
@@ -38,10 +38,7 @@ public class DriveTrain extends SubsystemBase {
      * @param rotation rotation from joystick triggers
      */
     public void arcadeDrive(double speed, double rotation) {
-        double maxInput = Math.copySign(
-            Math.max(Math.abs(speed), Math.abs(rotation)),
-            speed
-        );
+        double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
         double leftMotorOutput;
         double rightMotorOutput;
 
@@ -72,8 +69,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /**
-     * Test the lead motors and folowing motors test to see if initialization process for setting
-     * 'following' is correct
+     * Test the lead motors and folowing motors test to see if initialization process for setting 'following' is correct
      * 
      * @param left  left talonmFX output
      * @param right right talonmFX output
@@ -91,12 +87,7 @@ public class DriveTrain extends SubsystemBase {
      * @param leftFollow  left follow talonmFX output
      * @param rightFollow right followe talonmFX output
      */
-    public void testMotors(
-        double leftFront,
-        double rightFront,
-        double leftFollow,
-        double rightFollow
-    ) {
+    public void testMotors(double leftFront, double rightFront, double leftFollow, double rightFollow) {
         leftLeader.set(ControlMode.PercentOutput, leftFront);
         rightLeader.set(ControlMode.PercentOutput, rightFront);
 

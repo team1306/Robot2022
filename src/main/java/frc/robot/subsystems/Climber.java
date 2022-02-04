@@ -18,7 +18,7 @@ public class Climber extends SubsystemBase {
      * Initialize climber and configure motors
      */
     public Climber() {
-        motor = initMotor(CLIMBER_MOTOR_ID);
+        motor = initTalonFX(CLIMBER_MOTOR_ID);
     }
 
     /**

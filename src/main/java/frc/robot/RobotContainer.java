@@ -14,6 +14,10 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utils.Controller;
 import frc.robot.utils.UserAnalog;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.Shooter;
+import frc.robot.utils.UserDigital;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -22,9 +26,11 @@ import frc.robot.utils.UserAnalog;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final Command autoCommand;
+    private Command autoCommand;
 
     private final boolean runAuto = false;
+    private UserDigital shooterMainInput, shooterSubInput;
+    private UserAnalog indexInput;
 
     // inputs for drive train
     private UserAnalog speedDriveTrain;
@@ -34,15 +40,17 @@ public class RobotContainer {
 
     // The robot's inputs that it recieves from the controller are defined here
 
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         autoCommand = null;
+        Controller.init();
         configureButtonBindings();
 
         new DriveCommand(new DriveTrain(), speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
+        new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
+        // new IndexCommand(speedInput, index)
     }
 
     /**
@@ -56,6 +64,9 @@ public class RobotContainer {
         this.leftRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
         this.rightRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
 
+        shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
+        shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
+        indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
     }
 
     /**
