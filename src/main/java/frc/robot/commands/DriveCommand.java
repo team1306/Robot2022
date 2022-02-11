@@ -22,16 +22,11 @@ public class DriveCommand extends CommandBase {
      * @param leftRotation  initial left rotation
      * @param rightRotation initial right rotation
      */
-    public DriveCommand(
-        DriveTrain driveTrain,
-        UserAnalog speed,
-        UserAnalog leftRotation,
-        UserAnalog rightRotation
-    ) {
+    public DriveCommand(DriveTrain driveTrain, UserAnalog speed, UserAnalog leftRotation, UserAnalog rightRotation) {
         this.speed = speed;
         this.driveTrain = driveTrain;
-        this.driveTrain.setDefaultCommand(this);
         this.addRequirements(driveTrain);
+        this.driveTrain.setDefaultCommand(this);
         this.leftRotation = leftRotation;
         this.rightRotation = rightRotation;
     }
