@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-public interface MotorUtils {
+public class MotorUtils {
     public static TalonSRX initTalonSRX(int motorID) {
         var motor = new TalonSRX(motorID);
         motor.configFactoryDefault();
@@ -21,9 +21,8 @@ public interface MotorUtils {
         return motor;
     }
 
-
     // for use with NEO motor
-    public static CANSparkMax initShooterMotor(int motorID) {
+    public static CANSparkMax initSparkMax(int motorID) {
         var motor = new CANSparkMax(motorID, MotorType.kBrushless);
         motor.restoreFactoryDefaults();
         motor.setIdleMode(CANSparkMax.IdleMode.kBrake);

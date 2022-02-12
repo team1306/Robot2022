@@ -22,6 +22,13 @@ public class DriveTrain extends SubsystemBase {
      * Initializing drive train and talonmFX settings
      */
     public DriveTrain() {
+        /*
+         * Old drive train initialization
+         * leftLeader = new TalonSRX(LEFT_DRIVE_LEADER);
+         * rightLeader = new TalonSRX(RIGHT_DRIVE_LEADER); 
+         * leftFollower = new VictorSPX(LEFT_DRIVE_FOLLOWER); 
+         * rightFollower = new VictorSPX(RIGHT_DRIVE_FOLLOWER);
+         */
         leftLeader = initTalonFX(DRIVE_LEFT_LEADER_ID);
         rightLeader = initTalonFX(DRIVE_RIGHT_LEADER_ID);
         leftFollower = initTalonFX(DRIVE_LEFT_FOLLOWER_ID);
@@ -42,10 +49,6 @@ public class DriveTrain extends SubsystemBase {
         double leftMotorOutput;
         double rightMotorOutput;
 
-        /*
-         * perhaps make into single if-else statement later, like: if (Math.sign(speed) ==
-         * Math.signum(rotation)) <case 1> else <case2>
-         */
         if (speed >= 0) {
             if (rotation >= 0) {
                 leftMotorOutput = maxInput;
@@ -63,6 +66,14 @@ public class DriveTrain extends SubsystemBase {
                 rightMotorOutput = speed - rotation;
             }
         }
+        // possible replacement
+        /* if ((speed >= 0) == (rotation >= 0)) {
+            leftMotorOutput = maxInput;
+            rightMotorOutput = speed - rotation;
+        } else {
+            leftMotorOutput = speed + rotation;
+            rightMotorOutput = maxInput;
+        } */
 
         leftLeader.set(ControlMode.PercentOutput, leftMotorOutput);
         rightLeader.set(ControlMode.PercentOutput, rightMotorOutput);

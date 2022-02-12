@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.IndexCommand;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Index;
 import frc.robot.utils.Controller;
 import frc.robot.utils.UserAnalog;
 import frc.robot.commands.ShooterCommand;
@@ -50,7 +52,7 @@ public class RobotContainer {
 
         new DriveCommand(new DriveTrain(), speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
         new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
-        // new IndexCommand(speedInput, index)
+        new IndexCommand(indexInput, new Index());
     }
 
     /**

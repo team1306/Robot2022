@@ -11,11 +11,7 @@ package frc.robot;
  */
 public interface Constants {
     int SHOOTER_UPPER_MOTOR_ID = 1;
-    int SHOOTER_LOWER_MOTOR_ID = 3;
-    // int SHOOTER_MID_MOTOR_ID = 8; // the kicker??
-
-    int INDEX_FRONT_MOTOR_ID = 0;
-    int INDEX_BACK_MOTOR_ID = 0;
+    int SHOOTER_LOWER_MOTOR_ID = 2;// 3;
     int SHOOTER_KICKER_ID = 8;
     int SHOOTER_INDEX_ID = 5;
 
@@ -28,11 +24,4 @@ public interface Constants {
     /**
      * TODO: set the actual ID values
      */
-
-    // messing around with Janus and rewriting old code
-    int LeftDriveLeader = 1;
-    int RightDriveLeader = 2;
-    int LeftDriveFollower = 3;
-    int RightDriveFollower = 4;
-
 }
