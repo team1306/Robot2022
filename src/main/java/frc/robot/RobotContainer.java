@@ -52,7 +52,7 @@ public class RobotContainer {
 
         new DriveCommand(new DriveTrain(), speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
         new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
-        new IndexCommand(indexInput, new Index());
+        // new IndexCommand(indexInput, new Index());
     }
 
     /**
@@ -68,7 +68,7 @@ public class RobotContainer {
 
         shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
         shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
-        indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
+        // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
     }
 
     /**

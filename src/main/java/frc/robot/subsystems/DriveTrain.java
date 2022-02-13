@@ -4,19 +4,23 @@ import static frc.robot.Constants.*;
 import static frc.robot.utils.MotorUtils.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * Used by DriveTrain command to move robot Calculates output for each side of the drivetrain
  */
 public class DriveTrain extends SubsystemBase {
-    private TalonFX leftLeader;
-    private TalonFX leftFollower;
+    private WPI_TalonFX leftLeader;
+    private WPI_TalonFX leftFollower;
 
-    private TalonFX rightLeader;
-    private TalonFX rightFollower;
+    private WPI_TalonFX rightLeader;
+    private WPI_TalonFX rightFollower;
 
     /**
      * Initializing drive train and talonmFX settings
@@ -29,13 +33,14 @@ public class DriveTrain extends SubsystemBase {
          * leftFollower = new VictorSPX(LEFT_DRIVE_FOLLOWER); 
          * rightFollower = new VictorSPX(RIGHT_DRIVE_FOLLOWER);
          */
-        leftLeader = initTalonFX(DRIVE_LEFT_LEADER_ID);
-        rightLeader = initTalonFX(DRIVE_RIGHT_LEADER_ID);
-        leftFollower = initTalonFX(DRIVE_LEFT_FOLLOWER_ID);
-        rightFollower = initTalonFX(DRIVE_RIGHT_FOLLOWER_ID);
+        leftLeader = initWPITalonFX(DRIVE_LEFT_LEADER_ID);
+        rightLeader = initWPITalonFX(DRIVE_RIGHT_LEADER_ID);
+        leftFollower = initWPITalonFX(DRIVE_LEFT_FOLLOWER_ID);
+        rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
+
     }
 
     /**

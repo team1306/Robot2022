@@ -4,17 +4,18 @@ import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Index extends SubsystemBase {
-    private final TalonFX motor;
+    private final TalonSRX motor;
 
     /**
      * Initialize Index and configure motors
      */
     public Index() {
-        motor = new TalonFX(SHOOTER_INDEX_ID);
+        motor = new TalonSRX(SHOOTER_INDEX_ID);
     }
 
     /**
@@ -23,7 +24,7 @@ public class Index extends SubsystemBase {
      * @param speed speed of the motor
      */
     public void moveMotor(double speed) {
-        motor.set(ControlMode.PercentOutput, -speed);
+        motor.set(ControlMode.PercentOutput, speed);
     }
 
     /**
