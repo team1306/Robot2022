@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
     // private static Command testCommand = null;
 
     private RobotContainer m_robotContainer;
+    // public static Command driveCommand;
 
     // public static Intake intake = null;
 
@@ -59,7 +60,7 @@ public class Robot extends TimedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-        // swerveDrive.updatePose();
+
     }
 
     /**
@@ -76,6 +77,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+
         System.out.println("autonomousInit() RAN");
         autoCommand = m_robotContainer.getAutonomousCommand();
 
@@ -90,7 +92,9 @@ public class Robot extends TimedRobot {
      * This function is called periodically during autonomous.
      */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+
+    }
 
     @Override
     public void teleopInit() {

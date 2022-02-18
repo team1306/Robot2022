@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveTrain;
+
 import com.kauailabs.navx.frc.AHRS;
 
 /**
@@ -9,11 +11,16 @@ import com.kauailabs.navx.frc.AHRS;
 public class AutonomousCommand extends CommandBase {
     private final AHRS navx;
 
+    DriveTrain driveTrain;
+
     /**
      * initializes autonomous command
      */
     public AutonomousCommand() {
         this.navx = null;
+        driveTrain = new DriveTrain();
+        this.addRequirements(driveTrain);
+        driveTrain.setDefaultCommand(this);
     }
 
     /**
@@ -26,7 +33,9 @@ public class AutonomousCommand extends CommandBase {
      * 
      */
     @Override
-    public void execute() {}
+    public void execute() {
+        driveTrain.arcadeDrive(1, 0);
+    }
 
     /**
      * 
@@ -42,5 +51,9 @@ public class AutonomousCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         cancel();
+    }
+
+    public void remove() {
+
     }
 }

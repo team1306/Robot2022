@@ -6,10 +6,13 @@ import static frc.robot.utils.MotorUtils.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -21,6 +24,7 @@ public class DriveTrain extends SubsystemBase {
 
     private WPI_TalonFX rightLeader;
     private WPI_TalonFX rightFollower;
+    private DifferentialDrivetrainSim sim;
 
     /**
      * Initializing drive train and talonmFX settings
@@ -38,6 +42,12 @@ public class DriveTrain extends SubsystemBase {
         leftFollower = initWPITalonFX(DRIVE_LEFT_FOLLOWER_ID);
         rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
+        // sim = DifferentialDrivetrainSim.createKitbotSim(
+        // KitbotMotor.kDoubleFalcon500PerSide,
+        // KitbotGearing.k12p75,
+        // KitbotWheelSize.kSixInch,
+        // null
+        // );
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
 
@@ -54,6 +64,7 @@ public class DriveTrain extends SubsystemBase {
         double leftMotorOutput;
         double rightMotorOutput;
 
+        // speed is -1 to 1, rotation is also -1 to 1
         if (speed >= 0) {
             if (rotation >= 0) {
                 leftMotorOutput = maxInput;
@@ -80,12 +91,14 @@ public class DriveTrain extends SubsystemBase {
             rightMotorOutput = maxInput;
         } */
 
-        leftLeader.set(ControlMode.PercentOutput, leftMotorOutput);
-        rightLeader.set(ControlMode.PercentOutput, rightMotorOutput);
+        leftLeader.set(ControlMode.PercentOutput, leftMotorOutput / 5);
+        rightLeader.set(ControlMode.PercentOutput, -rightMotorOutput / 5);
     }
 
     /**
      * Test the lead motors and folowing motors test to see if initialization process for setting 'following' is correct
+     * 
+     * 
      * 
      * @param left  left talonmFX output
      * @param right right talonmFX output

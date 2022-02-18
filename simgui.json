@@ -1,0 +1,34 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Talon FX[0]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[1]/Analog In": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[8]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/DriveTrain": "Subsystem",
+      "/LiveWindow/Shooter": "Subsystem",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+    }
+  }
+}

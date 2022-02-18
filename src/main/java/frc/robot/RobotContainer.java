@@ -10,10 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.IndexCommand;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Index;
 import frc.robot.utils.Controller;
 import frc.robot.utils.UserAnalog;
 import frc.robot.commands.ShooterCommand;
@@ -30,7 +29,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private Command autoCommand;
 
-    private final boolean runAuto = false;
+    private final boolean runAuto = true;
     private UserDigital shooterMainInput, shooterSubInput;
     private UserAnalog indexInput;
 
@@ -38,6 +37,8 @@ public class RobotContainer {
     private UserAnalog speedDriveTrain;
     private UserAnalog leftRotationDriveTrain;
     private UserAnalog rightRotationDriveTrain;
+    private UserAnalog speedRightDriveTrain;
+
 
 
     // The robot's inputs that it recieves from the controller are defined here
@@ -46,12 +47,14 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        autoCommand = null;
+        autoCommand = new AutonomousCommand();
         Controller.init();
         configureButtonBindings();
 
-        new DriveCommand(new DriveTrain(), speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
-        new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
+        new DriveCommand(
+            new DriveTrain(), speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain, speedRightDriveTrain
+        );
+        // new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
         // new IndexCommand(indexInput, new Index());
     }
 
@@ -61,11 +64,10 @@ public class RobotContainer {
      * and then passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        Controller.init();
         this.speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
         this.leftRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
         this.rightRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
-
+        this.speedRightDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
         shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
         shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
         // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
