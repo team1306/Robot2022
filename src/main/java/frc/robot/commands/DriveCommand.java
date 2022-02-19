@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utils.UserAnalog;
 import frc.robot.subsystems.DriveTrain;
 
@@ -10,7 +11,7 @@ import frc.robot.subsystems.DriveTrain;
 public class DriveCommand extends CommandBase {
 
     private UserAnalog speed;
-    private UserAnalog rightSpeed;
+    // private UserAnalog rightSpeed;
     private DriveTrain driveTrain;
     private UserAnalog leftRotation;
     private UserAnalog rightRotation;
@@ -23,20 +24,12 @@ public class DriveCommand extends CommandBase {
      * @param leftRotation  initial left rotation
      * @param rightRotation initial right rotation
      */
-    public DriveCommand(
-        DriveTrain driveTrain,
-        UserAnalog speed,
-        UserAnalog leftRotation,
-        UserAnalog rightRotation,
-        UserAnalog rightSpeed
-    ) {
+    public DriveCommand(DriveTrain driveTrain, UserAnalog speed, UserAnalog leftRotation, UserAnalog rightRotation) {
         this.speed = speed;
         this.driveTrain = driveTrain;
         this.addRequirements(driveTrain);
-        // this.driveTrain.setDefaultCommand(this);
         this.leftRotation = leftRotation;
         this.rightRotation = rightRotation;
-        this.rightSpeed = rightSpeed;
     }
 
     /**
@@ -45,9 +38,7 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
         double spd = -speed.get();
-        double rspd = rightSpeed.get();
         double rotation = rightRotation.get() - leftRotation.get();
-        // driveTrain.testDrive(spd, rspd);
         if (Math.abs(spd) < .05) {
             spd = 0;
         }

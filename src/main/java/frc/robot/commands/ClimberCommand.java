@@ -20,6 +20,8 @@ public class ClimberCommand extends CommandBase {
     public ClimberCommand(Climber climber, UserAnalog speed) {
         this.climber = climber;
         this.speed = speed;
+        this.addRequirements(climber);
+        climber.setDefaultCommand(this);
     }
 
     /**

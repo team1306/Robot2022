@@ -28,8 +28,10 @@ import frc.robot.utils.UserDigital;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private Command autoCommand;
+    private Command driveCommand;
+    private DriveTrain driveTrain;
 
-    private final boolean runAuto = true;
+    private final boolean RUN_AUTO = true;
     private UserDigital shooterMainInput, shooterSubInput;
     private UserAnalog indexInput;
 
@@ -37,23 +39,22 @@ public class RobotContainer {
     private UserAnalog speedDriveTrain;
     private UserAnalog leftRotationDriveTrain;
     private UserAnalog rightRotationDriveTrain;
-    private UserAnalog speedRightDriveTrain;
 
 
 
     // The robot's inputs that it recieves from the controller are defined here
 
     /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
+     * The container for the robot. Contains subsystems, OI devices.
      */
     public RobotContainer() {
-        autoCommand = new AutonomousCommand();
+        // initialize controller using Controller init method to ensure Controller is properly initialized when the
+        // Controllern is required to be initialized at the start of the game. Controller represents an xbox controller
+        // which controls the robot using standard controller inputs such as joysticks, buttons, and triggers.
         Controller.init();
         configureButtonBindings();
 
-        new DriveCommand(
-            new DriveTrain(), speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain, speedRightDriveTrain
-        );
+        driveTrain = new DriveTrain();
         // new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
         // new IndexCommand(indexInput, new Index());
     }
@@ -67,23 +68,36 @@ public class RobotContainer {
         this.speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
         this.leftRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
         this.rightRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
-        this.speedRightDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
         shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
         shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
         // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
     }
 
     /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
+     * called when autonomous is started should create all commands that are used in auto
      */
-    public Command getAutonomousCommand() {
-        System.out.println("getAutonomousCommand() IN RobotContainer IS RUNNING");
-        if (runAuto) {
-            return autoCommand;
-        } else {
-            return null;
-        }
+    public void startAuto() {
+        autoCommand = new AutonomousCommand(driveTrain);
+
+        if (RUN_AUTO)
+            autoCommand.schedule();
     }
+
+    /**
+     * start off teleop period by cancelling autonomous command and switching the drivetrain command to the user driving
+     * command
+     */
+    public void startTeleop() {
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (RUN_AUTO)
+            autoCommand.cancel();
+
+        driveCommand = new DriveCommand(driveTrain, speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
+        driveCommand.schedule();
+        // driveTrain.setDefaultCommand(driveCommand);
+    }
+
 }

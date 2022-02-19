@@ -11,10 +11,10 @@ package frc.robot;
 import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import frc.robot.Constants;
 // import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -22,7 +22,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project, you must also update the build.gradle file in the project.
  */
 public class Robot extends TimedRobot {
-    private Command autoCommand;
+
+    public static DriveTrain driveTrain;
     // private static Command testCommand = null;
 
     private RobotContainer m_robotContainer;
@@ -77,15 +78,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-
         System.out.println("autonomousInit() RAN");
-        autoCommand = m_robotContainer.getAutonomousCommand();
-
-        // schedule the autonomous command (example)
-        if (autoCommand != null) {
-            autoCommand.schedule();
-            System.out.println("the IF STATEMENT in autonomousInit() RAN");
-        }
+        m_robotContainer.startAuto();
     }
 
     /**
@@ -98,13 +92,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
-        if (autoCommand != null) {
-            autoCommand.cancel();
-        }
+        System.out.println("teleopInit() RAAAAAANNN");
+        m_robotContainer.startTeleop();
     }
 
     /**

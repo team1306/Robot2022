@@ -16,11 +16,11 @@ public class AutonomousCommand extends CommandBase {
     /**
      * initializes autonomous command
      */
-    public AutonomousCommand() {
+    public AutonomousCommand(DriveTrain driveTrain) {
         this.navx = null;
-        driveTrain = new DriveTrain();
+        this.driveTrain = driveTrain;
         this.addRequirements(driveTrain);
-        driveTrain.setDefaultCommand(this);
+        // driveTrain.setDefaultCommand(this);
     }
 
     /**
@@ -49,11 +49,7 @@ public class AutonomousCommand extends CommandBase {
      * 
      */
     @Override
-    public void end(boolean interrupted) {
-        cancel();
-    }
+    public void end(boolean interrupted) {}
 
-    public void remove() {
-
-    }
+    public void remove() {}
 }

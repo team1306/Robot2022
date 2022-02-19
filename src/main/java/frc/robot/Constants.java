@@ -15,10 +15,10 @@ public interface Constants {
     int SHOOTER_KICKER_ID = 0;
     int SHOOTER_INDEX_ID = 0;
 
-    int DRIVE_LEFT_LEADER_ID = 3;
     int DRIVE_RIGHT_LEADER_ID = 1;
-    int DRIVE_LEFT_FOLLOWER_ID = 4;
     int DRIVE_RIGHT_FOLLOWER_ID = 2;
+    int DRIVE_LEFT_LEADER_ID = 3;
+    int DRIVE_LEFT_FOLLOWER_ID = 4;
 
     int CLIMBER_MOTOR_ID = 0;
     /**

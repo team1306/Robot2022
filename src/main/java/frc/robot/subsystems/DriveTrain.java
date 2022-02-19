@@ -42,12 +42,6 @@ public class DriveTrain extends SubsystemBase {
         leftFollower = initWPITalonFX(DRIVE_LEFT_FOLLOWER_ID);
         rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
-        // sim = DifferentialDrivetrainSim.createKitbotSim(
-        // KitbotMotor.kDoubleFalcon500PerSide,
-        // KitbotGearing.k12p75,
-        // KitbotWheelSize.kSixInch,
-        // null
-        // );
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
 
@@ -97,8 +91,6 @@ public class DriveTrain extends SubsystemBase {
 
     /**
      * Test the lead motors and folowing motors test to see if initialization process for setting 'following' is correct
-     * 
-     * 
      * 
      * @param left  left talonmFX output
      * @param right right talonmFX output

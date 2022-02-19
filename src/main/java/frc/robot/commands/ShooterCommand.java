@@ -16,9 +16,9 @@ public class ShooterCommand extends CommandBase {
      * initializes shooter command with given shooter and speed input
      * 
      * 
-     * @param speedInput      input for shooter speed
-     * @param subShooterInput kicker & indexer input
-     * @param shooter         shooter to bind
+     * @param mainShooterInput input for shooter speed
+     * @param subShooterInput  kicker and indexer input
+     * @param shooter          shooter to bind
      */
     public ShooterCommand(UserDigital mainShooterInput, UserDigital subShooterInput, Shooter shooter) {
         this.mainShooterInput = mainShooterInput;
