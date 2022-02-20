@@ -26,7 +26,7 @@ public class MotorUtils {
     public static TalonFX initTalonFX(int motorID) {
         var motor = new TalonFX(motorID);
         motor.configFactoryDefault();
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.setNeutralMode(NeutralMode.Coast);
         return motor;
     }
 
@@ -34,6 +34,7 @@ public class MotorUtils {
         var motor = new WPI_TalonFX(motorID);
         motor.configFactoryDefault();
         motor.setNeutralMode(NeutralMode.Brake);
+        motor.configClosedloopRamp(2);
         return motor;
     }
 

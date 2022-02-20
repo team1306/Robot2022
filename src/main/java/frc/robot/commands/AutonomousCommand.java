@@ -49,7 +49,9 @@ public class AutonomousCommand extends CommandBase {
      * 
      */
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        cancel();
+    }
 
     public void remove() {}
 }

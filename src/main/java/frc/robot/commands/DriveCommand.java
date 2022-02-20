@@ -46,6 +46,9 @@ public class DriveCommand extends CommandBase {
         if (Math.abs(rotation) < .05) {
             rotation = 0;
         }
+
+        spd = spd * Math.abs(spd);
+        rotation = rotation * Math.abs(rotation);
         driveTrain.arcadeDrive(spd, rotation);
     }
 }

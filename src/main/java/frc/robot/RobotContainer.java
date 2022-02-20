@@ -55,6 +55,10 @@ public class RobotContainer {
         configureButtonBindings();
 
         driveTrain = new DriveTrain();
+        autoCommand = new AutonomousCommand(driveTrain);
+        driveCommand = new DriveCommand(driveTrain, speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
+
+
         // new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
         // new IndexCommand(indexInput, new Index());
     }
@@ -77,7 +81,6 @@ public class RobotContainer {
      * called when autonomous is started should create all commands that are used in auto
      */
     public void startAuto() {
-        autoCommand = new AutonomousCommand(driveTrain);
 
         if (RUN_AUTO)
             autoCommand.schedule();
@@ -95,7 +98,6 @@ public class RobotContainer {
         if (RUN_AUTO)
             autoCommand.cancel();
 
-        driveCommand = new DriveCommand(driveTrain, speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
         driveCommand.schedule();
         // driveTrain.setDefaultCommand(driveCommand);
     }
