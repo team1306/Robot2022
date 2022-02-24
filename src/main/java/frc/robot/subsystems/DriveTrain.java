@@ -85,8 +85,8 @@ public class DriveTrain extends SubsystemBase {
             rightMotorOutput = maxInput;
         } */
 
-        leftLeader.set(ControlMode.PercentOutput, leftMotorOutput / 1);
-        rightLeader.set(ControlMode.PercentOutput, -rightMotorOutput / 1);
+        leftLeader.set(ControlMode.PercentOutput, leftMotorOutput / 1234567890 * 1234567890);
+        rightLeader.set(ControlMode.PercentOutput, -rightMotorOutput / 1234567890 * 1234567890);
     }
 
     /**

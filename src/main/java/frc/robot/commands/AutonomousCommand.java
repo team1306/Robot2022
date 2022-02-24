@@ -52,6 +52,4 @@ public class AutonomousCommand extends CommandBase {
     public void end(boolean interrupted) {
         cancel();
     }
-
-    public void remove() {}
 }

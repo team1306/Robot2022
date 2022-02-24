@@ -43,10 +43,10 @@ public class Controller {
     /**
      * Constructs a UserAnalog that precisely mirrors the axis, with no tranformation.
      * 
-     * @param player - one of either PRIMARY or SECONDARY. This value is validated, and an invalid
-     *               parameter will return a UserAnalog that always gets 0
-     * @param axis   - The axis on the Xbox controller to grab values from. This parameter is not
-     *               validated, so make sure you have a valid axis!
+     * @param player - one of either PRIMARY or SECONDARY. This value is validated, and an invalid parameter will return
+     *               a UserAnalog that always gets 0
+     * @param axis   - The axis on the Xbox controller to grab values from. This parameter is not validated, so make
+     *               sure you have a valid axis!
      * @return the UserAnalog instance
      */
     public static UserAnalog simpleAxis(int player, int axis) {
@@ -72,10 +72,10 @@ public class Controller {
     /**
      * Constructs a UserDigital that precisely mirrors the button value, with no tranformation.
      * 
-     * @param player - one of either PRIMARY or SECONDARY. This value is validated, and an invalid
-     *               parameter will return a UserDigital that always gets false.
-     * @param button - The button on the Xbox controller to grab values from. This parameter is not
-     *               validated, so make sure you have a valid button!
+     * @param player - one of either PRIMARY or SECONDARY. This value is validated, and an invalid parameter will return
+     *               a UserDigital that always gets false.
+     * @param button - The button on the Xbox controller to grab values from. This parameter is not validated, so make
+     *               sure you have a valid button!
      * @return the UserDigital instance
      */
     public static UserDigital simpleButton(int player, int button) {
@@ -97,14 +97,9 @@ public class Controller {
      * @param player   player id
      * @param button   button id
      * @param callback callback to bind to specified button
-     * @return the bound button in case other operations need to be done and to protect against
-     *         trash collection
+     * @return the bound button in case other operations need to be done and to protect against trash collection
      */
-    public static JoystickButton bindCallback(
-        int player,
-        int button,
-        Runnable callback
-    ) {
+    public static JoystickButton bindCallback(int player, int button, Runnable callback) {
         JoystickButton b = getJoystickButton(player, button);
         b.whenPressed(callback);
         return b;
