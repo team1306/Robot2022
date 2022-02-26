@@ -16,28 +16,26 @@ import edu.wpi.first.hal.HAL;
 public class SomeTest {
     // private Shooter shooter;
 
-    // @Before
-    // public void setup() {
-    // assert HAL.initialize(500, 0);
-    // System.out.println("Setup");
-    // shooter = new Shooter();
-    // // assertEquals(shooter, actual);
-    // }
+    @Before
+    public void setup() {
+        assert HAL.initialize(500, 0);
+        System.out.println("Setup");
+        // assertEquals(shooter, actual);
+    }
 
-    // @After
-    // public void shutdown() throws Exception {
-    // System.out.println("done");
-    // shooter.close();
-    // }
+    @After
+    public void shutdown() throws Exception {
+        System.out.println("done");
+    }
 
-    // @Test
-    // public void someTest() {
-    // System.out.println("test 1");
-    // // shooter.moveMainMotor(1);
-    // }
+    @Test
+    public void someTest() {
+        System.out.println("test 1");
+        // shooter.moveMainMotor(1);
+    }
 
-    // @Test
-    // public void nothing() {
-    // System.out.println("test 2");
-    // }
+    @Test
+    public void nothing() {
+        System.out.println("test 2");
+    }
 }

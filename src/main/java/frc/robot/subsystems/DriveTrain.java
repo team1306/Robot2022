@@ -4,27 +4,27 @@ import static frc.robot.Constants.*;
 import static frc.robot.utils.MotorUtils.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * Used by DriveTrain command to move robot Calculates output for each side of the drivetrain
  */
 public class DriveTrain extends SubsystemBase {
-    private WPI_TalonFX leftLeader;
-    private WPI_TalonFX leftFollower;
+    private TalonFX leftLeader;
+    private TalonFX leftFollower;
 
-    private WPI_TalonFX rightLeader;
-    private WPI_TalonFX rightFollower;
-    private DifferentialDrivetrainSim sim;
+    private TalonFX rightLeader;
+    private TalonFX rightFollower;
+    private AHRS gyro = new AHRS();
+    private final DifferentialDriveOdometry m_odometry;
+
 
     /**
      * Initializing drive train and talonmFX settings
@@ -44,6 +44,8 @@ public class DriveTrain extends SubsystemBase {
 
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
+
+        m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     }
 
@@ -85,8 +87,8 @@ public class DriveTrain extends SubsystemBase {
             rightMotorOutput = maxInput;
         } */
 
-        leftLeader.set(ControlMode.PercentOutput, leftMotorOutput / 1234567890 * 1234567890);
-        rightLeader.set(ControlMode.PercentOutput, -rightMotorOutput / 1234567890 * 1234567890);
+        leftLeader.set(ControlMode.PercentOutput, leftMotorOutput);
+        rightLeader.set(ControlMode.PercentOutput, -rightMotorOutput);
     }
 
     /**
@@ -122,5 +124,40 @@ public class DriveTrain extends SubsystemBase {
         // experimental
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
+    }
+
+    /**
+     * take encoder ticks displacement of left wheels and convert into meters
+     * 
+     * @return displacement of left wheels in meters
+     */
+    public double getLeftDistance() {
+        double encoderTicks = leftLeader.getSelectedSensorPosition();
+        double distance = encoderTicks / 2048 * 0.301;
+        return distance;
+    }
+
+    /**
+     * Take encoder ticks displacement of left wheels and convert into meters
+     * 
+     * @return displacement of left wheels in meters
+     */
+    public double getRightDistance() {
+        double encoderTicks = rightLeader.getSelectedSensorPosition();
+        double distance = encoderTicks / 2048 * 0.301;
+        return distance;
+    }
+
+    @Override
+    public void periodic() {
+        m_odometry.update( gyro.getRotation2d(), getLeftDistance(), getRightDistance());]
+    }
+
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
+
+    public DifferentialDriveWheelSPees getWheelSpeeds(){
+        return new DifferentialDriveWheelSpeeds()
     }
 }

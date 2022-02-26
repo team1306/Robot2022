@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utils.UserAnalog;
 import frc.robot.subsystems.DriveTrain;
 
@@ -35,20 +34,20 @@ public class DriveCommand extends CommandBase {
     /**
      * called repeatedly when command is schedules to run
      */
+
     @Override
     public void execute() {
         double spd = -speed.get();
         double rotation = rightRotation.get() - leftRotation.get();
-        if (Math.abs(spd) < .05) {
+
+        if (Math.abs(spd) < .05)
             spd = 0;
-        }
 
-        if (Math.abs(rotation) < .05) {
+        if (Math.abs(rotation) < .05)
             rotation = 0;
-        }
 
-        spd = spd * Math.abs(spd);
-        rotation = rotation * Math.abs(rotation);
+        spd *= Math.abs(spd);
+        rotation *= Math.abs(rotation);
         driveTrain.arcadeDrive(spd, rotation);
     }
 }

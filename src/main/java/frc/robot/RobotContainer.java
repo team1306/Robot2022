@@ -58,7 +58,6 @@ public class RobotContainer {
         autoCommand = new AutonomousCommand(driveTrain);
         driveCommand = new DriveCommand(driveTrain, speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
 
-
         // new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
         // new IndexCommand(indexInput, new Index());
     }
@@ -81,9 +80,10 @@ public class RobotContainer {
      * called when autonomous is started should create all commands that are used in auto
      */
     public void startAuto() {
-
-        if (RUN_AUTO)
+        if (RUN_AUTO) {
+            driveCommand.cancel();
             autoCommand.schedule();
+        }
     }
 
     /**
