@@ -10,20 +10,28 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /**
  * Used by DriveTrain command to move robot Calculates output for each side of the drivetrain
  */
 public class DriveTrain extends SubsystemBase {
-    private TalonFX leftLeader;
-    private TalonFX leftFollower;
+    private WPI_TalonFX leftLeader;
+    private WPI_TalonFX leftFollower;
 
-    private TalonFX rightLeader;
-    private TalonFX rightFollower;
+    private WPI_TalonFX rightLeader;
+    private WPI_TalonFX rightFollower;
     private AHRS gyro = new AHRS();
     private final DifferentialDriveOdometry m_odometry;
+    private final MotorControllerGroup m_leftMotors;
+    private final MotorControllerGroup m_rightMotors;
+    private final DifferentialDrive m_drive;
+
 
 
     /**
@@ -47,6 +55,10 @@ public class DriveTrain extends SubsystemBase {
 
         m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
+        m_rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
+        m_leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
+        m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
+        m_drive.setExpiration(10);
     }
 
     /**
@@ -56,39 +68,40 @@ public class DriveTrain extends SubsystemBase {
      * @param rotation rotation from joystick triggers
      */
     public void arcadeDrive(double speed, double rotation) {
-        double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
-        double leftMotorOutput;
-        double rightMotorOutput;
+        m_drive.arcadeDrive(speed, rotation, false);
+        // double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
+        // double leftMotorOutput;
+        // double rightMotorOutput;
 
-        // speed is -1 to 1, rotation is also -1 to 1
-        if (speed >= 0) {
-            if (rotation >= 0) {
-                leftMotorOutput = maxInput;
-                rightMotorOutput = speed - rotation;
-            } else {
-                leftMotorOutput = speed + rotation;
-                rightMotorOutput = maxInput;
-            }
-        } else {
-            if (rotation >= 0) {
-                leftMotorOutput = speed + rotation;
-                rightMotorOutput = maxInput;
-            } else {
-                leftMotorOutput = maxInput;
-                rightMotorOutput = speed - rotation;
-            }
-        }
-        // possible replacement
-        /* if ((speed >= 0) == (rotation >= 0)) {
-            leftMotorOutput = maxInput;
-            rightMotorOutput = speed - rotation;
-        } else {
-            leftMotorOutput = speed + rotation;
-            rightMotorOutput = maxInput;
-        } */
+        // // speed is -1 to 1, rotation is also -1 to 1
+        // if (speed >= 0) {
+        // if (rotation >= 0) {
+        // leftMotorOutput = maxInput;
+        // rightMotorOutput = speed - rotation;
+        // } else {
+        // leftMotorOutput = speed + rotation;
+        // rightMotorOutput = maxInput;
+        // }
+        // } else {
+        // if (rotation >= 0) {
+        // leftMotorOutput = speed + rotation;
+        // rightMotorOutput = maxInput;
+        // } else {
+        // leftMotorOutput = maxInput;
+        // rightMotorOutput = speed - rotation;
+        // }
+        // }
+        // // possible replacement
+        // /* if ((speed >= 0) == (rotation >= 0)) {
+        // leftMotorOutput = maxInput;
+        // rightMotorOutput = speed - rotation;
+        // } else {
+        // leftMotorOutput = speed + rotation;
+        // rightMotorOutput = maxInput;
+        // } */
 
-        leftLeader.set(ControlMode.PercentOutput, leftMotorOutput);
-        rightLeader.set(ControlMode.PercentOutput, -rightMotorOutput);
+        // m_rightMotors.set(-rightMotorOutput);
+        // m_leftMotors.set(leftMotorOutput);
     }
 
     /**
@@ -133,31 +146,49 @@ public class DriveTrain extends SubsystemBase {
      */
     public double getLeftDistance() {
         double encoderTicks = leftLeader.getSelectedSensorPosition();
-        double distance = encoderTicks / 2048 * 0.301;
+        double distance = encoderTicks / 2048 * Constants.WHEEL_CIRCUMFERENCE;
         return distance;
     }
 
     /**
-     * Take encoder ticks displacement of left wheels and convert into meters
+     * Take encoder ticks displacement of right wheels and convert into meters
      * 
-     * @return displacement of left wheels in meters
+     * @return displacement of right wheels in meters
      */
     public double getRightDistance() {
         double encoderTicks = rightLeader.getSelectedSensorPosition();
-        double distance = encoderTicks / 2048 * 0.301;
+        double distance = encoderTicks / 2048 * Constants.WHEEL_CIRCUMFERENCE;
         return distance;
     }
 
     @Override
     public void periodic() {
-        m_odometry.update( gyro.getRotation2d(), getLeftDistance(), getRightDistance());]
+        m_odometry.update(gyro.getRotation2d(), getLeftDistance(), getRightDistance());
     }
 
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
 
-    public DifferentialDriveWheelSPees getWheelSpeeds(){
-        return new DifferentialDriveWheelSpeeds()
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        double leftSpeed = leftLeader.getSelectedSensorVelocity() * 10 / 2048 * Constants.WHEEL_CIRCUMFERENCE;
+        double rightSpeed = rightLeader.getSelectedSensorVelocity() * 10 / 2048 * Constants.WHEEL_CIRCUMFERENCE;
+        return new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        m_odometry.resetPosition(pose, gyro.getRotation2d());
+    }
+
+    public void resetEncoders() {
+        leftLeader.setSelectedSensorPosition(0);
+        rightLeader.setSelectedSensorPosition(0);
+    }
+
+    public void tankDriveVolts(double lVolts, double rVolts) {
+        m_rightMotors.setVoltage(rVolts);
+        m_leftMotors.setVoltage(lVolts);
+        m_drive.feed();
     }
 }

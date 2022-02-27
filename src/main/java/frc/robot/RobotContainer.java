@@ -7,9 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveTrain;
@@ -18,6 +23,25 @@ import frc.robot.utils.UserAnalog;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.UserDigital;
+
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.Constants;
+import frc.robot.subsystems.DriveTrain;
 
 
 /**
@@ -40,6 +64,10 @@ public class RobotContainer {
     private UserAnalog leftRotationDriveTrain;
     private UserAnalog rightRotationDriveTrain;
 
+    DifferentialDriveKinematics DriveKinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
+    double kRamseteB = 2;
+    double KRamseteZeta = .7;
+
 
 
     // The robot's inputs that it recieves from the controller are defined here
@@ -55,7 +83,7 @@ public class RobotContainer {
         configureButtonBindings();
 
         driveTrain = new DriveTrain();
-        autoCommand = new AutonomousCommand(driveTrain);
+        autoCommand = getAutonomousCommand();
         driveCommand = new DriveCommand(driveTrain, speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
 
         // new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
@@ -101,6 +129,30 @@ public class RobotContainer {
 
         driveCommand.schedule();
         // driveTrain.setDefaultCommand(driveCommand);
+    }
+
+    public RamseteCommand getAutonomousCommand() {
+        var speedConstraint = new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(Constants.Ks, Constants.Kv, Constants.Ka), DriveKinematics, 10
+        );
+        TrajectoryConfig config = new TrajectoryConfig(
+            Constants.MAX_SPEED_MPS, Constants.MAX_ACCELERATION_MPSS
+        ).setKinematics(DriveKinematics).addConstraint(speedConstraint);
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            List.of(new Translation2d(0, 10)),
+            new Pose2d(0, 20, new Rotation2d(0)),
+            config
+        );
+        RamseteCommand ramseteCommand = new RamseteCommand(
+            exampleTrajectory, driveTrain::getPose, new RamseteController(kRamseteB, KRamseteZeta),
+            new SimpleMotorFeedforward(Constants.Ks, Constants.Kv, Constants.Ka), DriveKinematics,
+            driveTrain::getWheelSpeeds, new PIDController(0.2, 0, 0), new PIDController(0.2, 0, 0),
+            driveTrain::tankDriveVolts, driveTrain
+        );
+        driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
+        ramseteCommand.addRequirements(driveTrain);
+        return ramseteCommand;
     }
 
 }

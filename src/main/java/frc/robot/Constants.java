@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * A class for holding constant values in a single editable spot. What goes in this file: -Robot Motorcontroller ports
  * and IDS -Robot phsyical attributes -Field attributes
@@ -29,7 +31,8 @@ public interface Constants {
     double Kv = 2.0067;
     double Ka = .28138;
 
-    double TrackwidthMeters = .60;
-    double maxSpeedMPS = 4.67;
-    double maxAccelerationMPSS = 3;
+    double TRACK_WIDTH_METERS = .60;
+    double MAX_SPEED_MPS = 4.67;
+    double MAX_ACCELERATION_MPSS = 3;
+    double WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4) * Math.PI;
 }
