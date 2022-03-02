@@ -27,9 +27,9 @@ public interface Constants {
      * TODO: set the actual ID values
      */
 
-    double Ks = .61784;
-    double Kv = 2.0067;
-    double Ka = .28138;
+    double Ks = 0;// .61784;
+    double Kv = 0;// 2.0067;
+    double Ka = 0;// .28138;
 
     double TRACK_WIDTH_METERS = .60;
     double MAX_SPEED_MPS = 4.67;

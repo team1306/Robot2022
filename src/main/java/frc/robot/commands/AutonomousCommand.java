@@ -29,7 +29,7 @@ public class AutonomousCommand extends CommandBase {
     private final AHRS navx;
 
     DriveTrain driveTrain;
-    DifferentialDriveKinematics DriveKinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
+    DifferentialDriveKinematics DriveKinematics;
     double kRamseteB = 2;
     double KRamseteZeta = .7;
 
@@ -37,11 +37,11 @@ public class AutonomousCommand extends CommandBase {
      * initializes autonomous command
      */
     public AutonomousCommand(DriveTrain driveTrain) {
+        DriveKinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
         this.driveTrain = driveTrain;
         // this.addRequirements(driveTrain);
         this.navx = new AHRS();
         // driveTrain.setDefaultCommand(this);
-
     }
 
     /**

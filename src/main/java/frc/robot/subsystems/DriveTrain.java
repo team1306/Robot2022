@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -28,9 +29,7 @@ public class DriveTrain extends SubsystemBase {
     private WPI_TalonFX rightFollower;
     private AHRS gyro = new AHRS();
     private final DifferentialDriveOdometry m_odometry;
-    private final MotorControllerGroup m_leftMotors;
-    private final MotorControllerGroup m_rightMotors;
-    private final DifferentialDrive m_drive;
+
 
 
 
@@ -55,10 +54,8 @@ public class DriveTrain extends SubsystemBase {
 
         m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
-        m_rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
-        m_leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
-        m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
-        m_drive.setExpiration(10);
+
+
     }
 
     /**
@@ -68,40 +65,39 @@ public class DriveTrain extends SubsystemBase {
      * @param rotation rotation from joystick triggers
      */
     public void arcadeDrive(double speed, double rotation) {
-        m_drive.arcadeDrive(speed, rotation, false);
-        // double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
-        // double leftMotorOutput;
-        // double rightMotorOutput;
+        double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
+        double leftMotorOutput;
+        double rightMotorOutput;
 
-        // // speed is -1 to 1, rotation is also -1 to 1
-        // if (speed >= 0) {
-        // if (rotation >= 0) {
-        // leftMotorOutput = maxInput;
-        // rightMotorOutput = speed - rotation;
-        // } else {
-        // leftMotorOutput = speed + rotation;
-        // rightMotorOutput = maxInput;
-        // }
-        // } else {
-        // if (rotation >= 0) {
-        // leftMotorOutput = speed + rotation;
-        // rightMotorOutput = maxInput;
-        // } else {
-        // leftMotorOutput = maxInput;
-        // rightMotorOutput = speed - rotation;
-        // }
-        // }
-        // // possible replacement
-        // /* if ((speed >= 0) == (rotation >= 0)) {
-        // leftMotorOutput = maxInput;
-        // rightMotorOutput = speed - rotation;
-        // } else {
-        // leftMotorOutput = speed + rotation;
-        // rightMotorOutput = maxInput;
-        // } */
+        // speed is -1 to 1, rotation is also -1 to 1
+        if (speed >= 0) {
+            if (rotation >= 0) {
+                leftMotorOutput = maxInput;
+                rightMotorOutput = speed - rotation;
+            } else {
+                leftMotorOutput = speed + rotation;
+                rightMotorOutput = maxInput;
+            }
+        } else {
+            if (rotation >= 0) {
+                leftMotorOutput = speed + rotation;
+                rightMotorOutput = maxInput;
+            } else {
+                leftMotorOutput = maxInput;
+                rightMotorOutput = speed - rotation;
+            }
+        }
+        // possible replacement
+        /* if ((speed >= 0) == (rotation >= 0)) {
+        leftMotorOutput = maxInput;
+        rightMotorOutput = speed - rotation;
+        } else {
+        leftMotorOutput = speed + rotation;
+        rightMotorOutput = maxInput;
+        } */
 
-        // m_rightMotors.set(-rightMotorOutput);
-        // m_leftMotors.set(leftMotorOutput);
+        leftLeader.set(-rightMotorOutput);
+        rightLeader.set(leftMotorOutput);
     }
 
     /**
@@ -164,6 +160,7 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         m_odometry.update(gyro.getRotation2d(), getLeftDistance(), getRightDistance());
+
     }
 
     public Pose2d getPose() {
@@ -171,8 +168,14 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        double leftSpeed = leftLeader.getSelectedSensorVelocity() * 10 / 2048 * Constants.WHEEL_CIRCUMFERENCE;
-        double rightSpeed = rightLeader.getSelectedSensorVelocity() * 10 / 2048 * Constants.WHEEL_CIRCUMFERENCE;
+        // encoder ticks per 100 ms
+        // rotations per second
+        // meters per second
+        double leftSpeed = leftLeader.getSelectedSensorVelocity() * (10.0 / 2048.0) * Constants.WHEEL_CIRCUMFERENCE;
+        SmartDashboard.putNumber("leftSpeed", leftSpeed);
+        double rightSpeed = rightLeader.getSelectedSensorVelocity() * (10.0 / 2048.0) * Constants.WHEEL_CIRCUMFERENCE;
+        SmartDashboard.putNumber("leftSpeed", leftSpeed);
+
         return new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
     }
 
@@ -187,8 +190,9 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void tankDriveVolts(double lVolts, double rVolts) {
-        m_rightMotors.setVoltage(rVolts);
-        m_leftMotors.setVoltage(lVolts);
-        m_drive.feed();
+        leftLeader.set(ControlMode.PercentOutput, lVolts / 12);
+        rightLeader.set(ControlMode.PercentOutput, rVolts / 12);
+        SmartDashboard.putNumber("lVolts", lVolts);
+        SmartDashboard.putNumber("rVolts", rVolts);
     }
 }

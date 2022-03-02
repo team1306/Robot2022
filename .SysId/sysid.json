@@ -1,7 +1,7 @@
 {
   "SysId": {
-    "Analysis Type": "Drivetrain",
-    "AnalyzerJSONLocation": "C:\\Users\\BadgerBots\\Desktop\\sysid_data20220226-145626.json",
+    "Analysis Type": "General Mechanism",
+    "AnalyzerJSONLocation": "C:\\Users\\BadgerBots\\Desktop\\sysid_data20220226-144816.json",
     "NetworkTables Settings": {
       "serverTeam": "1306"
     },
