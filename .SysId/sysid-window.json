@@ -1,11 +1,11 @@
 {
   "MainWindow": {
     "GLOBAL": {
-      "height": "684",
+      "height": "1017",
       "maximized": "1",
       "style": "0",
       "userScale": "2",
-      "width": "1254",
+      "width": "1920",
       "xpos": "0",
       "ypos": "23"
     }
@@ -43,7 +43,7 @@
     },
     "Diagnostic Plots": {
       "Collapsed": "0",
-      "Pos": "985,26",
+      "Pos": "1183,50",
       "Size": "689,954"
     },
     "Exception Caught!": {

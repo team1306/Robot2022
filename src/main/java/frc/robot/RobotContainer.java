@@ -120,10 +120,13 @@ public class RobotContainer {
 
     public RamseteCommand getAutonomousCommand() {
         var speedConstraint = new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Constants.Ks, Constants.Kv, Constants.Ka), DriveKinematics, 5
+            new SimpleMotorFeedforward(Constants.Ks, Constants.Kv, Constants.Ka),
+            DriveKinematics,
+            5
         );
         TrajectoryConfig config = new TrajectoryConfig(
-            Constants.MAX_SPEED_MPS, Constants.MAX_ACCELERATION_MPSS
+            Constants.MAX_SPEED_MPS,
+            Constants.MAX_ACCELERATION_MPSS
         ).setKinematics(DriveKinematics).addConstraint(speedConstraint);
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
@@ -133,11 +136,18 @@ public class RobotContainer {
         );
         System.out.println(exampleTrajectory.toString());
         RamseteCommand ramseteCommand = new RamseteCommand(
-            exampleTrajectory, driveTrain::getPose, new RamseteController(kRamseteB, KRamseteZeta),
-            new SimpleMotorFeedforward(Constants.Ks, Constants.Kv, Constants.Ka), DriveKinematics,
-            driveTrain::getWheelSpeeds, new PIDController(0, 0, 0), new PIDController(0, 0, 0),
-            (driveTrain::tankDriveVolts), driveTrain
+            exampleTrajectory,
+            driveTrain::getPose,
+            new RamseteController(kRamseteB, KRamseteZeta),
+            new SimpleMotorFeedforward(Constants.Ks, Constants.Kv, Constants.Ka),
+            DriveKinematics,
+            driveTrain::getWheelSpeeds,
+            new PIDController(2.4821, 0, 0),
+            new PIDController(2.4821, 0, 0),
+            driveTrain::tankDriveVolts,
+            driveTrain
         );
+
 
         driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
         ramseteCommand.addRequirements(driveTrain);

@@ -102,7 +102,7 @@ e.g 20 : 16 + 4 = Wrap when necessary and ident by 1
 		<setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_type" value="49" />
 		<!-- argument alignment -->
 		<!-- 16 or 48 ; 48 very tall, 16 very wide-->
-		<setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_allocation_expression" value="16" />
+		<setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_allocation_expression" value="48" />
 		<setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_annotation" value="0" />
 		<setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_enum_constant" value="48" />
 		<setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_explicit_constructor_call" value="80" />

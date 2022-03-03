@@ -12,6 +12,7 @@ import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 // import frc.robot.Constants;
 // import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.DriveTrain;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.DriveTrain;
 public class Robot extends TimedRobot {
 
     public static DriveTrain driveTrain;
+    public static RamseteCommand autocmd;
     // private static Command testCommand = null;
 
     private RobotContainer m_robotContainer;
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+        autocmd = m_robotContainer.getAutonomousCommand();
     }
 
     /**
@@ -60,7 +63,6 @@ public class Robot extends TimedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-
     }
 
     /**

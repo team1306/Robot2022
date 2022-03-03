@@ -49,13 +49,14 @@ public class DriveTrain extends SubsystemBase {
         leftFollower = initWPITalonFX(DRIVE_LEFT_FOLLOWER_ID);
         rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
+
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
 
         m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
 
-
+        gyro.reset();
     }
 
     /**
@@ -87,17 +88,17 @@ public class DriveTrain extends SubsystemBase {
                 rightMotorOutput = speed - rotation;
             }
         }
-        // possible replacement
-        /* if ((speed >= 0) == (rotation >= 0)) {
-        leftMotorOutput = maxInput;
-        rightMotorOutput = speed - rotation;
-        } else {
-        leftMotorOutput = speed + rotation;
-        rightMotorOutput = maxInput;
-        } */
 
         leftLeader.set(-rightMotorOutput);
-        rightLeader.set(leftMotorOutput);
+        rightLeader.set(leftMotorOutput);;
+        SmartDashboard.putNumber("LeftVelocity", getWheelSpeeds().leftMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE);
+        SmartDashboard.putNumber(
+            "RightVelocity",
+            getWheelSpeeds().rightMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE
+        );
+        SmartDashboard.putNumber("LeftEncoder things", leftLeader.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("Gyro heading", gyro.getYaw());
+
     }
 
     /**
