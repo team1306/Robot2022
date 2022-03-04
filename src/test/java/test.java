@@ -40,12 +40,12 @@ public class test {
         5
     );
 
-    static Pose2d pose = new Pose2d(0, 0, new Rotation2d(0));
+    static Pose2d pose = new Pose2d(0, 0, new Rotation2d(Math.PI / 2));
     static RamseteController m_follower = new RamseteController(2, .7);
     static Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         pose,
-        List.of(new Translation2d(10, 0)),
-        new Pose2d(20, 0, new Rotation2d(0)),
+        List.of(new Translation2d(0, 10)),
+        new Pose2d(0, 20, new Rotation2d(Math.PI / 2)),
         new TrajectoryConfig(Constants.MAX_SPEED_MPS, Constants.MAX_ACCELERATION_MPSS).setKinematics(
             driveKinematics
         ).addConstraint(speedConstraint)
@@ -53,14 +53,12 @@ public class test {
 
     public static void printSpeeds() {
         Pose2d prevpose = pose;
-        for (double time = 0; time < 10; time += .02) {
+        for (double time = 0; time < 6.18; time += .02) {
             var state = exampleTrajectory.sample(time);
-            System.out.println(
-                driveKinematics.toWheelSpeeds(m_follower.calculate(prevpose, state)).toString().replace(
-                    "DifferentialDriveWheelSpeeds",
-                    ""
-                )
-            );
+            // System.out.print(state.poseMeters.toString().replaceAll("[A-za-z]+2d", "") + " ");
+            var x = m_follower.calculate(prevpose, state);
+            System.out.println(x);
+            System.out.println(driveKinematics.toWheelSpeeds(x).toString().replace("DifferentialDriveWheelSpeeds", ""));
             prevpose = state.poseMeters;
         }
     }

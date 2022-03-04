@@ -14,6 +14,8 @@ public class DriveCommand extends CommandBase {
     private DriveTrain driveTrain;
     private UserAnalog leftRotation;
     private UserAnalog rightRotation;
+    private UserAnalog joystickRotation;
+    private boolean useJoystickRotation = true;
 
     /**
      * initalizes drive command from given drivetrain, speed, and rotation
@@ -23,12 +25,19 @@ public class DriveCommand extends CommandBase {
      * @param leftRotation  initial left rotation
      * @param rightRotation initial right rotation
      */
-    public DriveCommand(DriveTrain driveTrain, UserAnalog speed, UserAnalog leftRotation, UserAnalog rightRotation) {
+    public DriveCommand(
+        DriveTrain driveTrain,
+        UserAnalog speed,
+        UserAnalog leftRotation,
+        UserAnalog rightRotation,
+        UserAnalog joystickRotation
+    ) {
         this.speed = speed;
         this.driveTrain = driveTrain;
         this.addRequirements(driveTrain);
         this.leftRotation = leftRotation;
         this.rightRotation = rightRotation;
+        this.joystickRotation = joystickRotation;
     }
 
     /**
@@ -37,17 +46,30 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double spd = -speed.get();
-        double rotation = rightRotation.get() - leftRotation.get();
+        double spd = speed.get();
+        double rotation;
+        if (useJoystickRotation) {
+            rotation = joystickRotation.get();
+        } else {
+            rotation = rightRotation.get() - leftRotation.get();
 
-        if (Math.abs(spd) < .05)
-            spd = 0;
+        }
 
-        if (Math.abs(rotation) < .05)
-            rotation = 0;
+        if (Math.abs(spd) > .2)
+            spd = .2 + (spd - .2) * (Math.abs(spd - .2));
+
+        if (Math.abs(rotation) > .2)
+            rotation = .2 + (rotation - .2) * Math.abs(rotation - .2);
 
         spd *= Math.abs(spd);
         rotation *= Math.abs(rotation);
-        driveTrain.arcadeDrive(spd, rotation);
+        if (useJoystickRotation) {
+            // double addedTriggerSpeed = rightRotation.get() - leftRotation.get();
+            // double targetSpeed = Math.copySign(Math.max(Math.abs(spd), Math.abs(addedTriggerSpeed)), spd);
+            driveTrain.arcadeDrive(.5 * spd, .5 * rotation);
+        } else {
+            driveTrain.arcadeDrive(.5 * spd, .5 * rotation);
+
+        }
     }
 }

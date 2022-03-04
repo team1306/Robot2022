@@ -33,7 +33,7 @@ public class MotorUtils {
     public static WPI_TalonFX initWPITalonFX(int motorID) {
         var motor = new WPI_TalonFX(motorID);
         motor.configFactoryDefault();
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.setNeutralMode(NeutralMode.Coast);
         motor.configClosedloopRamp(2);
         return motor;
     }

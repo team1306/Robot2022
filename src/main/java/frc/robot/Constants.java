@@ -32,7 +32,7 @@ public interface Constants {
     double Ka = 0;// .28138;
 
     double TRACK_WIDTH_METERS = .60;
-    double MAX_SPEED_MPS = 4.67;
+    double MAX_SPEED_MPS = 1;
     double MAX_ACCELERATION_MPSS = 3;
     double WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4) * Math.PI;
 }

@@ -9,11 +9,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -143,7 +145,7 @@ public class DriveTrain extends SubsystemBase {
      */
     public double getLeftDistance() {
         double encoderTicks = leftLeader.getSelectedSensorPosition();
-        double distance = encoderTicks / 2048 * Constants.WHEEL_CIRCUMFERENCE;
+        double distance = encoderTicks / 2048 / 5.88 * Constants.WHEEL_CIRCUMFERENCE;
         return distance;
     }
 
@@ -154,13 +156,21 @@ public class DriveTrain extends SubsystemBase {
      */
     public double getRightDistance() {
         double encoderTicks = rightLeader.getSelectedSensorPosition();
-        double distance = encoderTicks / 2048 * Constants.WHEEL_CIRCUMFERENCE;
+        double distance = encoderTicks / 2048 / 5.88 * Constants.WHEEL_CIRCUMFERENCE;
         return distance;
     }
 
     @Override
     public void periodic() {
-        m_odometry.update(gyro.getRotation2d(), getLeftDistance(), getRightDistance());
+        // Disabling gyro
+        var rot = new Rotation2d(0);
+        double ldist = getLeftDistance();
+        double rdist = getRightDistance();
+        // monkaS
+        var field = new Field2d();
+        field.setRobotPose(ldist, rdist, rot);
+        SmartDashboard.putData(field);
+        m_odometry.update(rot, ldist, rdist);
 
     }
 
@@ -172,10 +182,14 @@ public class DriveTrain extends SubsystemBase {
         // encoder ticks per 100 ms
         // rotations per second
         // meters per second
-        double leftSpeed = leftLeader.getSelectedSensorVelocity() * (10.0 / 2048.0) * Constants.WHEEL_CIRCUMFERENCE;
+        double leftSpeed = leftLeader.getSelectedSensorVelocity()
+            * (10.0 / 2048 / 5.88)
+            * Constants.WHEEL_CIRCUMFERENCE;
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
-        double rightSpeed = rightLeader.getSelectedSensorVelocity() * (10.0 / 2048.0) * Constants.WHEEL_CIRCUMFERENCE;
-        SmartDashboard.putNumber("leftSpeed", leftSpeed);
+        double rightSpeed = rightLeader.getSelectedSensorVelocity()
+            * (10.0 / 2048 / 5.88)
+            * Constants.WHEEL_CIRCUMFERENCE;
+        SmartDashboard.putNumber("rightSpeed", rightSpeed);
 
         return new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
     }
@@ -191,8 +205,8 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void tankDriveVolts(double lVolts, double rVolts) {
-        leftLeader.set(ControlMode.PercentOutput, lVolts / 12);
-        rightLeader.set(ControlMode.PercentOutput, rVolts / 12);
+        leftLeader.set(ControlMode.PercentOutput, lVolts / 12.0 * (46.0 / 48.0));
+        rightLeader.set(ControlMode.PercentOutput, rVolts / 12.0);
         SmartDashboard.putNumber("lVolts", lVolts);
         SmartDashboard.putNumber("rVolts", rVolts);
     }

@@ -50,6 +50,7 @@ public class RobotContainer {
     private UserAnalog speedDriveTrain;
     private UserAnalog leftRotationDriveTrain;
     private UserAnalog rightRotationDriveTrain;
+    private UserAnalog joystickRotationDriveTrain;
 
     DifferentialDriveKinematics DriveKinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
     double kRamseteB = 2;
@@ -71,7 +72,13 @@ public class RobotContainer {
 
         driveTrain = new DriveTrain();
         autoCommand = getAutonomousCommand();
-        driveCommand = new DriveCommand(driveTrain, speedDriveTrain, leftRotationDriveTrain, rightRotationDriveTrain);
+        driveCommand = new DriveCommand(
+            driveTrain,
+            speedDriveTrain,
+            leftRotationDriveTrain,
+            rightRotationDriveTrain,
+            joystickRotationDriveTrain
+        );
 
         // new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
         // new IndexCommand(indexInput, new Index());
@@ -86,6 +93,7 @@ public class RobotContainer {
         this.speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
         this.leftRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
         this.rightRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
+        this.joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
         // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
         // shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
         // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
@@ -130,8 +138,8 @@ public class RobotContainer {
         ).setKinematics(DriveKinematics).addConstraint(speedConstraint);
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(0, 10)),
-            new Pose2d(0, 20, new Rotation2d(0)),
+            List.of(new Translation2d(1, 0)),
+            new Pose2d(2, 0, new Rotation2d(0)),
             config
         );
         System.out.println(exampleTrajectory.toString());
