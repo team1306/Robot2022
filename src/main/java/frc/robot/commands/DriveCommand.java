@@ -56,12 +56,12 @@ public class DriveCommand extends CommandBase {
         }
 
         if (Math.abs(spd) > .2)
-            spd = .2 + (spd - .2) * (Math.abs(spd - .2));
+            spd = 1.0 / 6 * Math.signum(spd) + 5.0 / 6 * spd * Math.abs(spd);
 
-        if (Math.abs(rotation) > .2)
-            rotation = .2 + (rotation - .2) * Math.abs(rotation - .2);
+        // if (Math.abs(rotation) > .2)
+        // rotation = .2 + (rotation - .2) * Math.abs(rotation - .2);
 
-        spd *= Math.abs(spd);
+        // spd *= Math.abs(spd);
         rotation *= Math.abs(rotation);
         if (useJoystickRotation) {
             // double addedTriggerSpeed = rightRotation.get() - leftRotation.get();

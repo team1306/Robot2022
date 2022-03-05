@@ -1,5 +1,11 @@
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -27,12 +33,31 @@ public interface Constants {
      * TODO: set the actual ID values
      */
 
-    double Ks = 0;// .61784;
-    double Kv = 0;// 2.0067;
-    double Ka = 0;// .28138;
+    double K_S = .61784;
+    double K_V = 2.0067;
+    double K_A = .28138;
+
+    double K_P = 2.4821;
+    double K_I = 0;
+    double K_D = 0;
+    double K_RAMSETE_B = 2;
+    double K_RAMSETE_ZETA = .7;
 
     double TRACK_WIDTH_METERS = .60;
     double MAX_SPEED_MPS = 1;
     double MAX_ACCELERATION_MPSS = 3;
     double WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4) * Math.PI;
+
+    List<Pose2d> TRAJ_TWOBALLS_1 = List.of(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(-2.7, -0.7875, new Rotation2d(Math.PI * 2.0 / 3))
+    );
+    List<Pose2d> TRAJ_TWOBALLS_2 = List.of(
+        new Pose2d(-2.7, -0.7875, new Rotation2d(Math.PI * 2.0 / 3)),
+        new Pose2d(0, -4, new Rotation2d(Math.PI * 4.0 / 3))
+    );
+    List<Pose2d> TRAJ_TWOBALLS_3 = List.of(
+        new Pose2d(0, -4, new Rotation2d(Math.PI * 4.0 / 3)),
+        new Pose2d(0, 0, new Rotation2d(0))
+    );
 }

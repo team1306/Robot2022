@@ -12,9 +12,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,24 +36,15 @@ public class DriveTrain extends SubsystemBase {
      * Initializing drive train and talonmFX settings
      */
     public DriveTrain() {
-        /*
-         * Old drive train initialization
-         * leftLeader = new TalonSRX(LEFT_DRIVE_LEADER);
-         * rightLeader = new TalonSRX(RIGHT_DRIVE_LEADER); 
-         * leftFollower = new VictorSPX(LEFT_DRIVE_FOLLOWER); 
-         * rightFollower = new VictorSPX(RIGHT_DRIVE_FOLLOWER);
-         */
         leftLeader = initWPITalonFX(DRIVE_LEFT_LEADER_ID);
         rightLeader = initWPITalonFX(DRIVE_RIGHT_LEADER_ID);
         leftFollower = initWPITalonFX(DRIVE_LEFT_FOLLOWER_ID);
         rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
-
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
 
         m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
-
 
         gyro.reset();
     }
@@ -92,7 +80,7 @@ public class DriveTrain extends SubsystemBase {
         }
 
         leftLeader.set(-rightMotorOutput);
-        rightLeader.set(leftMotorOutput);;
+        rightLeader.set(leftMotorOutput);
         SmartDashboard.putNumber("LeftVelocity", getWheelSpeeds().leftMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE);
         SmartDashboard.putNumber(
             "RightVelocity",
