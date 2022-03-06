@@ -55,11 +55,11 @@ public class test {
         List.of(
             new Pose2d(0, 0, new Rotation2d(0)),
             new Pose2d(
-                Units.inchesToMeters(-92.945),
-                Units.inchesToMeters(-30.51),
+                Units.inchesToMeters(-89.95),
+                Units.inchesToMeters(-17.38),
                 new Rotation2d(Math.PI * -120.0 / 180)
             ),
-            new Pose2d(Units.inchesToMeters(-2.85), Units.inchesToMeters(-67.95), new Rotation2d(Math.PI * -60 / 180)),
+            new Pose2d(Units.inchesToMeters(-0.15), Units.inchesToMeters(-72.24), new Rotation2d(Math.PI * -60 / 180)),
             new Pose2d(0, 0, new Rotation2d(0))
         ),
         config
@@ -76,7 +76,7 @@ public class test {
                 time,
                 driveKinematics.toWheelSpeeds(x).toString().replace("DifferentialDriveWheelSpeeds", "")
             );
-            System.out.println(state.poseMeters);
+            System.out.print(state.poseMeters);
             prevpose = state.poseMeters;
         }
     }

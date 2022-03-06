@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
@@ -38,14 +39,24 @@ public class AutonomousCommand extends RamseteCommand {
         )
     );
 
-    // Go intake two balls
-    // PROBLEM : We want to intake the ball at each waypoint, but
+    // Start from position B facing goal and get ball 2 and then ball 1. Return to starting position
+    // Poisitions and balls are labeled on the field map on whiteboard
+    // PROBLEMS : We want to intake the ball at each waypoint. Rotation values are sudo numbers
     static Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(0, 0, new Rotation2d(0)),
-            new Pose2d(-2.7, -0.7875, new Rotation2d(Math.PI * 2.0 / 3)),
-            new Pose2d(0, -4, new Rotation2d(Math.PI * 4.0 / 3)),
+            new Pose2d(Units.inchesToMeters(-89.95), Units.inchesToMeters(-17.38), new Rotation2d(Math.PI * 2.0 / 3)),
+            new Pose2d(Units.inchesToMeters(-0.15), Units.inchesToMeters(-72.24), new Rotation2d(Math.PI * 4.0 / 3)),
             new Pose2d(0, 0, new Rotation2d(0))
+        ),
+        config
+    );
+    // Start on posision D facing ball 4. Collect ball 4 and move to position E facing the goal.
+    static Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
+        List.of(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            new Pose2d(Units.inchesToMeters(46.37), Units.inchesToMeters(71.58), new Rotation2d(0)),
+            new Pose2d(Units.inchesToMeters(-55.41), Units.inchesToMeters(-44.33), new Rotation2d(Math.PI * 5.0 / 6))
         ),
         config
     );
