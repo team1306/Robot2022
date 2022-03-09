@@ -198,4 +198,42 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("lVolts", lVolts);
         SmartDashboard.putNumber("rVolts", rVolts);
     }
+
+    /**
+     * two params : speed, rotation use those two params to generate target state of robot, which means we need to know
+     * the speed forward and rotational speed. Then compare those two speeds to the current speed of the robot, and find
+     * the difference between the current speed between the target speed Adjust the target speed based on the current
+     * speed and the difference. Basically arcadeDrive.
+     */
+    public void adjustedArcadeDrive(double speed, double rotation) {
+        double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);
+        double leftMotorOutput;
+        double rightMotorOutput;
+        if (speed >= 0) {
+            if (rotation >= 0) {
+                leftMotorOutput = speed;
+                rightMotorOutput = speed - rotation;
+            } else {
+                leftMotorOutput = speed + rotation;
+                rightMotorOutput = maxInput;
+            }
+        } else {
+            if (rotation >= 0) {
+                leftMotorOutput = speed + rotation;
+                rightMotorOutput = maxInput;
+            } else {
+                leftMotorOutput = maxInput;
+                rightMotorOutput = speed - rotation;
+            }
+        }
+        DifferentialDriveWheelSpeeds currentSpeed = getWheelSpeeds();
+        double leftDiff = (currentSpeed.leftMetersPerSecond / Constants.MAX_SPEED_MPS - leftMotorOutput) * 0.9;
+        double rightDiff = (currentSpeed.rightMetersPerSecond / Constants.MAX_SPEED_MPS - rightMotorOutput) * 0.9;
+        double leftSpeed = currentSpeed.leftMetersPerSecond + leftDiff * 0.9; // TODO don't use 0.9
+        double rightSpeed = currentSpeed.rightMetersPerSecond + rightDiff * 0.9;
+        // Somehow the flipped output for the right motor is assined to the left motor.
+        // Somehow it woirks in the original arcadeDrive.
+        leftLeader.set(-rightSpeed);
+        rightLeader.set(leftSpeed);
+    }
 }

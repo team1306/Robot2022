@@ -52,15 +52,22 @@ public class test {
         Constants.MAX_ACCELERATION_MPSS + 2
     ).setKinematics(driveKinematics).addConstraint(speedConstraint);
     static Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // List.of(
+        // new Pose2d(0, 0, new Rotation2d(0)),
+        // new Pose2d(
+        // Units.inchesToMeters(-89.95),
+        // Units.inchesToMeters(-17.38),
+        // new Rotation2d(Math.PI * -120.0 / 180)
+        // ),
+        // new Pose2d(Units.inchesToMeters(-0.15), Units.inchesToMeters(-72.24), new Rotation2d(Math.PI * -60 / 180)),
+        // new Pose2d(0, 0, new Rotation2d(0))
+        // ),
         List.of(
             new Pose2d(0, 0, new Rotation2d(0)),
-            new Pose2d(
-                Units.inchesToMeters(-89.95),
-                Units.inchesToMeters(-17.38),
-                new Rotation2d(Math.PI * -120.0 / 180)
-            ),
-            new Pose2d(Units.inchesToMeters(-0.15), Units.inchesToMeters(-72.24), new Rotation2d(Math.PI * -60 / 180)),
-            new Pose2d(0, 0, new Rotation2d(0))
+            new Pose2d(4, 0, new Rotation2d(0)),
+            new Pose2d(4, 4, new Rotation2d(Math.PI / 2)),
+            new Pose2d(0, 4, new Rotation2d(Math.PI / 2)),
+            new Pose2d(0, 0, new Rotation2d(Math.PI / 2))
         ),
         config
     );

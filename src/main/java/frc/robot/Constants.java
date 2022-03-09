@@ -44,20 +44,9 @@ public interface Constants {
     double K_RAMSETE_ZETA = .7;
 
     double TRACK_WIDTH_METERS = .60;
-    double MAX_SPEED_MPS = 1;
+    double MAX_SPEED_MPS = 4.67;
     double MAX_ACCELERATION_MPSS = 3;
     double WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4) * Math.PI;
 
-    List<Pose2d> TRAJ_TWOBALLS_1 = List.of(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        new Pose2d(-2.7, -0.7875, new Rotation2d(Math.PI * 2.0 / 3))
-    );
-    List<Pose2d> TRAJ_TWOBALLS_2 = List.of(
-        new Pose2d(-2.7, -0.7875, new Rotation2d(Math.PI * 2.0 / 3)),
-        new Pose2d(0, -4, new Rotation2d(Math.PI * 4.0 / 3))
-    );
-    List<Pose2d> TRAJ_TWOBALLS_3 = List.of(
-        new Pose2d(0, -4, new Rotation2d(Math.PI * 4.0 / 3)),
-        new Pose2d(0, 0, new Rotation2d(0))
-    );
+    double MAX_DIFF_ACCELERATION = 0;
 }

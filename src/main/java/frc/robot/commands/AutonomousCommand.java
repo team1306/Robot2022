@@ -41,7 +41,6 @@ public class AutonomousCommand extends RamseteCommand {
 
     // Start from position B facing goal and get ball 2 and then ball 1. Return to starting position
     // Poisitions and balls are labeled on the field map on whiteboard
-    // PROBLEMS : We want to intake the ball at each waypoint. Rotation values are sudo numbers
     static Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(0, 0, new Rotation2d(0)),
