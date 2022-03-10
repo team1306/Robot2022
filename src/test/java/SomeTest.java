@@ -6,7 +6,8 @@ import java.lang.System;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 
 import org.junit.*;
-import frc.robot.subsystems.Shooter;
+
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.hal.HAL;
 // import edu.wpi.first.wpilibj.simulation.PWMSim;
 
@@ -14,24 +15,26 @@ import edu.wpi.first.hal.HAL;
  * testers probably
  */
 public class SomeTest {
-    // private Shooter shooter;
+    private DriveTrain dtrain;
 
     @Before
     public void setup() {
         assert HAL.initialize(500, 0);
         System.out.println("Setup");
-        // assertEquals(shooter, actual);
+        dtrain = new DriveTrain();
     }
 
     @After
     public void shutdown() throws Exception {
         System.out.println("done");
+        dtrain.close();
     }
 
     @Test
     public void someTest() {
         System.out.println("test 1");
-        // shooter.moveMainMotor(1);
+        dtrain.adjustedArcadeDrive(1, 0.5);
+        dtrain.arcadeDrive(1, 0.5);
     }
 
     @Test

@@ -20,7 +20,7 @@ import frc.robot.Constants;
 /**
  * Used by DriveTrain command to move robot Calculates output for each side of the drivetrain
  */
-public class DriveTrain extends SubsystemBase {
+public class DriveTrain extends SubsystemBase implements AutoCloseable {
     private WPI_TalonFX leftLeader;
     private WPI_TalonFX leftFollower;
 
@@ -79,6 +79,7 @@ public class DriveTrain extends SubsystemBase {
             }
         }
 
+        System.out.printf("left: %f , right : %f\n", -rightMotorOutput, leftMotorOutput);
         leftLeader.set(-rightMotorOutput);
         rightLeader.set(leftMotorOutput);
         SmartDashboard.putNumber("LeftVelocity", getWheelSpeeds().leftMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE);
@@ -227,13 +228,30 @@ public class DriveTrain extends SubsystemBase {
             }
         }
         DifferentialDriveWheelSpeeds currentSpeed = getWheelSpeeds();
-        double leftDiff = (currentSpeed.leftMetersPerSecond / Constants.MAX_SPEED_MPS - leftMotorOutput) * 0.9;
-        double rightDiff = (currentSpeed.rightMetersPerSecond / Constants.MAX_SPEED_MPS - rightMotorOutput) * 0.9;
-        double leftSpeed = currentSpeed.leftMetersPerSecond + leftDiff * 0.9; // TODO don't use 0.9
-        double rightSpeed = currentSpeed.rightMetersPerSecond + rightDiff * 0.9;
+        System.out.println(currentSpeed);
+        double adjustedLeftMotorOutput = rightMotorOutput;
+        double adjustedRightMotorOutput = -leftMotorOutput;
+        double leftDiff = (currentSpeed.leftMetersPerSecond / Constants.MAX_SPEED_MPS - adjustedLeftMotorOutput) * .5;
+        double rightDiff = (currentSpeed.rightMetersPerSecond / Constants.MAX_SPEED_MPS - adjustedRightMotorOutput)
+            * .5;
+        double leftSpeed = currentSpeed.leftMetersPerSecond + leftDiff; // TODO don't use 0.9
+        double rightSpeed = currentSpeed.rightMetersPerSecond + rightDiff;
         // Somehow the flipped output for the right motor is assined to the left motor.
         // Somehow it woirks in the original arcadeDrive.
-        leftLeader.set(-rightSpeed);
-        rightLeader.set(leftSpeed);
+        System.out.printf("left: %f , right : %f\n", leftSpeed, rightSpeed);
+        leftLeader.set(leftSpeed);
+        rightLeader.set(rightSpeed);
+    }
+
+    @Override
+    public void close() throws Exception {
+        // TODO Auto-generated method stub
+        leftLeader.close();
+        rightLeader.close();
+        leftFollower.close();
+        rightFollower.close();
+
+        gyro.close();
+
     }
 }

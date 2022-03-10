@@ -89,10 +89,7 @@ public class test {
     }
 
     public static void main(String[] args) {
-        System.out.println(exampleTrajectory.toString().replace("State", "").replaceAll("[A-za-z]+2d", ""));
-        System.out.println("\n\n");
-        System.out.println(Units.inchesToMeters(-92.945) + "," + Units.inchesToMeters(-30.51));
-        System.out.println(Units.inchesToMeters(-2.85) + "," + Units.inchesToMeters(-67.95));
-        printSpeeds();
+        var drive = new DriveTrain();
+        drive.adjustedArcadeDrive(1, 1);
     }
 }
