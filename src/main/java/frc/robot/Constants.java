@@ -18,15 +18,16 @@ import edu.wpi.first.math.util.Units;
  * 
  */
 public interface Constants {
-    int SHOOTER_UPPER_MOTOR_ID = 0;
-    int SHOOTER_LOWER_MOTOR_ID = 0;// 3;
-    int SHOOTER_KICKER_ID = 0;
-    int SHOOTER_INDEX_ID = 0;
+    int FRONT_SHOOTER_ID = 2;
+    int BACK_SHOOTER_ID = 1;
+    int SHOOTER_KICKER_ID = 7;
+    int FRONT_INDEX_ID = 4;
+    int BACK_INDEX_ID = 3;
 
-    int DRIVE_RIGHT_LEADER_ID = 1;
-    int DRIVE_RIGHT_FOLLOWER_ID = 2;
-    int DRIVE_LEFT_LEADER_ID = 3;
-    int DRIVE_LEFT_FOLLOWER_ID = 4;
+    int DRIVE_RIGHT_LEADER_ID = 5;
+    int DRIVE_RIGHT_FOLLOWER_ID = 6;
+    int DRIVE_LEFT_LEADER_ID = 8;
+    int DRIVE_LEFT_FOLLOWER_ID = 9;
 
     int CLIMBER_MOTOR_ID = 0;
     /**

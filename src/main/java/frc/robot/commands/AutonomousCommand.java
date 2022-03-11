@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Shooter;
 
 import java.util.List;
 
@@ -24,9 +25,9 @@ import com.kauailabs.navx.frc.AHRS;
  * shell code for autonomous command
  */
 public class AutonomousCommand extends RamseteCommand {
-    private final AHRS navx;
 
     DriveTrain driveTrain;
+    Shooter shooter;
     static DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
     static TrajectoryConfig config = new TrajectoryConfig(
         Constants.MAX_SPEED_MPS,
@@ -63,7 +64,7 @@ public class AutonomousCommand extends RamseteCommand {
     /**
      * initializes autonomous command
      */
-    public AutonomousCommand(DriveTrain driveTrain) {
+    public AutonomousCommand(DriveTrain driveTrain, Shooter shooter) {
         super(
             trajectory1,
             driveTrain::getPose,
@@ -79,8 +80,15 @@ public class AutonomousCommand extends RamseteCommand {
         driveTrain.resetOdometry(trajectory1.getInitialPose());
         driveKinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
         this.driveTrain = driveTrain;
+        this.shooter = shooter;
         // this.addRequirements(driveTrain);
-        this.navx = new AHRS();
+        // this.navx = new AHRS();
         // driveTrain.setDefaultCommand(this);
+    }
+
+    @Override
+    public void execute() {
+        shooter.moveMotor(0, 0, true);
+        super.execute();
     }
 }

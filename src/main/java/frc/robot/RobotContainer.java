@@ -18,9 +18,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utils.Controller;
 import frc.robot.utils.UserAnalog;
+import frc.robot.utils.UserDigital;
+import frc.robot.subsystems.Shooter;
+
+import java.util.ResourceBundle.Control;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 
@@ -34,6 +40,7 @@ public class RobotContainer {
     private Command autoCommand;
     private Command driveCommand;
     private DriveTrain driveTrain;
+    private Shooter shooter;
 
     private final boolean RUN_AUTO = true;
 
@@ -42,6 +49,10 @@ public class RobotContainer {
     private UserAnalog leftRotationDriveTrain;
     private UserAnalog rightRotationDriveTrain;
     private UserAnalog joystickRotationDriveTrain;
+
+    private UserAnalog intakeInput;
+    private UserDigital dumpShot, nearShot, farShot;
+    private UserDigital stall;
 
     // The robot's inputs that it recieves from the controller are defined here
 
@@ -65,7 +76,7 @@ public class RobotContainer {
             joystickRotationDriveTrain
         );
 
-        // new ShooterCommand(shooterMainInput, shooterSubInput, new Shooter());
+        new ShooterCommand(new Shooter(), dumpShot, nearShot, farShot, stall, intakeInput);
         // new IndexCommand(indexInput, new Index());
     }
 
@@ -79,6 +90,14 @@ public class RobotContainer {
         this.leftRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
         this.rightRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
         this.joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
+
+
+        intakeInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
+        dumpShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_X);
+        nearShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_Y);
+        farShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_B);
+        stall = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
+
         // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
         // shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
         // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
@@ -112,7 +131,7 @@ public class RobotContainer {
     }
 
     public RamseteCommand getAutonomousCommand() {
-        return new AutonomousCommand(driveTrain);
+        return new AutonomousCommand(driveTrain, shooter);
     }
 
 }

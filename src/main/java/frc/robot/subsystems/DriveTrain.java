@@ -26,7 +26,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
     private WPI_TalonFX rightLeader;
     private WPI_TalonFX rightFollower;
-    private AHRS gyro = new AHRS();
+    // private AHRS gyro = new AHRS();
     private final DifferentialDriveOdometry m_odometry;
 
 
@@ -44,9 +44,9 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
 
-        m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+        m_odometry = new DifferentialDriveOdometry(new Rotation2d());
 
-        gyro.reset();
+        // gyro.reset();
     }
 
     /**
@@ -88,7 +88,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
             getWheelSpeeds().rightMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE
         );
         SmartDashboard.putNumber("LeftEncoder things", leftLeader.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("Gyro heading", gyro.getYaw());
+        // SmartDashboard.putNumber("Gyro heading", gyro.getYaw());
 
     }
 
@@ -151,15 +151,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
     @Override
     public void periodic() {
-        // Disabling gyro
-        var rot = new Rotation2d(0);
-        double ldist = getLeftDistance();
-        double rdist = getRightDistance();
-        // monkaS
-        var field = new Field2d();
-        field.setRobotPose(ldist, rdist, rot);
-        SmartDashboard.putData(field);
-        m_odometry.update(rot, ldist, rdist);
+        m_odometry.update(new Rotation2d(), getLeftDistance(), getRightDistance());
 
     }
 
@@ -185,7 +177,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
-        m_odometry.resetPosition(pose, gyro.getRotation2d());
+        m_odometry.resetPosition(pose, new Rotation2d());
     }
 
     public void resetEncoders() {
@@ -234,7 +226,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         double leftDiff = (currentSpeed.leftMetersPerSecond / Constants.MAX_SPEED_MPS - adjustedLeftMotorOutput) * .5;
         double rightDiff = (currentSpeed.rightMetersPerSecond / Constants.MAX_SPEED_MPS - adjustedRightMotorOutput)
             * .5;
-        double leftSpeed = currentSpeed.leftMetersPerSecond + leftDiff; // TODO don't use 0.9
+        double leftSpeed = currentSpeed.leftMetersPerSecond + leftDiff;
         double rightSpeed = currentSpeed.rightMetersPerSecond + rightDiff;
         // Somehow the flipped output for the right motor is assined to the left motor.
         // Somehow it woirks in the original arcadeDrive.
@@ -251,7 +243,6 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         leftFollower.close();
         rightFollower.close();
 
-        gyro.close();
-
+        // gyro.close();
     }
 }
