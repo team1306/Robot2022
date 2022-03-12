@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.*;
 import static frc.robot.utils.MotorUtils.*;
 
+import java.util.concurrent.locks.LockSupport;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -40,6 +42,9 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         rightLeader = initWPITalonFX(DRIVE_RIGHT_LEADER_ID);
         leftFollower = initWPITalonFX(DRIVE_LEFT_FOLLOWER_ID);
         rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
+
+        // leftLeader.config_kP(0, .5);
+        // rightLeader.config_kP(0, .5);
 
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
@@ -79,10 +84,13 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
             }
         }
 
-        System.out.printf("left: %f , right : %f\n", -rightMotorOutput, leftMotorOutput);
+        // System.out.printf("left: %f , right : %f\n", -rightMotorOutput, leftMotorOutput);
         leftLeader.set(-rightMotorOutput);
         rightLeader.set(leftMotorOutput);
-        SmartDashboard.putNumber("LeftVelocity", getWheelSpeeds().leftMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE);
+        SmartDashboard.putNumber(
+            "LeftVelocity",
+            getWheelSpeeds().leftMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE
+        );
         SmartDashboard.putNumber(
             "RightVelocity",
             getWheelSpeeds().rightMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE
@@ -111,7 +119,12 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
      * @param leftFollow  left follow talonmFX output
      * @param rightFollow right followe talonmFX output
      */
-    public void testMotors(double leftFront, double rightFront, double leftFollow, double rightFollow) {
+    public void testMotors(
+        double leftFront,
+        double rightFront,
+        double leftFollow,
+        double rightFollow
+    ) {
         leftLeader.set(ControlMode.PercentOutput, leftFront);
         rightLeader.set(ControlMode.PercentOutput, rightFront);
 
@@ -164,7 +177,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         // rotations per second
         // meters per second
         double leftSpeed = leftLeader.getSelectedSensorVelocity()
-            * (10.0 / 2048 / 5.88)
+            * (10.0 / 2048 / 5.88) // dm -> m, et -> rot, gear ratio
             * Constants.WHEEL_CIRCUMFERENCE;
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
         double rightSpeed = rightLeader.getSelectedSensorVelocity()
@@ -220,16 +233,29 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
             }
         }
         DifferentialDriveWheelSpeeds currentSpeed = getWheelSpeeds();
-        System.out.println(currentSpeed);
-        double adjustedLeftMotorOutput = rightMotorOutput;
-        double adjustedRightMotorOutput = -leftMotorOutput;
-        double leftDiff = (currentSpeed.leftMetersPerSecond / Constants.MAX_SPEED_MPS - adjustedLeftMotorOutput) * .5;
-        double rightDiff = (currentSpeed.rightMetersPerSecond / Constants.MAX_SPEED_MPS - adjustedRightMotorOutput)
-            * .5;
-        double leftSpeed = currentSpeed.leftMetersPerSecond + leftDiff;
-        double rightSpeed = currentSpeed.rightMetersPerSecond + rightDiff;
+
+
         // Somehow the flipped output for the right motor is assined to the left motor.
         // Somehow it woirks in the original arcadeDrive.
+        double desiredLeftOutput = rightMotorOutput;
+        double desiredRightOutput = -leftMotorOutput;
+        // System.out.println("current: " + lspeed + " " + rspeed);
+        // System.out.println("desired: " + desiredLeftOutput + " " + desiredRightOutput);
+        // P(ID?) Constants
+        final double P = .5;
+        // normalize speeds to [-1,1]
+        double curLSpeed = currentSpeed.leftMetersPerSecond / Constants.MAX_SPEED_MPS;
+        double curRSpeed = currentSpeed.rightMetersPerSecond / Constants.MAX_SPEED_MPS;
+        // get error
+        double leftErr = desiredLeftOutput - curLSpeed;// curLSpeed - desiredLeftOutput;
+        double rightErr = desiredRightOutput - curRSpeed;// curRSpeed - desiredRightOutput;
+        // got proportional offset
+        double leftDiff = leftErr * P;
+        double rightDiff = rightErr * P;
+
+        // get final speeds;
+        double leftSpeed = curLSpeed + leftDiff;
+        double rightSpeed = curRSpeed + rightDiff;
         System.out.printf("left: %f , right : %f\n", leftSpeed, rightSpeed);
         leftLeader.set(leftSpeed);
         rightLeader.set(rightSpeed);
@@ -237,12 +263,9 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        // TODO Auto-generated method stub
         leftLeader.close();
         rightLeader.close();
         leftFollower.close();
         rightFollower.close();
-
-        // gyro.close();
     }
 }

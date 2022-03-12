@@ -68,7 +68,7 @@ e.g 20 : 16 + 4 = Wrap when necessary and ident by 1
 	<profile kind="CodeFormatterProfile" name="Profilos" version="21">
 		<!-- line length rules -->
 		<setting id="org.eclipse.jdt.core.formatter.comment.line_length" value="120" />
-		<setting id="org.eclipse.jdt.core.formatter.lineSplit" value="120" />
+		<setting id="org.eclipse.jdt.core.formatter.lineSplit" value="100" />
 
 		<!-- align rules -->
 		<setting id="org.eclipse.jdt.core.formatter.align_assignment_statements_on_columns" value="false" />

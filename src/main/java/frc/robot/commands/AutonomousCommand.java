@@ -28,7 +28,10 @@ public class AutonomousCommand extends RamseteCommand {
 
     DriveTrain driveTrain;
     Shooter shooter;
-    static DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
+    public static int state = 0;
+    static DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(
+        Constants.TRACK_WIDTH_METERS
+    );
     static TrajectoryConfig config = new TrajectoryConfig(
         Constants.MAX_SPEED_MPS,
         Constants.MAX_ACCELERATION_MPSS
@@ -45,9 +48,10 @@ public class AutonomousCommand extends RamseteCommand {
     static Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(0, 0, new Rotation2d(0)),
-            new Pose2d(Units.inchesToMeters(-89.95), Units.inchesToMeters(-17.38), new Rotation2d(Math.PI * 2.0 / 3)),
-            new Pose2d(Units.inchesToMeters(-0.15), Units.inchesToMeters(-72.24), new Rotation2d(Math.PI * 4.0 / 3)),
-            new Pose2d(0, 0, new Rotation2d(0))
+            new Pose2d(4, 0, new Rotation2d(0)),
+            new Pose2d(4, 4, new Rotation2d(Math.PI / 2)),
+            new Pose2d(0, 4, new Rotation2d(Math.PI / 2)),
+            new Pose2d(0, 0, new Rotation2d(Math.PI / 2))
         ),
         config
     );
@@ -56,7 +60,11 @@ public class AutonomousCommand extends RamseteCommand {
         List.of(
             new Pose2d(0, 0, new Rotation2d(0)),
             new Pose2d(Units.inchesToMeters(46.37), Units.inchesToMeters(71.58), new Rotation2d(0)),
-            new Pose2d(Units.inchesToMeters(-55.41), Units.inchesToMeters(-44.33), new Rotation2d(Math.PI * 5.0 / 6))
+            new Pose2d(
+                Units.inchesToMeters(-55.41),
+                Units.inchesToMeters(-44.33),
+                new Rotation2d(Math.PI * 5.0 / 6)
+            )
         ),
         config
     );
@@ -88,7 +96,7 @@ public class AutonomousCommand extends RamseteCommand {
 
     @Override
     public void execute() {
-        shooter.moveMotor(0, 0, true);
+        shooter.moveMotor(state, 0, true);
         super.execute();
     }
 }

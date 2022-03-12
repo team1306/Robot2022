@@ -1,16 +1,15 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.*;
+
 import static frc.robot.utils.MotorUtils.*;
+
+import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
-
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /**
  * Used to shoot cargos with the other functionality
@@ -32,12 +31,12 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         // kicker = initSparkMax(SHOOTER_KICKER_ID,);
 
 
-        frontIndex = initWPITalonSRX(0);
-        backIndex = initWPITalonSRX(0);
+        frontIndex = initWPITalonSRX(Constants.FRONT_INDEX_ID);
+        backIndex = initWPITalonSRX(Constants.BACK_INDEX_ID);
 
-        frontShooter = initSparkMax(0);
-        shooterKicker = initSparkMax(0);
-        backShooter = initSparkMax(0);
+        frontShooter = initSparkMax(Constants.FRONT_SHOOTER_ID);
+        shooterKicker = initSparkMax(Constants.SHOOTER_KICKER_ID);
+        backShooter = initSparkMax(Constants.BACK_SHOOTER_ID);
         // // probably doesnt factor in gearing
         // REVPhysicsSim.getInstance().addSparkMax(backMotor, DCMotor.getNEO(1));
     }
@@ -49,35 +48,42 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
      * @param isIntaking input for kicker wheel
      */
     public void moveMotor(int shootState, double intake, boolean stall) {
+        // System.out.println(List.of(shootState, intake, stall));
         switch (shootState) {
             case OFF:
+                // System.out.println("off");
                 backShooter.set(0);
                 frontShooter.set(0);
                 shooterKicker.set(0);
                 break;
             case DUMP: // shoot low
-                backShooter.set(.2);
-                frontShooter.set(.2);
-                shooterKicker.set(.2);
+                System.out.println("low");
+                backShooter.set(-.3);
+                frontShooter.set(-.2);
+                shooterKicker.set(-.2);
                 break;
             case NEAR:
-                backShooter.set(.6);
-                frontShooter.set(.5);
-                shooterKicker.set(.5);
+                System.out.println("nmear");
+                backShooter.set(-.6);
+                frontShooter.set(-.5);
+                shooterKicker.set(-.5);
                 break;
             case FAR:
-                backShooter.set(0.8);
-                frontShooter.set(.9);
-                shooterKicker.set(.7);
+                System.out.println("FAR");
+                backShooter.set(-.9);
+                frontShooter.set(-.8);
+                shooterKicker.set(-.7);
                 break;
+            default:
+                throw new Error("invalid state (wutchu doin over there?)");
         }
 
         if (stall) {
             frontIndex.set(ControlMode.PercentOutput, 1);
-            backIndex.set(ControlMode.PercentOutput, 1);
+            backIndex.set(ControlMode.PercentOutput, -1);
         } else if (Math.abs(intake) > 0.05) {
-            frontIndex.set(ControlMode.PercentOutput, intake);
-            backIndex.set(ControlMode.PercentOutput, intake);
+            frontIndex.set(ControlMode.PercentOutput, -intake);
+            backIndex.set(ControlMode.PercentOutput, -intake);
         } else {
             frontIndex.set(ControlMode.PercentOutput, 0);
             backIndex.set(ControlMode.PercentOutput, 0);

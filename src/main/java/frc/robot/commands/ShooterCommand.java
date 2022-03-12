@@ -31,6 +31,7 @@ public class ShooterCommand extends CommandBase {
         UserAnalog intake
     ) {
         this.shooter = shooter;
+        this.addRequirements(shooter);
         this.dump = dump;
         this.near = near;
         this.far = far;
@@ -50,6 +51,7 @@ public class ShooterCommand extends CommandBase {
         } else {
             state = OFF;
         }
+        // System.out.println(state);
         shooter.moveMotor(state, intake.get(), stall.get());
     }
 

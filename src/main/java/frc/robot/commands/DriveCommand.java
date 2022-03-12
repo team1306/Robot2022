@@ -66,9 +66,9 @@ public class DriveCommand extends CommandBase {
         if (useJoystickRotation) {
             // double addedTriggerSpeed = rightRotation.get() - leftRotation.get();
             // double targetSpeed = Math.copySign(Math.max(Math.abs(spd), Math.abs(addedTriggerSpeed)), spd);
-            driveTrain.adjustedArcadeDrive(.5 * spd, .5 * rotation);
+            driveTrain.arcadeDrive(.5 * spd, .5 * rotation);
         } else {
-            driveTrain.adjustedArcadeDrive(.5 * spd, .5 * rotation);
+            driveTrain.arcadeDrive(.5 * spd, .5 * rotation);
 
         }
     }

@@ -7,15 +7,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.commands.AutoShooter;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ShooterCommand;
@@ -24,10 +20,6 @@ import frc.robot.utils.Controller;
 import frc.robot.utils.UserAnalog;
 import frc.robot.utils.UserDigital;
 import frc.robot.subsystems.Shooter;
-
-import java.util.ResourceBundle.Control;
-
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 
 /**
@@ -41,8 +33,9 @@ public class RobotContainer {
     private Command driveCommand;
     private DriveTrain driveTrain;
     private Shooter shooter;
+    private Command shooterCommand;
 
-    private final boolean RUN_AUTO = true;
+    private final boolean RUN_AUTO = false;
 
     // inputs for drive train
     private UserAnalog speedDriveTrain;
@@ -67,7 +60,7 @@ public class RobotContainer {
         configureButtonBindings();
 
         driveTrain = new DriveTrain();
-        autoCommand = getAutonomousCommand();
+        // autoCommand = getAutonomousCommand();
         driveCommand = new DriveCommand(
             driveTrain,
             speedDriveTrain,
@@ -76,7 +69,14 @@ public class RobotContainer {
             joystickRotationDriveTrain
         );
 
-        new ShooterCommand(new Shooter(), dumpShot, nearShot, farShot, stall, intakeInput);
+        shooterCommand = new ShooterCommand(
+            new Shooter(),
+            dumpShot,
+            nearShot,
+            farShot,
+            stall,
+            intakeInput
+        );
         // new IndexCommand(indexInput, new Index());
     }
 
@@ -87,16 +87,25 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         this.speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
-        this.leftRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
-        this.rightRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
-        this.joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
+        this.leftRotationDriveTrain = Controller.simpleAxis(
+            Controller.PRIMARY,
+            Controller.AXIS_LTRIGGER
+        );
+        this.rightRotationDriveTrain = Controller.simpleAxis(
+            Controller.PRIMARY,
+            Controller.AXIS_RTRIGGER
+        );
+        this.joystickRotationDriveTrain = Controller.simpleAxis(
+            Controller.PRIMARY,
+            Controller.AXIS_LX
+        );
 
 
-        intakeInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
-        dumpShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_X);
-        nearShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_Y);
-        farShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_B);
-        stall = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
+        intakeInput = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RY);
+        dumpShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_X);
+        nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_Y);
+        farShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_B);
+        stall = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
 
         // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
         // shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
@@ -109,7 +118,9 @@ public class RobotContainer {
     public void startAuto() {
         if (RUN_AUTO) {
             driveCommand.cancel();
-            autoCommand.schedule();
+            autoCommand.beforeStarting(new AutoShooter(shooter, 2000)).andThen(
+                new AutoShooter(shooter, 4000)
+            ).schedule();
         }
     }
 
@@ -127,6 +138,7 @@ public class RobotContainer {
             autoCommand.cancel();
 
         driveCommand.schedule();
+        shooterCommand.schedule();
         // driveTrain.setDefaultCommand(driveCommand);
     }
 

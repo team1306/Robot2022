@@ -27,14 +27,18 @@ public class SomeTest {
     @After
     public void shutdown() throws Exception {
         System.out.println("done");
+        HAL.shutdown();
         dtrain.close();
     }
 
     @Test
     public void someTest() {
         System.out.println("test 1");
-        dtrain.adjustedArcadeDrive(1, 0.5);
-        dtrain.arcadeDrive(1, 0.5);
+        for (int i = 0; i < 10; i++) {
+            dtrain.adjustedArcadeDrive(1, -0.5);
+        }
+        System.out.println();
+        dtrain.arcadeDrive(1, -0.5);
     }
 
     @Test
