@@ -39,8 +39,8 @@ public class RobotContainer {
 
     // inputs for drive train
     private UserAnalog speedDriveTrain;
-    private UserAnalog leftRotationDriveTrain;
-    private UserAnalog rightRotationDriveTrain;
+    private UserAnalog backwardsTurbo;
+    private UserAnalog forwardTurbo;
     private UserAnalog joystickRotationDriveTrain;
 
     private UserAnalog intakeInput;
@@ -64,8 +64,8 @@ public class RobotContainer {
         driveCommand = new DriveCommand(
             driveTrain,
             speedDriveTrain,
-            leftRotationDriveTrain,
-            rightRotationDriveTrain,
+            backwardsTurbo,
+            forwardTurbo,
             joystickRotationDriveTrain
         );
 
@@ -87,14 +87,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         this.speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
-        this.leftRotationDriveTrain = Controller.simpleAxis(
-            Controller.PRIMARY,
-            Controller.AXIS_LTRIGGER
-        );
-        this.rightRotationDriveTrain = Controller.simpleAxis(
-            Controller.PRIMARY,
-            Controller.AXIS_RTRIGGER
-        );
+        this.backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
+        this.forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
         this.joystickRotationDriveTrain = Controller.simpleAxis(
             Controller.PRIMARY,
             Controller.AXIS_LX
@@ -103,8 +97,8 @@ public class RobotContainer {
 
         intakeInput = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RY);
         dumpShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_X);
-        nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_Y);
-        farShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_B);
+        nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_LTRIGGER);
+        farShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_RTRIGGER);
         stall = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
 
         // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);

@@ -12,8 +12,8 @@ public class DriveCommand extends CommandBase {
     private UserAnalog speed;
     // private UserAnalog rightSpeed;
     private DriveTrain driveTrain;
-    private UserAnalog leftRotation;
-    private UserAnalog rightRotation;
+    private UserAnalog backwardsTurbo;
+    private UserAnalog forwardTurbo;
     private UserAnalog joystickRotation;
     private boolean useJoystickRotation = true;
 
@@ -28,15 +28,15 @@ public class DriveCommand extends CommandBase {
     public DriveCommand(
         DriveTrain driveTrain,
         UserAnalog speed,
-        UserAnalog leftRotation,
-        UserAnalog rightRotation,
+        UserAnalog backwardsTurbo,
+        UserAnalog forwardTurbo,
         UserAnalog joystickRotation
     ) {
         this.speed = speed;
         this.driveTrain = driveTrain;
         this.addRequirements(driveTrain);
-        this.leftRotation = leftRotation;
-        this.rightRotation = rightRotation;
+        this.backwardsTurbo = backwardsTurbo;
+        this.forwardTurbo = forwardTurbo;
         this.joystickRotation = joystickRotation;
     }
 
@@ -47,30 +47,31 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
         double spd = speed.get();
-        double rotation;
-        if (useJoystickRotation) {
-            rotation = joystickRotation.get();
-        } else {
-            rotation = rightRotation.get() - leftRotation.get();
+        double rotation = joystickRotation.get();
 
+        if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
+            driveTrain.arcadeDrive(forwardTurbo.get() - backwardsTurbo.get(), 0);
+        } else {
+            if (Math.abs(spd) > .2)
+                spd = 1.0 / 6 * Math.signum(spd) + 5.0 / 6 * spd * Math.abs(spd);
+
+            // if (Math.abs(rotation) > .2)
+            // rotation = .2 + (rotation - .2) * Math.abs(rotation - .2);
+
+            // spd *= Math.abs(spd);
+            rotation *= Math.abs(rotation);
+            if (useJoystickRotation) {
+                // double addedTriggerSpeed = rightRotation.get() - leftRotation.get();
+                // double targetSpeed = Math.copySign(Math.max(Math.abs(spd), Math.abs(addedTriggerSpeed)), spd);
+                driveTrain.arcadeDrive(.25 * spd, .25 * rotation);
+            } else {
+                driveTrain.arcadeDrive(.25 * spd, .25 * rotation);
+
+            }
         }
 
-        if (Math.abs(spd) > .2)
-            spd = 1.0 / 6 * Math.signum(spd) + 5.0 / 6 * spd * Math.abs(spd);
 
-        // if (Math.abs(rotation) > .2)
-        // rotation = .2 + (rotation - .2) * Math.abs(rotation - .2);
 
-        // spd *= Math.abs(spd);
-        rotation *= Math.abs(rotation);
-        if (useJoystickRotation) {
-            // double addedTriggerSpeed = rightRotation.get() - leftRotation.get();
-            // double targetSpeed = Math.copySign(Math.max(Math.abs(spd), Math.abs(addedTriggerSpeed)), spd);
-            driveTrain.arcadeDrive(.5 * spd, .5 * rotation);
-        } else {
-            driveTrain.arcadeDrive(.5 * spd, .5 * rotation);
-
-        }
     }
 
     // the current speed, the current stick position
