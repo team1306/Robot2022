@@ -64,14 +64,14 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 break;
             case NEAR:
                 System.out.println("near");
-                backShooter.set(-.7);
-                frontShooter.set(-.8);
+                backShooter.set(-.50);
+                frontShooter.set(-.6);
                 shooterKicker.set(-.5);
                 break;
             case FAR:
                 System.out.println("FAR");
-                backShooter.set(-.64); // original (with no problems?) back = -.9, front = -.7
-                frontShooter.set(-.75);
+                backShooter.set(-.7); // original (with no problems?) back = -.9, front = -.7
+                frontShooter.set(-.55);
                 shooterKicker.set(-.7);
                 break;
             default:

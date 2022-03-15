@@ -42,7 +42,7 @@ public class MotorUtils {
     public static CANSparkMax initSparkMax(int motorID) {
         var motor = new CANSparkMax(motorID, MotorType.kBrushless);
         motor.restoreFactoryDefaults();
-        motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         return motor;
     }
 }

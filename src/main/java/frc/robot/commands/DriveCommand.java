@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.utils.UserAnalog;
 import frc.robot.subsystems.DriveTrain;
@@ -52,8 +53,15 @@ public class DriveCommand extends CommandBase {
         if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
             driveTrain.arcadeDrive(forwardTurbo.get() - backwardsTurbo.get(), 0);
         } else {
-            if (Math.abs(spd) > .2)
-                spd = 1.0 / 6 * Math.signum(spd) + 5.0 / 6 * spd * Math.abs(spd);
+            if (Math.abs(spd) > .05) {
+                spd = spd * Math.abs(spd);
+
+            } else {
+                spd = 0;
+            }
+
+            SmartDashboard.putNumber("Speed", spd);
+            // spd = 1.0 / 6 * Math.signum(spd) + 5.0 / 6 * spd * Math.abs(spd);
 
             // if (Math.abs(rotation) > .2)
             // rotation = .2 + (rotation - .2) * Math.abs(rotation - .2);
