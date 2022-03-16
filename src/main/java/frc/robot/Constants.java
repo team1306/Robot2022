@@ -30,6 +30,8 @@ public interface Constants {
     int DRIVE_LEFT_FOLLOWER_ID = 9;
 
     int CLIMBER_MOTOR_ID = 0;
+
+    double CLIMBER_VELOCITY = 0.5;
     /**
      * TODO: set the actual ID values
      */
