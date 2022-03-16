@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -30,7 +31,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     private WPI_TalonFX rightFollower;
     // private AHRS gyro = new AHRS();
     private final DifferentialDriveOdometry m_odometry;
-
+    private PIDController controller; 
 
 
 
@@ -51,6 +52,15 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
         m_odometry = new DifferentialDriveOdometry(new Rotation2d());
 
+        controller = new PIDController(1, 0, 0);
+        
+        leftLeader.config_kP(0, .25);
+        leftLeader.config_kI(0, 0);
+        leftLeader.config_kD(0, 0);
+
+        rightLeader.config_kP(0, .25);
+        rightLeader.config_kI(0, 0);
+        rightLeader.config_kD(0, 0);
         // gyro.reset();
     }
 
@@ -85,8 +95,8 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         }
 
         // System.out.printf("left: %f , right : %f\n", -rightMotorOutput, leftMotorOutput);
-        leftLeader.set(-rightMotorOutput);
-        rightLeader.set(leftMotorOutput);
+        leftLeader.set(ControlMode.PercentOutput, rightMotorOutput);
+        rightLeader.set(ControlMode.PercentOutput, leftMotorOutput);
         SmartDashboard.putNumber(
             "LeftVelocity",
             getWheelSpeeds().leftMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE
