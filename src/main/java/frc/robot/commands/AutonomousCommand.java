@@ -96,7 +96,7 @@ public class AutonomousCommand extends RamseteCommand {
 
     @Override
     public void execute() {
-        shooter.moveMotor(state, 0, true);
+        shooter.moveMotor(state, false, true);
         super.execute();
     }
 }

@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +32,11 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     private WPI_TalonFX rightFollower;
     // private AHRS gyro = new AHRS();
     private final DifferentialDriveOdometry m_odometry;
-    private PIDController controller; 
+    private PIDController controller;
+
+    private double previousRightPercentOutput;
+
+    private double previousLeftPercentOutput;
 
 
 
@@ -52,16 +57,21 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
         m_odometry = new DifferentialDriveOdometry(new Rotation2d());
 
-        controller = new PIDController(1, 0, 0);
-        
-        leftLeader.config_kP(0, .25);
-        leftLeader.config_kI(0, 0);
-        leftLeader.config_kD(0, 0);
 
-        rightLeader.config_kP(0, .25);
-        rightLeader.config_kI(0, 0);
-        rightLeader.config_kD(0, 0);
+        // leftLeader.config_kP(0, .25);
+        // leftLeader.config_kI(0, 0);
+        // leftLeader.config_kD(0, 0);
+        // leftLeader.setControlFramePeriod(0, 20);
+        // leftLeader.configClosedloopRamp(1);
+
+        // rightLeader.config_kP(0, .25);
+        // rightLeader.config_kI(0, 0);
+        // rightLeader.config_kD(0, 0);
+        // rightLeader.setControlFramePeriod(0, 20);
+        // rightLeader.configClosedloopRamp(1);
         // gyro.reset();
+        previousRightPercentOutput = 0;
+        previousLeftPercentOutput = 0;
     }
 
     /**
@@ -95,17 +105,29 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         }
 
         // System.out.printf("left: %f , right : %f\n", -rightMotorOutput, leftMotorOutput);
-        leftLeader.set(ControlMode.PercentOutput, rightMotorOutput);
-        rightLeader.set(ControlMode.PercentOutput, leftMotorOutput);
-        SmartDashboard.putNumber(
-            "LeftVelocity",
-            getWheelSpeeds().leftMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE
-        );
-        SmartDashboard.putNumber(
-            "RightVelocity",
-            getWheelSpeeds().rightMetersPerSecond / Constants.WHEEL_CIRCUMFERENCE
-        );
-        SmartDashboard.putNumber("LeftEncoder things", leftLeader.getSelectedSensorVelocity());
+        // if (leftMotorOutput > previousLeftPercentOutput + .01) {
+        // leftMotorOutput = previousLeftPercentOutput + .01;
+        // } else if (leftMotorOutput < previousLeftPercentOutput - .01) {
+        // leftMotorOutput = previousLeftPercentOutput - .01;
+        // }
+
+        // if (rightMotorOutput > previousRightPercentOutput + .01) {
+        // rightMotorOutput = previousRightPercentOutput + .01;
+        // } else if (rightMotorOutput < previousRightPercentOutput - .01) {
+        // rightMotorOutput = previousRightPercentOutput - .01;
+        // }
+
+        SmartDashboard.putNumber("rightMotorOutput", rightMotorOutput);
+        SmartDashboard.putNumber("leftMotorOutput", leftMotorOutput);
+        SmartDashboard.putNumber("previousRightPercentOutput", previousRightPercentOutput);
+        SmartDashboard.putNumber("previousLeftPercentOutput", previousLeftPercentOutput);
+
+        leftLeader.set(-leftMotorOutput);
+        rightLeader.set(rightMotorOutput);
+
+        previousLeftPercentOutput = leftMotorOutput;
+        previousRightPercentOutput = rightMotorOutput;
+
         // SmartDashboard.putNumber("Gyro heading", gyro.getYaw());
 
     }

@@ -43,7 +43,7 @@ public class RobotContainer {
     private UserAnalog forwardTurbo;
     private UserAnalog joystickRotationDriveTrain;
 
-    private UserAnalog intakeInput;
+    private UserDigital primaryIntakeInput, secondaryIntakeInput, intakeInput;
     private UserDigital dumpShot, nearShot, farShot;
     private UserDigital stall;
 
@@ -95,7 +95,9 @@ public class RobotContainer {
         );
 
 
-        intakeInput = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RY);
+        secondaryIntakeInput = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
+        primaryIntakeInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
+        intakeInput = () -> primaryIntakeInput.get() || secondaryIntakeInput.get();
         dumpShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_X);
         nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_LTRIGGER);
         farShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_RTRIGGER);

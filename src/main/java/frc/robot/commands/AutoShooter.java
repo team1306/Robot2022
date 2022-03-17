@@ -22,12 +22,12 @@ public class AutoShooter extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.moveMotor(1, 0, false);
+        shooter.moveMotor(1, false, false);
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.moveMotor(0, 0, false);
+        shooter.moveMotor(0, false, false);
     }
 
     @Override

@@ -48,10 +48,10 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
         double spd = speed.get();
-        double rotation = joystickRotation.get();
+        double rotation = -joystickRotation.get();
 
         if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
-            driveTrain.arcadeDrive(forwardTurbo.get() - backwardsTurbo.get(), 0);
+            driveTrain.arcadeDrive(backwardsTurbo.get() - forwardTurbo.get(), rotation);
         } else {
             if (Math.abs(spd) > .05) {
                 spd = spd * Math.abs(spd);

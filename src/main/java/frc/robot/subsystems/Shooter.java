@@ -47,7 +47,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
      * @param isShooting input for main shooter wheels
      * @param isIntaking input for kicker wheel
      */
-    public void moveMotor(int shootState, double intake, boolean stall) {
+    public void moveMotor(int shootState, boolean intake, boolean stall) {
         // System.out.println(List.of(shootState, intake, stall));
         switch (shootState) {
             case OFF:
@@ -79,11 +79,11 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         }
 
         if (stall) {
-            frontIndex.set(ControlMode.PercentOutput, 1);
+            frontIndex.set(ControlMode.PercentOutput, 0);
             backIndex.set(ControlMode.PercentOutput, -1);
-        } else if (Math.abs(intake) > 0.05) {
-            frontIndex.set(ControlMode.PercentOutput, -intake);
-            backIndex.set(ControlMode.PercentOutput, -intake);
+        } else if (intake) {
+            frontIndex.set(ControlMode.PercentOutput, 1);
+            backIndex.set(ControlMode.PercentOutput, 1);
         } else {
             frontIndex.set(ControlMode.PercentOutput, 0);
             backIndex.set(ControlMode.PercentOutput, 0);
