@@ -52,4 +52,7 @@ public interface Constants {
     double WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4) * Math.PI;
 
     double MAX_DIFF_ACCELERATION = 0;
+
+    double TIME_TO_FULL_SPEED = .25;
+    double TIME_PER_LOOP = .02;
 }

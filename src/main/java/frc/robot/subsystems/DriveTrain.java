@@ -104,32 +104,51 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
             }
         }
 
-        // System.out.printf("left: %f , right : %f\n", -rightMotorOutput, leftMotorOutput);
-        // if (leftMotorOutput > previousLeftPercentOutput + .01) {
-        // leftMotorOutput = previousLeftPercentOutput + .01;
-        // } else if (leftMotorOutput < previousLeftPercentOutput - .01) {
-        // leftMotorOutput = previousLeftPercentOutput - .01;
-        // }
+        leftMotorOutput = limitAcceleration(leftMotorOutput, previousLeftPercentOutput);
+        rightMotorOutput = limitAcceleration(rightMotorOutput, previousRightPercentOutput);
 
-        // if (rightMotorOutput > previousRightPercentOutput + .01) {
-        // rightMotorOutput = previousRightPercentOutput + .01;
-        // } else if (rightMotorOutput < previousRightPercentOutput - .01) {
-        // rightMotorOutput = previousRightPercentOutput - .01;
-        // }
 
-        SmartDashboard.putNumber("rightMotorOutput", rightMotorOutput);
-        SmartDashboard.putNumber("leftMotorOutput", leftMotorOutput);
-        SmartDashboard.putNumber("previousRightPercentOutput", previousRightPercentOutput);
-        SmartDashboard.putNumber("previousLeftPercentOutput", previousLeftPercentOutput);
+        System.out.printf("left: %.02f, right : %.02f\n", leftMotorOutput, rightMotorOutput);
 
         leftLeader.set(-leftMotorOutput);
         rightLeader.set(rightMotorOutput);
 
         previousLeftPercentOutput = leftMotorOutput;
         previousRightPercentOutput = rightMotorOutput;
+    }
 
-        // SmartDashboard.putNumber("Gyro heading", gyro.getYaw());
+    /**
+     * limits acceleration for the robot, should prevent rocking does not prevent rapid decceleration
+     * 
+     * @param currentTargetPercentOutput target output for motor that user inputed
+     * @param previousPercentOutput      previous outputed target for motor
+     * @return a target motor value
+     */
+    public double limitAcceleration(
+        double currentTargetPercentOutput,
+        double previousPercentOutput
+    ) {
+        // change that the user wants
+        double error = currentTargetPercentOutput - previousPercentOutput;
 
+        // target is going towards 0
+        boolean isDecel = Math.abs(currentTargetPercentOutput) < .05;
+
+        if (isDecel) { return currentTargetPercentOutput; }
+
+
+        // divide that change over a period of time
+        // if the change in acceleration is too large positively, accelerate slower
+        if (error > (Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED)) {
+            return previousPercentOutput + Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED;
+        }
+
+        // the change in acceleration is too large negatively, accelerate to the negative direction slower
+        if (error < -(Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED)) {
+            return previousPercentOutput - Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED;
+        }
+
+        return currentTargetPercentOutput;
     }
 
     /**

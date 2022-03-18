@@ -20,6 +20,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
     private final CANSparkMax frontShooter, shooterKicker, backShooter;
     private final WPI_TalonSRX frontIndex, backIndex;
     private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3;
+    private double previousIntakeFront = 0, previousIntakeBack = 0;
 
 
     /**
@@ -64,7 +65,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 break;
             case NEAR:
                 System.out.println("near");
-                backShooter.set(-.50);
+                backShooter.set(-.5);
                 frontShooter.set(-.6);
                 shooterKicker.set(-.5);
                 break;
@@ -78,16 +79,51 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 throw new Error("invalid state (wutchu doin over there?)");
         }
 
+
+
+        // desired right and left speeds
+        double fspeed, bspeed;
         if (stall) {
-            frontIndex.set(ControlMode.PercentOutput, 0);
-            backIndex.set(ControlMode.PercentOutput, -1);
+            fspeed = 1;
+            bspeed = -1;
         } else if (intake) {
-            frontIndex.set(ControlMode.PercentOutput, 1);
-            backIndex.set(ControlMode.PercentOutput, 1);
+            fspeed = 1;
+            bspeed = 1;
         } else {
-            frontIndex.set(ControlMode.PercentOutput, 0);
-            backIndex.set(ControlMode.PercentOutput, 0);
+            fspeed = 0;
+            bspeed = 0;
         }
+
+        previousIntakeFront = limitAcceleration(fspeed, previousIntakeFront);
+        previousIntakeBack = limitAcceleration(bspeed, previousIntakeBack);
+
+        System.out.printf("%.03f %.03f\n", previousIntakeFront, previousIntakeBack);
+        frontIndex.set(previousIntakeFront);
+        backIndex.set(previousIntakeBack);
+    }
+
+    public double limitAcceleration(
+        double currentTargetPercentOutput,
+        double previousPercentOutput
+    ) {
+        final double INCR = Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED;
+        // change that the user wants
+        double error = currentTargetPercentOutput - previousPercentOutput;
+
+        // target is going towards 0
+        boolean isDecel = Math.abs(currentTargetPercentOutput) < .05;
+
+        if (isDecel) { return currentTargetPercentOutput; }
+
+
+        // divide that change over a period of time
+        // if the change in acceleration is too large positively, accelerate slower
+        if (error > INCR) { return previousPercentOutput + INCR; }
+
+        // the change in acceleration is too large negatively, accelerate to the negative direction slower
+        if (error < -INCR) { return previousPercentOutput - INCR; }
+
+        return currentTargetPercentOutput;
     }
 
 
