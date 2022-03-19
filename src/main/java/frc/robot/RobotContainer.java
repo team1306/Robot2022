@@ -7,14 +7,18 @@
 
 package frc.robot;
 
+import java.util.ResourceBundle.Control;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.AutoShooter;
 import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utils.Controller;
 import frc.robot.utils.UserAnalog;
@@ -27,12 +31,15 @@ import frc.robot.subsystems.Shooter;
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
  * Instead, the structure of the robot (including subsystems, commands, and button mappings) should be declared here.
  */
+@SuppressWarnings("unused")
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private Command autoCommand;
     private Command driveCommand;
     private DriveTrain driveTrain;
     private Shooter shooter;
+    private Climber climber;
+    private Command climberCommand;
     private Command shooterCommand;
 
     private final boolean RUN_AUTO = false;
@@ -42,10 +49,15 @@ public class RobotContainer {
     private UserAnalog backwardsTurbo;
     private UserAnalog forwardTurbo;
     private UserAnalog joystickRotationDriveTrain;
-
-    private UserDigital primaryIntakeInput, secondaryIntakeInput, intakeInput;
+    // intake / shooter
     private UserDigital dumpShot, nearShot, farShot;
     private UserDigital stall;
+    private UserAnalog intakeInput;
+    // climber
+    private UserAnalog climberInput;
+    private UserDigital unlockClimber;
+
+
 
     // The robot's inputs that it recieves from the controller are defined here
 
@@ -60,7 +72,9 @@ public class RobotContainer {
         configureButtonBindings();
 
         driveTrain = new DriveTrain();
-        // autoCommand = getAutonomousCommand();
+        shooter = new Shooter();
+        climber = new Climber();
+        autoCommand = getAutonomousCommand();
         driveCommand = new DriveCommand(
             driveTrain,
             speedDriveTrain,
@@ -70,13 +84,15 @@ public class RobotContainer {
         );
 
         shooterCommand = new ShooterCommand(
-            new Shooter(),
+            shooter,
             dumpShot,
             nearShot,
             farShot,
             stall,
             intakeInput
         );
+
+        climberCommand = new ClimberCommand(climber, climberInput);
         // new IndexCommand(indexInput, new Index());
     }
 
@@ -86,22 +102,28 @@ public class RobotContainer {
      * and then passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        this.speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
-        this.backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
-        this.forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
-        this.joystickRotationDriveTrain = Controller.simpleAxis(
-            Controller.PRIMARY,
-            Controller.AXIS_LX
-        );
+        speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
+        backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
+        forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
+        joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
 
 
-        secondaryIntakeInput = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
-        primaryIntakeInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
-        intakeInput = () -> primaryIntakeInput.get() || secondaryIntakeInput.get();
+        // either A button pressed
+        var pstall = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
+        var sstall = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
+        stall = () -> sstall.get() || pstall.get();
+        intakeInput = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RY);
         dumpShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_X);
         nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_LTRIGGER);
         farShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_RTRIGGER);
-        stall = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
+
+
+        climberInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
+        // both bumpers pressed
+        var plb = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
+        var prb = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_RBUMPER);
+        unlockClimber = () -> plb.get() && prb.get();
+
 
         // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
         // shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
@@ -114,9 +136,7 @@ public class RobotContainer {
     public void startAuto() {
         if (RUN_AUTO) {
             driveCommand.cancel();
-            autoCommand.beforeStarting(new AutoShooter(shooter, 2000)).andThen(
-                new AutoShooter(shooter, 4000)
-            ).schedule();
+            autoCommand.schedule();
         }
     }
 
@@ -126,20 +146,21 @@ public class RobotContainer {
      * 
      */
     public void startTeleop() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
+        // This makes sure that the autonomous stops running when teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove this line or comment it out.
         if (RUN_AUTO)
             autoCommand.cancel();
 
         driveCommand.schedule();
         shooterCommand.schedule();
+        climberCommand.schedule();
         // driveTrain.setDefaultCommand(driveCommand);
     }
 
-    public RamseteCommand getAutonomousCommand() {
-        return new AutonomousCommand(driveTrain, shooter);
+    public Command getAutonomousCommand() {
+        return new AutonomousCommand(driveTrain, shooter)
+            .beforeStarting(new AutoShooter(shooter, 3)) // shoot before
+            .andThen(new AutoShooter(shooter, 3)); // shoot after;
     }
 
 }

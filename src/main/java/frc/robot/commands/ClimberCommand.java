@@ -8,6 +8,7 @@ import frc.robot.utils.UserDigital;
 /**
  * command for climber
  */
+@SuppressWarnings("unused")
 public class ClimberCommand extends CommandBase {
     private final Climber climber;
     private final UserAnalog speed;

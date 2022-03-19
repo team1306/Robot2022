@@ -12,7 +12,7 @@ public class ShooterCommand extends CommandBase {
     private final Shooter shooter;
     private final UserDigital dump, near, far;
     private final UserDigital stall;
-    private final UserDigital intake;
+    private final UserAnalog intake;
     private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3;
 
     /**
@@ -28,7 +28,7 @@ public class ShooterCommand extends CommandBase {
         UserDigital near,
         UserDigital far,
         UserDigital stall,
-        UserDigital intake
+        UserAnalog intake
     ) {
         this.shooter = shooter;
         this.addRequirements(shooter);

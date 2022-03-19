@@ -14,6 +14,7 @@ import frc.robot.Constants;
 /**
  * Used to shoot cargos with the other functionality
  */
+@SuppressWarnings("unused")
 public class Shooter extends SubsystemBase implements AutoCloseable {
 
     // on the robot, "kicker" was connected to the controller w/ "ind"
@@ -27,11 +28,6 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
      * Initialize Shooter and configure motors
      */
     public Shooter() {
-        // frontMotor = initSparkMax(SHOOTER_UPPER_MOTOR_ID);grad
-        // backMotor = initSparkMax(SHOOTER_LOWER_MOTOR_ID);
-        // kicker = initSparkMax(SHOOTER_KICKER_ID,);
-
-
         frontIndex = initWPITalonSRX(Constants.FRONT_INDEX_ID);
         backIndex = initWPITalonSRX(Constants.BACK_INDEX_ID);
 
@@ -48,7 +44,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
      * @param isShooting input for main shooter wheels
      * @param isIntaking input for kicker wheel
      */
-    public void moveMotor(int shootState, boolean intake, boolean stall) {
+    public void moveMotor(int shootState, double intake, boolean stall) {
         // System.out.println(List.of(shootState, intake, stall));
         switch (shootState) {
             case OFF:
@@ -58,21 +54,24 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 shooterKicker.set(0);
                 break;
             case DUMP: // shoot low
-                System.out.println("low");
+                System.out.print("low : ");
                 backShooter.set(-.3);
                 frontShooter.set(-.2);
                 shooterKicker.set(-.2);
                 break;
             case NEAR:
-                System.out.println("near");
+                System.out.print("near  ");
                 backShooter.set(-.5);
                 frontShooter.set(-.6);
                 shooterKicker.set(-.5);
                 break;
             case FAR:
-                System.out.println("FAR");
-                backShooter.set(-.7); // original (with no problems?) back = -.9, front = -.7
-                frontShooter.set(-.55);
+                // System.out.println("FAR");
+                // backShooter.set(-.7); // original (with no problems?) back = -.9, front = -.7
+                // frontShooter.set(-.55);
+                // shooterKicker.set(-.7);
+                backShooter.set(-.9); // original (with no problems?) back = -.9, front = -.7
+                frontShooter.set(-.7);
                 shooterKicker.set(-.7);
                 break;
             default:
@@ -86,12 +85,10 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         if (stall) {
             fspeed = 1;
             bspeed = -1;
-        } else if (intake) {
-            fspeed = 1;
-            bspeed = 1;
+        } else if (Math.abs(intake) > 0.05) {
+            fspeed = bspeed = intake;
         } else {
-            fspeed = 0;
-            bspeed = 0;
+            fspeed = bspeed = 0;
         }
 
         previousIntakeFront = limitAcceleration(fspeed, previousIntakeFront);
@@ -113,15 +110,18 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         // target is going towards 0
         boolean isDecel = Math.abs(currentTargetPercentOutput) < .05;
 
-        if (isDecel) { return currentTargetPercentOutput; }
+        if (isDecel)
+            return currentTargetPercentOutput;
 
 
         // divide that change over a period of time
         // if the change in acceleration is too large positively, accelerate slower
-        if (error > INCR) { return previousPercentOutput + INCR; }
+        if (error > INCR)
+            return previousPercentOutput + INCR;
 
         // the change in acceleration is too large negatively, accelerate to the negative direction slower
-        if (error < -INCR) { return previousPercentOutput - INCR; }
+        if (error < -INCR)
+            return previousPercentOutput - INCR;
 
         return currentTargetPercentOutput;
     }

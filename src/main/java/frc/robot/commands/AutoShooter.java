@@ -12,6 +12,7 @@ public class AutoShooter extends CommandBase {
     public AutoShooter(Shooter shooter, double timeoutS) {
         this.shooter = shooter;
         this.timeoutS = timeoutS;
+        this.addRequirements(shooter);
     }
 
     @Override
@@ -22,12 +23,12 @@ public class AutoShooter extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.moveMotor(2, false, false);
+        shooter.moveMotor(3, 1, false);
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.moveMotor(0, false, false);
+        shooter.moveMotor(0, 0, false);
     }
 
     @Override

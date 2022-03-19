@@ -4,6 +4,7 @@ import static frc.robot.Constants.*;
 import static frc.robot.utils.MotorUtils.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,8 @@ import frc.robot.utils.UserDigital;
 /**
  * Used by climber command to climber up monkey bars
  */
+// TODO everything
+@SuppressWarnings("unused")
 public class Climber extends SubsystemBase {
     private TalonFX motor;
     private double velocity;
@@ -24,6 +27,7 @@ public class Climber extends SubsystemBase {
      */
     public Climber() {
         this.motor = initTalonFX(CLIMBER_MOTOR_ID);
+        this.motor.setNeutralMode(NeutralMode.Brake);
         this.height = 0;
         this.velocity = 0;
         this.isOverLimit = false;
@@ -36,13 +40,8 @@ public class Climber extends SubsystemBase {
      * @param analogInput the velocity at which the robot will move
      */
     public void extend(double userAnalog, boolean isManual) {
-        if (isManual || !isOverLimit) {
-            velocity = Constants.CLIMBER_VELOCITY;
-        } else {
-            velocity = -Constants.CLIMBER_VELOCITY;
-        }
-        motor.set(ControlMode.PercentOutput, velocity);
-        calcHeight(velocity);
+        motor.set(ControlMode.PercentOutput, userAnalog);
+
     }
 
     public void calcHeight(double velocityPercentage) {

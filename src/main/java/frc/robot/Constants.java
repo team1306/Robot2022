@@ -17,6 +17,7 @@ import edu.wpi.first.math.util.Units;
  * Constants is interface as interface fields are public, static, and final by default
  * 
  */
+@SuppressWarnings("unused")
 public interface Constants {
     int FRONT_SHOOTER_ID = 2;
     int BACK_SHOOTER_ID = 1;
@@ -29,12 +30,10 @@ public interface Constants {
     int DRIVE_LEFT_LEADER_ID = 8;
     int DRIVE_LEFT_FOLLOWER_ID = 9;
 
+    // TODO set actual climber id
     int CLIMBER_MOTOR_ID = 0;
 
     double CLIMBER_VELOCITY = 0.5;
-    /**
-     * TODO: set the actual ID values
-     */
 
     double K_S = .61784;
     double K_V = 2.0067;

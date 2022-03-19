@@ -24,6 +24,7 @@ import frc.robot.Constants;
 /**
  * Used by DriveTrain command to move robot Calculates output for each side of the drivetrain
  */
+@SuppressWarnings("unused")
 public class DriveTrain extends SubsystemBase implements AutoCloseable {
     private WPI_TalonFX leftLeader;
     private WPI_TalonFX leftFollower;

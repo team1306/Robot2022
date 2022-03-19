@@ -34,6 +34,7 @@ import frc.robot.Constants;
 /**
  * test
  */
+@SuppressWarnings("unused")
 public class test {
 
     private static DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(
@@ -81,7 +82,9 @@ public class test {
             System.out.printf(
                 "%.2gs: %s\n",
                 time,
-                driveKinematics.toWheelSpeeds(x).toString().replace("DifferentialDriveWheelSpeeds", "")
+                driveKinematics.toWheelSpeeds(x)
+                    .toString()
+                    .replace("DifferentialDriveWheelSpeeds", "")
             );
             System.out.print(state.poseMeters);
             prevpose = state.poseMeters;
@@ -89,7 +92,10 @@ public class test {
     }
 
     public static void main(String[] args) {
-        var drive = new DriveTrain();
-        drive.adjustedArcadeDrive(1, 1);
+        try (var drive = new DriveTrain()) {
+            drive.adjustedArcadeDrive(1, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

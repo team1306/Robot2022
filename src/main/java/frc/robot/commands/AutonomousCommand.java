@@ -24,6 +24,7 @@ import com.kauailabs.navx.frc.AHRS;
 /**
  * shell code for autonomous command
  */
+@SuppressWarnings("unused")
 public class AutonomousCommand extends RamseteCommand {
 
     DriveTrain driveTrain;
@@ -35,23 +36,27 @@ public class AutonomousCommand extends RamseteCommand {
     static TrajectoryConfig config = new TrajectoryConfig(
         Constants.MAX_SPEED_MPS,
         Constants.MAX_ACCELERATION_MPSS
-    ).setKinematics(driveKinematics).addConstraint(
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Constants.K_S, Constants.K_V, Constants.K_A),
-            driveKinematics,
-            5 // max voltage
-        )
-    );
+    ).setKinematics(driveKinematics)
+        .addConstraint(
+            new DifferentialDriveVoltageConstraint(
+                new SimpleMotorFeedforward(Constants.K_S, Constants.K_V, Constants.K_A),
+                driveKinematics,
+                5 // max voltage
+            )
+        );
 
     // Start from position B facing goal and get ball 2 and then ball 1. Return to starting position
     // Poisitions and balls are labeled on the field map on whiteboard
     static Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
-        List.of(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            new Pose2d(4, 0, new Rotation2d(0)),
-            new Pose2d(4, 4, new Rotation2d(Math.PI / 2)),
-            new Pose2d(0, 4, new Rotation2d(Math.PI / 2)),
-            new Pose2d(0, 0, new Rotation2d(Math.PI / 2))
+        // List.of(
+        // new Pose2d(0, 0, new Rotation2d(0)),
+        // new Pose2d(4, 0, new Rotation2d(0)),
+        // new Pose2d(4, 4, new Rotation2d(Math.PI / 2)),
+        // new Pose2d(0, 4, new Rotation2d(Math.PI / 2)),
+        // new Pose2d(0, 0, new Rotation2d(Math.PI / 2))
+        // ),
+        List.of(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4, 0, new Rotation2d(0))// ,
+        // new Pose2d(0, 0, new Rotation2d(0))
         ),
         config
     );
@@ -96,7 +101,7 @@ public class AutonomousCommand extends RamseteCommand {
 
     @Override
     public void execute() {
-        shooter.moveMotor(state, false, true);
+        shooter.moveMotor(state, 0, true);
         super.execute();
     }
 }
