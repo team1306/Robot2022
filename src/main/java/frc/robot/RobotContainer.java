@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.commands.AutoDriveTrain;
 import frc.robot.commands.AutoShooter;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.ClimberCommand;
@@ -158,8 +159,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new AutonomousCommand(driveTrain, shooter)
-            .beforeStarting(new AutoShooter(shooter, 3)) // shoot before
+        return new AutoDriveTrain(driveTrain, 5).beforeStarting(new AutoShooter(shooter, 3)) // shoot before
             .andThen(new AutoShooter(shooter, 3)); // shoot after;
     }
 

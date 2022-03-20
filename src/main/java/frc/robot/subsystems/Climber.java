@@ -41,7 +41,6 @@ public class Climber extends SubsystemBase {
      */
     public void extend(double userAnalog, boolean isManual) {
         motor.set(ControlMode.PercentOutput, userAnalog);
-
     }
 
     public void calcHeight(double velocityPercentage) {

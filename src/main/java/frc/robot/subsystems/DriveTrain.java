@@ -129,25 +129,25 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         double currentTargetPercentOutput,
         double previousPercentOutput
     ) {
+        // increment
+        final double INCR = Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED;
         // change that the user wants
         double error = currentTargetPercentOutput - previousPercentOutput;
 
         // target is going towards 0
         boolean isDecel = Math.abs(currentTargetPercentOutput) < .05;
 
-        if (isDecel) { return currentTargetPercentOutput; }
-
+        if (isDecel)
+            return currentTargetPercentOutput;
 
         // divide that change over a period of time
         // if the change in acceleration is too large positively, accelerate slower
-        if (error > (Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED)) {
-            return previousPercentOutput + Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED;
-        }
+        if (error > INCR)
+            return previousPercentOutput + INCR;
 
         // the change in acceleration is too large negatively, accelerate to the negative direction slower
-        if (error < -(Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED)) {
-            return previousPercentOutput - Constants.TIME_PER_LOOP / Constants.TIME_TO_FULL_SPEED;
-        }
+        if (error < -INCR)
+            return previousPercentOutput - INCR;
 
         return currentTargetPercentOutput;
     }
