@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,6 +36,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     private final DifferentialDriveOdometry m_odometry;
     private PIDController controller;
 
+    private BuiltInAccelerometer accelerometer;
     private double previousRightPercentOutput;
 
     private double previousLeftPercentOutput;
@@ -50,6 +52,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         leftFollower = initWPITalonFX(DRIVE_LEFT_FOLLOWER_ID);
         rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
+        accelerometer = new BuiltInAccelerometer();
         // leftLeader.config_kP(0, .5);
         // rightLeader.config_kP(0, .5);
 
@@ -216,8 +219,11 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Acceleration in x", accelerometer.getX());
+
         m_odometry.update(new Rotation2d(), getLeftDistance(), getRightDistance());
 
+        SmartDashboard.putNumber("Movement in x", m_odometry.getPoseMeters().getX());
     }
 
     public Pose2d getPose() {

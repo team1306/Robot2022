@@ -66,10 +66,6 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 shooterKicker.set(-.5);
                 break;
             case FAR:
-                // System.out.println("FAR");
-                // backShooter.set(-.7); // original (with no problems?) back = -.9, front = -.7
-                // frontShooter.set(-.55);
-                // shooterKicker.set(-.7);
                 backShooter.set(-.9); // original (with no problems?) back = -.9, front = -.7
                 frontShooter.set(-.7);
                 shooterKicker.set(-.7);
@@ -80,7 +76,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 frontShooter.set(-.6);
                 shooterKicker.set(-.5);
                 break;
-            case FAR_AUTO: 
+            case FAR_AUTO:
                 backShooter.set(-1);
                 frontShooter.set(-.6);
                 shooterKicker.set(-.8);

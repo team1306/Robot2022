@@ -11,7 +11,20 @@ public class AutoDriveTrain extends CommandBase {
     private double timeoutS;
     private boolean rotate180;
 
-    public AutoDriveTrain(DriveTrain driveTrain, double timeoutS, boolean direction, boolean rotate180) {
+
+    /**
+     * 
+     * @param driveTrain
+     * @param timeoutS   time of command
+     * @param direction  whether or not it will be reversed
+     * @param rotate180  whether it should be rotating
+     */
+    public AutoDriveTrain(
+        DriveTrain driveTrain,
+        double timeoutS,
+        boolean direction,
+        boolean rotate180
+    ) {
         this.timeoutS = timeoutS;
         this.direction = direction;
         this.driveTrain = driveTrain;
@@ -27,18 +40,18 @@ public class AutoDriveTrain extends CommandBase {
 
     @Override
     public void execute() {
-        if(!rotate180) {
-            if(direction) {
+        if (!rotate180) {
+            if (direction) {
                 driveTrain.arcadeDrive(0.2, 0);
-    
+
             } else {
                 driveTrain.arcadeDrive(-0.2, 0);
-    
+
             }
         } else {
             driveTrain.arcadeDrive(0, .2);
         }
-        
+
     }
 
     @Override

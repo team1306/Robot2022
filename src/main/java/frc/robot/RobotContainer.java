@@ -108,24 +108,28 @@ public class RobotContainer {
         autoCommand2 = new AutoDriveTrain(driveTrain, 3, true, false)
             .beforeStarting(new AutoShooter(shooter, 2, 5, -1));
         autoCommand3 = new AutoDriveTrain(driveTrain, 1.25, false, false)
-            .andThen(new AutoDriveTrain(driveTrain, .5, false, false)).alongWith(new AutoShooter(shooter, 1.80, 0, -.8))
+            .andThen(new AutoDriveTrain(driveTrain, .5, false, false))
+            .alongWith(new AutoShooter(shooter, 1.80, 0, -.8))
             .andThen(new AutoDriveTrain(driveTrain, 1.75, true, false))
             .andThen(new AutoDriveTrain(driveTrain, 1.60, false, true))
             .andThen(new AutoDriveTrain(driveTrain, 2, false, false))
             .andThen(new AutoShooter(shooter, .25, 0, 1))
             .andThen(new AutoShooter(shooter, 3, 4, -1));
-        autoCommand4 = new AutoDriveTrain(driveTrain, 5, true, false)
-            .beforeStarting(new AutoShooter(shooter, 3, 4, 1));
+        autoCommand4 = new AutoShooter(shooter, 3, 5, -1)
+            .andThen(new AutoDriveTrain(driveTrain, 1.75, true, false))
+            .andThen(new AutoShooter(shooter, 0.6, 0, 0))
+            .andThen(new AutoDriveTrain(driveTrain, .5, false, true));
+
 
         // revBoard = new REVDigitBoard();
 
         // new IndexCommand(indexInput, new Index());
         m_chooser = new SendableChooser<Command>();
 
-        m_chooser.setDefaultOption("Primary", autoCommand);
-        m_chooser.addOption("Secondary", autoCommand2);
-        m_chooser.addOption("Fancy", autoCommand3);
-        m_chooser.addOption("Push", autoCommand4);
+        m_chooser.setDefaultOption("Close Shot", autoCommand);
+        m_chooser.addOption("Far Shot", autoCommand2);
+        m_chooser.addOption("Two Ball Auto", autoCommand3);
+        m_chooser.addOption("Three Ball Auto", autoCommand4);
 
         SmartDashboard.putData(m_chooser);
     }
