@@ -116,8 +116,8 @@ public class RobotContainer {
             .andThen(new AutoShooter(shooter, .25, 0, 1))
             .andThen(new AutoShooter(shooter, 3, 4, -1));
         autoCommand4 = new AutoShooter(shooter, 3, 5, -1)
-            .andThen(new AutoDriveTrain(driveTrain, 1.75, true, false))
-            .andThen(new AutoShooter(shooter, 0.6, 0, 0))
+            .andThen(new AutoDriveTrain(driveTrain, 1.8, true, false))
+            .andThen(new AutoShooter(shooter, 0.55, 0, 0))
             .andThen(new AutoDriveTrain(driveTrain, .5, false, true));
 
 
