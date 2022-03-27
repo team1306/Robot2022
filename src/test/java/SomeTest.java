@@ -37,8 +37,8 @@ public class SomeTest {
 
     @Test
     public void test1() {
-        var x = new AutonomousCommand(dtrain, shooter).beforeStarting(new AutoShooter(shooter, 2))
-            .andThen(new AutoShooter(shooter, 2));
+        var x = new AutonomousCommand(dtrain, shooter).beforeStarting(new AutoShooter(shooter, 2, 2, 1))
+            .andThen(new AutoShooter(shooter, 2, 2, 1));
         x.schedule();
         CommandScheduler.getInstance().run();
         CommandScheduler.getInstance().run();

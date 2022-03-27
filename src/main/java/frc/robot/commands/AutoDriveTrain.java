@@ -7,11 +7,15 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoDriveTrain extends CommandBase {
     private DriveTrain driveTrain;
     private Timer timer;
+    private boolean direction;
     private double timeoutS;
+    private boolean rotate180;
 
-    public AutoDriveTrain(DriveTrain driveTrain, double timeoutS) {
+    public AutoDriveTrain(DriveTrain driveTrain, double timeoutS, boolean direction, boolean rotate180) {
         this.timeoutS = timeoutS;
+        this.direction = direction;
         this.driveTrain = driveTrain;
+        this.rotate180 = rotate180;
         this.addRequirements(driveTrain);
     }
 
@@ -23,7 +27,18 @@ public class AutoDriveTrain extends CommandBase {
 
     @Override
     public void execute() {
-        driveTrain.arcadeDrive(0.2, 0);
+        if(!rotate180) {
+            if(direction) {
+                driveTrain.arcadeDrive(0.2, 0);
+    
+            } else {
+                driveTrain.arcadeDrive(-0.2, 0);
+    
+            }
+        } else {
+            driveTrain.arcadeDrive(0, .2);
+        }
+        
     }
 
     @Override

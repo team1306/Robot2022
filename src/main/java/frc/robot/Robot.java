@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 // import frc.robot.Constants;
 // import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.utils.REVDigitBoard;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
     // private static Command testCommand = null;
 
     private RobotContainer m_robotContainer;
+
     // public static Command driveCommand;
 
     // public static Intake intake = null;
@@ -42,7 +44,25 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+        System.out.print("ROBOT INITIALIZED");
         // autocmd = m_robotContainer.getAutonomousCommand();
+
+        // Before we press "ENABLE", hold down one or both buttons -- after robot has initialized,
+        // the button setting cannot be changed
+        // if(!revBoard.getButtonA() && !revBoard.getButtonB()) {
+        //     revBoard.display("3");
+        //     autoNum = 3;
+        // } else
+        // if(!revBoard.getButtonA()) {
+        //     revBoard.display("1");
+        //     autoNum = 1;
+        // } else 
+        // if(!revBoard.getButtonB()) {
+        //     revBoard.display("2");
+        //     autoNum = 2;
+        // } else {
+        //     revBoard.display("NONE");
+        // }
     }
 
     /**
@@ -63,6 +83,19 @@ public class Robot extends TimedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        
+        // if(!revBoard.getButtonA() && !revBoard.getButtonB()) {
+        //     revBoard.display("BOTH");
+        // } else
+        // if(!revBoard.getButtonA()) {
+        //     revBoard.display("A");
+        // } else 
+        // if(!revBoard.getButtonB()) {
+        //     revBoard.display("B");
+        // } else {
+        //     revBoard.display("NONE");
+        // }
+
     }
 
     /**
@@ -80,7 +113,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         System.out.println("autonomousInit() RAN");
-        m_robotContainer.startAuto();
+        m_robotContainer.startAuto(); 
     }
 
     /**
@@ -95,13 +128,15 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         System.out.println("teleopInit() RAAAAAANNN");
         m_robotContainer.startTeleop();
+
     }
 
     /**
      * This function is called periodically during operator control.
      */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
     @Override
     public void testInit() {

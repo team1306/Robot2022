@@ -25,7 +25,7 @@ import com.kauailabs.navx.frc.AHRS;
  * shell code for autonomous command
  */
 @SuppressWarnings("unused")
-public class AutonomousCommand extends RamseteCommand {
+public class TestAutoCommand extends RamseteCommand {
 
     DriveTrain driveTrain;
     Shooter shooter;
@@ -57,7 +57,8 @@ public class AutonomousCommand extends RamseteCommand {
         // ),
         List.of(
             new Pose2d(0, 0, new Rotation2d(0)),
-            new Pose2d(100, 0, new Rotation2d(0))
+            new Pose2d(-4, 0, new Rotation2d(0)),
+            new Pose2d(0, 0, new Rotation2d(0))
         ),
         config
     );
@@ -78,7 +79,7 @@ public class AutonomousCommand extends RamseteCommand {
     /**
      * initializes autonomous command
      */
-    public AutonomousCommand(DriveTrain driveTrain, Shooter shooter) {
+    public TestAutoCommand(DriveTrain driveTrain, Shooter shooter) {
         super(
             trajectory1,
             driveTrain::getPose,

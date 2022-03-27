@@ -20,7 +20,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
     // on the robot, "kicker" was connected to the controller w/ "ind"
     private final CANSparkMax frontShooter, shooterKicker, backShooter;
     private final WPI_TalonSRX frontIndex, backIndex;
-    private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3;
+    private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3, NEAR_AUTO = 4, FAR_AUTO = 5;
     private double previousIntakeFront = 0, previousIntakeBack = 0;
 
 
@@ -61,8 +61,8 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 break;
             case NEAR:
                 System.out.print("near  ");
-                backShooter.set(-.5);
-                frontShooter.set(-.6);
+                backShooter.set(-.525);
+                frontShooter.set(-.625);
                 shooterKicker.set(-.5);
                 break;
             case FAR:
@@ -73,6 +73,17 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 backShooter.set(-.9); // original (with no problems?) back = -.9, front = -.7
                 frontShooter.set(-.7);
                 shooterKicker.set(-.7);
+                break;
+            case NEAR_AUTO:
+                System.out.print("near  ");
+                backShooter.set(-.5);
+                frontShooter.set(-.6);
+                shooterKicker.set(-.5);
+                break;
+            case FAR_AUTO: 
+                backShooter.set(-1);
+                frontShooter.set(-.6);
+                shooterKicker.set(-.8);
                 break;
             default:
                 throw new Error("invalid state (wutchu doin over there?)");
@@ -95,8 +106,8 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         previousIntakeBack = limitAcceleration(bspeed, previousIntakeBack);
 
         System.out.printf("%.03f %.03f\n", previousIntakeFront, previousIntakeBack);
-        frontIndex.set(previousIntakeFront);
-        backIndex.set(previousIntakeBack);
+        frontIndex.set(-previousIntakeFront);
+        backIndex.set(-previousIntakeBack);
     }
 
     public double limitAcceleration(

@@ -19,14 +19,14 @@ public class MotorUtils {
     public static WPI_TalonSRX initWPITalonSRX(int motorID) {
         var motor = new WPI_TalonSRX(motorID);
         motor.configFactoryDefault();
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.setNeutralMode(NeutralMode.Coast);
         return motor;
     }
 
     public static TalonFX initTalonFX(int motorID) {
         var motor = new TalonFX(motorID);
         motor.configFactoryDefault();
-        motor.setNeutralMode(NeutralMode.Coast);
+        motor.setNeutralMode(NeutralMode.Brake);
         return motor;
     }
 

@@ -51,34 +51,17 @@ public class DriveCommand extends CommandBase {
         double rotation = -joystickRotation.get();
 
         if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
-            driveTrain.arcadeDrive(backwardsTurbo.get() - forwardTurbo.get(), rotation);
+        spd = .65 * (backwardsTurbo.get() - forwardTurbo.get());
         } else {
-            if (Math.abs(spd) > .05) {
-                spd = spd * Math.abs(spd);
-
-            } else {
-                spd = 0;
-            }
-
-            SmartDashboard.putNumber("Speed", spd);
-            // spd = 1.0 / 6 * Math.signum(spd) + 5.0 / 6 * spd * Math.abs(spd);
-
-            // if (Math.abs(rotation) > .2)
-            // rotation = .2 + (rotation - .2) * Math.abs(rotation - .2);
-
-            // spd *= Math.abs(spd);
-            rotation *= Math.abs(rotation);
-            if (useJoystickRotation) {
-                // double addedTriggerSpeed = rightRotation.get() - leftRotation.get();
-                // double targetSpeed = Math.copySign(Math.max(Math.abs(spd), Math.abs(addedTriggerSpeed)), spd);
-                driveTrain.arcadeDrive(.25 * spd, .25 * rotation);
-            } else {
-                driveTrain.arcadeDrive(.25 * spd, .25 * rotation);
-
-            }
+           spd = 0;
         }
 
+        if(Math.abs(rotation) < .05) {
+            rotation = 0;
+        }
 
+        SmartDashboard.putNumber("Target Speed Drive Command", spd);
+        driveTrain.arcadeDrive(spd, rotation);
 
     }
 
