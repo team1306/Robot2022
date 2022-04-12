@@ -217,13 +217,19 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         return distance;
     }
 
+    int disp, vel;
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Acceleration in x", accelerometer.getX());
+        // SmartDashboard.putNumber("Acceleration in x", accelerometer.getX());
+
+        // sketchy distance
+        vel += accelerometer.getX();
+        disp += vel;
 
         m_odometry.update(new Rotation2d(), getLeftDistance(), getRightDistance());
 
-        SmartDashboard.putNumber("Movement in x", m_odometry.getPoseMeters().getX());
+        // SmartDashboard.putNumber("Movement in x", m_odometry.getPoseMeters().getX());
     }
 
     public Pose2d getPose() {
@@ -237,11 +243,11 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         double leftSpeed = leftLeader.getSelectedSensorVelocity()
             * (10.0 / 2048 / 5.88) // dm -> m, et -> rot, gear ratio
             * Constants.WHEEL_CIRCUMFERENCE;
-        SmartDashboard.putNumber("leftSpeed", leftSpeed);
+        // SmartDashboard.putNumber("leftSpeed", leftSpeed);
         double rightSpeed = rightLeader.getSelectedSensorVelocity()
             * (10.0 / 2048 / 5.88)
             * Constants.WHEEL_CIRCUMFERENCE;
-        SmartDashboard.putNumber("rightSpeed", rightSpeed);
+        // SmartDashboard.putNumber("rightSpeed", rightSpeed);
 
         return new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
     }
@@ -259,8 +265,8 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     public void tankDriveVolts(double lVolts, double rVolts) {
         leftLeader.set(ControlMode.PercentOutput, lVolts / 12.0 * (46.0 / 48.0));
         rightLeader.set(ControlMode.PercentOutput, rVolts / 12.0);
-        SmartDashboard.putNumber("lVolts", lVolts);
-        SmartDashboard.putNumber("rVolts", rVolts);
+        // SmartDashboard.putNumber("lVolts", lVolts);
+        // SmartDashboard.putNumber("rVolts", rVolts);
     }
 
     /**

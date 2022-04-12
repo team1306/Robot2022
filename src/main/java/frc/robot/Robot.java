@@ -8,16 +8,17 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 // import frc.robot.Constants;
 // import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.utils.REVDigitBoard;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
 
     private RobotContainer m_robotContainer;
 
+    public static AHRS navx;
+
     // public static Command driveCommand;
 
     // public static Intake intake = null;
@@ -45,7 +48,10 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+        navx = new AHRS();
+        // the 2 USB camera streams
         CameraServer.startAutomaticCapture();
+
         System.out.print("ROBOT INITIALIZED");
         // autocmd = m_robotContainer.getAutonomousCommand();
 
@@ -98,6 +104,9 @@ public class Robot extends TimedRobot {
         // revBoard.display("NONE");
         // }
 
+        SmartDashboard.putNumber("Rotation", navx.getYaw());
+
+
     }
 
     /**
@@ -131,13 +140,17 @@ public class Robot extends TimedRobot {
         System.out.println("teleopInit() RAAAAAANNN");
         m_robotContainer.startTeleop();
 
+
     }
 
     /**
      * This function is called periodically during operator control.
      */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+
+
+    }
 
     @Override
     public void testInit() {

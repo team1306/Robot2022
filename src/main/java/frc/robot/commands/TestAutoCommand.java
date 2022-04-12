@@ -103,7 +103,7 @@ public class TestAutoCommand extends RamseteCommand {
 
     @Override
     public void execute() {
-        shooter.moveMotor(state, 0, true);
+        shooter.moveMotor(state, 0, true, -1);
         super.execute();
     }
 }

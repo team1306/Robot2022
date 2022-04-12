@@ -1,45 +1,55 @@
 {
   "MainWindow": {
     "GLOBAL": {
-      "height": "1017",
+      "height": "1001",
       "maximized": "1",
       "style": "0",
       "userScale": "2",
       "width": "1920",
       "xpos": "0",
-      "ypos": "23"
+      "ypos": "29"
     }
   },
   "Window": {
+    "###/LiveWindow/Shooter": {
+      "Collapsed": "0",
+      "Pos": "238,355",
+      "Size": "256,98"
+    },
     "###FMS": {
       "Collapsed": "0",
       "Pos": "5,540",
-      "Size": "235,169"
+      "Size": "281,190"
     },
     "###Joysticks": {
       "Collapsed": "0",
-      "Pos": "250,465",
-      "Size": "796,240"
+      "Pos": "397,582",
+      "Size": "976,82"
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "250,277",
-      "Size": "750,185"
+      "Pos": "540,98",
+      "Size": "750,383"
     },
     "###Other Devices": {
       "Collapsed": "0",
       "Pos": "1504,185",
       "Size": "250,695"
     },
+    "###RoboRIO": {
+      "Collapsed": "0",
+      "Pos": "36,336",
+      "Size": "141,164"
+    },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "5,350",
-      "Size": "192,218"
+      "Pos": "227,65",
+      "Size": "232,254"
     },
     "###Timing": {
       "Collapsed": "0",
       "Pos": "5,150",
-      "Size": "135,150"
+      "Size": "162,168"
     },
     "Debug##Default": {
       "Collapsed": "0",
@@ -49,7 +59,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "5,20",
-      "Size": "92,99"
+      "Size": "109,114"
     }
   }
 }

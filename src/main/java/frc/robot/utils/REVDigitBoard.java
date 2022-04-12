@@ -28,7 +28,7 @@ public class REVDigitBoard {
 	AnalogInput pot;
 
 	byte[][] charreg;
-	Map charmap;
+	Map<Character, Integer> charmap;
 
 	public REVDigitBoard() {
 		i2c = new I2C(Port.kMXP, 0x70);
@@ -173,17 +173,15 @@ public class REVDigitBoard {
 		str = repeat(' ', Math.max(0, 4 - str.length())) + str.toUpperCase(); // pad it to 4 chars
 
 		for (int i = 0; i < 4; i++) {
-			Integer g = (int) charmap.get(str.charAt(i));
-			if (g == null) {
-				g = 36;
-			}
-			charz[i] = g;
+			charz[i] = charmap.getOrDefault(str.charAt(i), 36);;
 		}
 		this._display(charz);
 	}
 
 	public void display(double batt) { // optimized for battery voltage, needs a double like 12.34
-		int[] charz = { 36, 36, 36, 36 };
+		int[] charz = {
+			36, 36, 36, 36
+		};
 		// idk how to decimal point
 		int ten = (int) (batt / 10);
 		int one = (int) (batt % 10);
@@ -200,7 +198,9 @@ public class REVDigitBoard {
 	}
 
 	void clear() {
-		int[] charz = { 36, 36, 36, 36 }; // whyy java
+		int[] charz = {
+			36, 36, 36, 36
+		}; // whyy java
 		this._display(charz);
 	}
 
