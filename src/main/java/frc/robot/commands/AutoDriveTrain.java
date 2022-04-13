@@ -6,15 +6,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
-public class AutoDriveTrain extends CommandBase {
+public class AutoDriveTrain extends TimedCommand {
     private DriveTrain driveTrain;
-    private Timer timer;
     private boolean direction;
-    private double timeoutS;
-
-    public static final int DRIVE = 0, TIMED_ROTATION = 1, TARGET_ROTATION = 2;
-    private int state;
+    // public static final int DRIVE = 0, TIMED_ROTATION = 1, TARGET_ROTATION = 2;
+    private DriveState state;
     private double targetRotation;
+
+    public static enum DriveState {
+        DRIVE, TIMED_ROTATION, TARGET_ROTATION
+    }
 
 
 
@@ -34,21 +35,15 @@ public class AutoDriveTrain extends CommandBase {
         DriveTrain driveTrain,
         double timeoutS,
         boolean direction,
-        int state,
+        DriveState state,
         double targetRotation
     ) {
-        this.timeoutS = timeoutS;
+        super(timeoutS);
         this.direction = direction;
         this.driveTrain = driveTrain;
         this.addRequirements(driveTrain);
         this.state = state;
         this.targetRotation = targetRotation;
-    }
-
-    @Override
-    public void initialize() {
-        timer = new Timer();
-        timer.start();
     }
 
     /**
@@ -115,10 +110,5 @@ public class AutoDriveTrain extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         driveTrain.arcadeDrive(0, 0);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return timer.hasElapsed(timeoutS);
     }
 }
