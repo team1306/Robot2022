@@ -188,7 +188,13 @@ public class RobotContainer {
         m_chooser.addOption("Two Ball Auto", autoCommand3);
         m_chooser.addOption("Three Ball Auto", autoCommand4);
 
-        max_speed.setDefaultOption(".65", .65);
+        max_speed.setDefaultOption(".25", .25);
+        max_speed.addOption(".3", .3);
+        max_speed.addOption(".35", .35);
+        max_speed.addOption(".4", .4);
+        max_speed.addOption(".45", .45);
+        max_speed.addOption(".5 ", .5);
+        max_speed.addOption(".65", .65);
         max_speed.addOption(".7", .7);
         max_speed.addOption(".75", .75);
         max_speed.addOption(".8", .8);
@@ -208,8 +214,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
-        backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
-        forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
+        // backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
+        // forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
         joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
 
 
