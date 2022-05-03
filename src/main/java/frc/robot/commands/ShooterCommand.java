@@ -12,7 +12,7 @@ public class ShooterCommand extends CommandBase {
     private final Shooter shooter;
     private final UserDigital dump, near, far;
     private final UserDigital stall;
-    private final UserAnalog intake;
+    private final UserAnalog intake, kickerUp, kickerDown;
     private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3;
 
     /**
@@ -28,8 +28,12 @@ public class ShooterCommand extends CommandBase {
         UserDigital near,
         UserDigital far,
         UserDigital stall,
-        UserAnalog intake
+        UserAnalog intake,
+        UserAnalog kickerUp,
+        UserAnalog kickerDown
     ) {
+        this.kickerDown = kickerDown;
+        this.kickerUp = kickerUp;
         this.shooter = shooter;
         this.addRequirements(shooter);
         this.dump = dump;
@@ -52,7 +56,7 @@ public class ShooterCommand extends CommandBase {
             state = OFF;
         }
         // System.out.println(state);
-        shooter.moveMotor(state, intake.get(), stall.get());
+        shooter.moveMotor(state, intake.get(), stall.get(), kickerUp.get() - kickerDown.get());
     }
 
 }

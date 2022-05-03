@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.utils.UserAnalog;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -16,7 +17,7 @@ public class DriveCommand extends CommandBase {
     private UserAnalog backwardsTurbo;
     private UserAnalog forwardTurbo;
     private UserAnalog joystickRotation;
-    private boolean useJoystickRotation = true;
+    private double max_spd = .65;
 
     /**
      * initalizes drive command from given drivetrain, speed, and rotation
@@ -50,18 +51,25 @@ public class DriveCommand extends CommandBase {
         double spd = speed.get();
         double rotation = -joystickRotation.get();
 
-        if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
-        spd = .65 * (backwardsTurbo.get() - forwardTurbo.get());
+        if (RobotContainer.RC_MAX_SPEED < .65 || RobotContainer.RC_MAX_SPEED > 1) {
+            max_spd = .75;
         } else {
-           spd = 0;
+            max_spd = RobotContainer.RC_MAX_SPEED;
         }
 
-        if(Math.abs(rotation) < .05) {
+        if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
+            spd = max_spd * (backwardsTurbo.get() - forwardTurbo.get());
+        } else {
+            spd = 0;
+        }
+
+        if (Math.abs(rotation) < .05) {
             rotation = 0;
         }
 
-        SmartDashboard.putNumber("Target Speed Drive Command", spd);
-        driveTrain.arcadeDrive(spd, rotation);
+        // SmartDashboard.putNumber("Target Speed Drive Command", spd);
+        // SmartDashboard.putNumber("max speed mult", max_spd);
+        driveTrain.arcadeDrive(spd, .8 * rotation);
 
     }
 

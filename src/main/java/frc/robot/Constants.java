@@ -24,6 +24,8 @@ public interface Constants {
     int SHOOTER_KICKER_ID = 7;
     int FRONT_INDEX_ID = 4;
     int BACK_INDEX_ID = 3;
+    int EXTERNAL_INTAKE_ID = 10;
+
 
     int DRIVE_RIGHT_LEADER_ID = 5;
     int DRIVE_RIGHT_FOLLOWER_ID = 6;

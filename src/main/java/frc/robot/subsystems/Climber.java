@@ -15,7 +15,6 @@ import frc.robot.utils.UserDigital;
 /**
  * Used by climber command to climber up monkey bars
  */
-// TODO everything
 @SuppressWarnings("unused")
 public class Climber extends SubsystemBase {
     private TalonFX motor;
@@ -40,8 +39,6 @@ public class Climber extends SubsystemBase {
         motor.setSelectedSensorPosition(0);
         this.lowerBound = motor.getSelectedSensorPosition() + 5000;
         this.upperBound = 185000;
-        SmartDashboard.putNumber("LowerBound, Climber", lowerBound);
-        SmartDashboard.putNumber("UpperBound, Climber", upperBound);
         this.limitClimber = true;
 
     }
@@ -53,18 +50,14 @@ public class Climber extends SubsystemBase {
      * @param analogInput the velocity at which the robot will move
      */
     public void extend(double userAnalog, boolean isManual, boolean limitClimber) {
-        //if the button is pressed the climber should no longer be limited
-
-        SmartDashboard.putBoolean("isClimberLimited", limitClimber);
-
-        SmartDashboard.putNumber("Climber Height, Climber", motor.getSelectedSensorPosition());
-        //trying to go up and encoder thinks we are above the highest position -> stop
-        if(userAnalog < 0 && motor.getSelectedSensorPosition() > upperBound && !limitClimber) {
+        // if the button is pressed the climber should no longer be limited
+        // trying to go up and encoder thinks we are above the highest position -> stop
+        if (userAnalog < 0 && motor.getSelectedSensorPosition() > upperBound && !limitClimber) {
             userAnalog = 0;
         }
 
-        //trying to go down and the encoder thinks we are below the starting position -> stop
-        if(userAnalog > 0 && motor.getSelectedSensorPosition() < lowerBound && !limitClimber) {
+        // trying to go down and the encoder thinks we are below the starting position -> stop
+        if (userAnalog > 0 && motor.getSelectedSensorPosition() < lowerBound && !limitClimber) {
             userAnalog = 0;
         }
 

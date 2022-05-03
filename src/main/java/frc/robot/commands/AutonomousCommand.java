@@ -55,10 +55,7 @@ public class AutonomousCommand extends RamseteCommand {
         // new Pose2d(0, 4, new Rotation2d(Math.PI / 2)),
         // new Pose2d(0, 0, new Rotation2d(Math.PI / 2))
         // ),
-        List.of(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            new Pose2d(100, 0, new Rotation2d(0))
-        ),
+        List.of(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(100, 0, new Rotation2d(0))),
         config
     );
     // Start on posision D facing ball 4. Collect ball 4 and move to position E facing the goal.
@@ -102,7 +99,7 @@ public class AutonomousCommand extends RamseteCommand {
 
     @Override
     public void execute() {
-        shooter.moveMotor(state, 0, true);
+        shooter.moveMotor(state, 0, true, 1);
         super.execute();
     }
 }
