@@ -51,11 +51,8 @@ public class DriveCommand extends CommandBase {
         double spd = speed.get();
         double rotation = -joystickRotation.get();
 
-        if (RobotContainer.RC_MAX_SPEED < .65 || RobotContainer.RC_MAX_SPEED > 1) {
-            max_spd = .75;
-        } else {
-            max_spd = RobotContainer.RC_MAX_SPEED;
-        }
+        // RC_MAX_SPEED is the max speed set in Shuffle Board
+        max_spd = RobotContainer.RC_MAX_SPEED > 1 ? .75 : RobotContainer.RC_MAX_SPEED;
 
         if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
             spd = max_spd * (backwardsTurbo.get() - forwardTurbo.get());
