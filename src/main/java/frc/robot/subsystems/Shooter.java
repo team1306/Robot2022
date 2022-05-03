@@ -71,52 +71,57 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 // System.out.print("low : ");
                 backShooter.set(-.3);
                 frontShooter.set(-.2);
+                shooterKicker.set(-.5);
                 break;
             case NEAR:
                 // System.out.print("near ");
                 backShooter.set(-.525);
                 frontShooter.set(-.625);
-                if (kicker > .05) {
-                    shooterKicker.set(-.5);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.5);
-                } else {
-                    shooterKicker.set(0);
-                }
+                shooterKicker.set(-.5);
+                // if (kicker > .05) {
+                //     shooterKicker.set(-.5);
+                // } else if (kicker < -.05) {
+                //     shooterKicker.set(.5);
+                // } else {
+                //     shooterKicker.set(0);
+                // }
                 break;
             case FAR:
                 backShooter.set(-1); // original (with no problems?) back = -.9, front = -.7
                 frontShooter.set(-.6);
-                if (kicker > .05) {
-                    shooterKicker.set(-.7);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.7);
-                } else {
-                    shooterKicker.set(0);
-                }
+                shooterKicker.set(-.7);
+                // if (kicker > .05) {
+                //     shooterKicker.set(-.7);
+                // } else if (kicker < -.05) {
+                //     shooterKicker.set(.7);
+                // } else {
+                //     shooterKicker.set(0);
+                // }
                 break;
             case NEAR_AUTO:
                 // System.out.print("near auto");
                 backShooter.set(-.5);
                 frontShooter.set(-.60);
-                if (kicker > .05) {
-                    shooterKicker.set(-.5);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.5);
-                } else {
-                    shooterKicker.set(0);
-                }
+                shooterKicker.set(-.5);
+                // if (kicker > .05) {
+                //     shooterKicker.set(-.5);
+                // } else if (kicker < -.05) {
+                //     shooterKicker.set(.5);
+                // } else {
+                //     shooterKicker.set(0);
+                // }
                 break;
             case FAR_AUTO:
                 backShooter.set(-1);
                 frontShooter.set(-.6);
-                if (kicker > .05) {
-                    shooterKicker.set(-.8);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.8);
-                } else {
-                    shooterKicker.set(0);
-                }
+                shooterKicker.set(-.8);
+                // if (kicker > .05) {
+                //     shooterKicker.set(-.8);
+                // } else if (kicker < -.05) {
+                //     shooterKicker.set(.8);
+                // } else {
+                //     shooterKicker.set(0);
+                // }
                 break;
             default:
                 throw new Error("invalid state (wutchu doin over there?)");

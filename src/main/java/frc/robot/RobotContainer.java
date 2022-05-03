@@ -220,12 +220,12 @@ public class RobotContainer {
 
 
         // either A button pressed
-        intakeInput = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_LY);
-        dumpShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_X);
-        nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_LTRIGGER);
-        farShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_RTRIGGER);
-        kickerUp = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RTRIGGER);
-        kickerDown = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_LTRIGGER);
+        intakeInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
+        dumpShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
+        nearShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_RBUMPER);
+        farShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LTRIGGER);
+        // kickerUp = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RTRIGGER);
+        // kickerDown = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_LTRIGGER);
 
 
 
