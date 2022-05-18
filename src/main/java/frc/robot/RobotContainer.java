@@ -177,9 +177,18 @@ public class RobotContainer {
         kickerUp = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RTRIGGER);
         kickerDown = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_LTRIGGER);
 
-
+        backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
+        forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
+        joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
 
         climberInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
+
+        var pstall = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
+        var sstall = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
+        stall = () -> false;// sstall.get() || pstall.get();
+        // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
+        // shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
+        // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
 
         limitClimber = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_START);
     }
