@@ -62,6 +62,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
             case DUMP: // shoot low
                 backShooter.set(-.3);
                 frontShooter.set(-.2);
+                shooterKicker.set(-.5);
                 break;
             case NEAR:
                 backShooter.set(-.525);
