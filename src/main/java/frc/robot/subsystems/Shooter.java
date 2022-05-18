@@ -24,8 +24,6 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
     private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3, NEAR_AUTO = 4, FAR_AUTO = 5;
     private double previousIntakeFront = 0, previousIntakeBack = 0;
 
-
-
     /**
      * Initialize Shooter and configure motors
      */
@@ -33,12 +31,9 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         frontIndex = initWPITalonSRX(Constants.FRONT_INDEX_ID);
         backIndex = initWPITalonSRX(Constants.BACK_INDEX_ID);
 
-        // externalIndex = initSparkMax(Constants.EXTERNAL_INTAKE_ID);
         frontShooter = initSparkMax(Constants.FRONT_SHOOTER_ID);
         shooterKicker = initSparkMax(Constants.SHOOTER_KICKER_ID);
         backShooter = initSparkMax(Constants.BACK_SHOOTER_ID);
-        // // probably doesnt factor in gearing
-        // REVPhysicsSim.getInstance().addSparkMax(backMotor, DCMotor.getNEO(1));
     }
 
     /**
@@ -50,77 +45,47 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
      * @param kicker     whether kicker is turning or no
      */
     public void moveMotor(int shootState, double intake, boolean stall, double kicker) {
-        // System.out.println(List.of(shootState, intake, stall));
 
-        if (kicker > .05) {
-            shooterKicker.set(-.7);
-        } else if (kicker < -.05) {
-            shooterKicker.set(.7);
-        } else {
-            shooterKicker.set(0);
-        }
+        int sign = 0;
+        if (kicker > .05)
+            sign = -1;
+        if (kicker < -.05)
+            sign = 1;
+
+        double kickerMag = .7;
 
         switch (shootState) {
             case OFF:
-                // System.out.println("off");
                 backShooter.set(0);
                 frontShooter.set(0);
-
                 break;
             case DUMP: // shoot low
-                // System.out.print("low : ");
                 backShooter.set(-.3);
                 frontShooter.set(-.2);
                 break;
             case NEAR:
-                // System.out.print("near ");
                 backShooter.set(-.525);
                 frontShooter.set(-.625);
-                if (kicker > .05) {
-                    shooterKicker.set(-.5);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.5);
-                } else {
-                    shooterKicker.set(0);
-                }
+                kickerMag = .5;
                 break;
             case FAR:
                 backShooter.set(-1); // original (with no problems?) back = -.9, front = -.7
                 frontShooter.set(-.6);
-                if (kicker > .05) {
-                    shooterKicker.set(-.7);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.7);
-                } else {
-                    shooterKicker.set(0);
-                }
                 break;
             case NEAR_AUTO:
                 // System.out.print("near auto");
                 backShooter.set(-.5);
                 frontShooter.set(-.60);
-                if (kicker > .05) {
-                    shooterKicker.set(-.5);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.5);
-                } else {
-                    shooterKicker.set(0);
-                }
+                kickerMag = .5;
                 break;
             case FAR_AUTO:
                 backShooter.set(-1);
                 frontShooter.set(-.6);
-                if (kicker > .05) {
-                    shooterKicker.set(-.8);
-                } else if (kicker < -.05) {
-                    shooterKicker.set(.8);
-                } else {
-                    shooterKicker.set(0);
-                }
-                break;
+                kickerMag = .8;
             default:
-                throw new Error("invalid state (wutchu doin over there?)");
+                throw new Error("invalid state");
         }
+        shooterKicker.set(sign * kickerMag);
 
         // desired right and left speeds
         double fspeed, bspeed;
@@ -135,13 +100,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
         previousIntakeFront = limitAcceleration(fspeed, previousIntakeFront);
         previousIntakeBack = limitAcceleration(bspeed, previousIntakeBack);
-
-        // SmartDashboard.putNumber("kicker", kicker);
-
-
-        // System.out.printf("%.03f %.03f\n", previousIntakeFront, previousIntakeBack);
         frontIndex.set(-previousIntakeFront);
-        // externalIndex.set(-previousIntakeFront);
         backIndex.set(-previousIntakeBack);
     }
 

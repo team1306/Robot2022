@@ -4,8 +4,6 @@
 
 import org.junit.*;
 
-import frc.robot.commands.AutoShooter;
-import frc.robot.commands.AutonomousCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.hal.HAL;
@@ -37,12 +35,6 @@ public class SomeTest {
 
     @Test
     public void test1() {
-        // var x = new AutonomousCommand(dtrain, shooter)
-        // .beforeStarting(new AutoShooter(shooter, 2, 2, 1, true))
-        // .andThen(new AutoShooter(shooter, 2, 2, 1, true));
-        // x.schedule();
-        CommandScheduler.getInstance().run();
-        CommandScheduler.getInstance().run();
         CommandScheduler.getInstance().run();
     }
 }

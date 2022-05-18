@@ -92,10 +92,6 @@ public class test {
     }
 
     public static void main(String[] args) {
-        try (var drive = new DriveTrain()) {
-            drive.adjustedArcadeDrive(1, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 }

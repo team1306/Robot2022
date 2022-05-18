@@ -1,14 +1,15 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
+/**
+ * autnomous command for shooter, controlling shooting state, kicker state, and speed of intaking
+ */
 public class AutoShooter extends TimedCommand {
     private Shooter shooter;
     private double intakeSpeed;
 
-    // public static final int NOT_SHOOTING = 0, NEAR = 4, FAR = 5;
+    // shooter states
     public static enum ShootState {
         NOT_SHOOTING, NEAR, FAR
     }
@@ -17,11 +18,13 @@ public class AutoShooter extends TimedCommand {
     private boolean kicker;
 
     /**
+     * creates auto shooter command with given inputs
      * 
-     * @param shooter
-     * @param timeoutS    number of seconds the command should run for
-     * @param state       0 is off, 4 is close, 5 is far
-     * @param intakeSpeed speed at which it should be intaking
+     * @param shooter     shooter to bind
+     * @param timeoutS    timeout in seconds0
+     * @param state       what type of shot
+     * @param intakeSpeed speed of intake
+     * @param kicker      whether the kicker should run
      */
     public AutoShooter(
         Shooter shooter,

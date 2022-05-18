@@ -29,15 +29,10 @@ public class Robot extends TimedRobot {
 
     public static DriveTrain driveTrain;
     public static RamseteCommand autocmd;
-    // private static Command testCommand = null;
 
     private RobotContainer m_robotContainer;
 
     public static AHRS navx;
-
-    // public static Command driveCommand;
-
-    // public static Intake intake = null;
 
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.

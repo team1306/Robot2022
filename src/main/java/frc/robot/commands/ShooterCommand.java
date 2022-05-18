@@ -6,7 +6,7 @@ import frc.robot.utils.UserAnalog;
 import frc.robot.utils.UserDigital;
 
 /**
- * template command for shooter subsystem
+ * omnibus command for all things relating to the shooter subsystem. shot precedence order : near > far > dump
  */
 public class ShooterCommand extends CommandBase {
     private final Shooter shooter;
@@ -16,11 +16,16 @@ public class ShooterCommand extends CommandBase {
     private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3;
 
     /**
-     * @param shooter
-     * @param dump
-     * @param near
-     * @param far
-     * @param intake
+     * creates shooter command from given inputs
+     * 
+     * @param shooter    shooter to bind
+     * @param dump       whether to dump (near, low)
+     * @param near       whether to take a near high shot
+     * @param far        whether to take a far high shot
+     * @param stall      whether to stall ball (currently unused*)
+     * @param intake     whether to intake the ball
+     * @param kickerUp   speed to move kicker up
+     * @param kickerDown speed to move kicker down
      */
     public ShooterCommand(
         Shooter shooter,
@@ -55,7 +60,6 @@ public class ShooterCommand extends CommandBase {
         } else {
             state = OFF;
         }
-        // System.out.println(state);
         shooter.moveMotor(state, intake.get(), stall.get(), kickerUp.get() - kickerDown.get());
     }
 

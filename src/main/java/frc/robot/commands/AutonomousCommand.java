@@ -22,7 +22,7 @@ import java.util.List;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
- * shell code for autonomous command
+ * another autonomous command using trajectories (unused)
  */
 @SuppressWarnings("unused")
 public class AutonomousCommand extends RamseteCommand {

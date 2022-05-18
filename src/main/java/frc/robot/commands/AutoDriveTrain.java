@@ -1,9 +1,6 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
@@ -94,7 +91,6 @@ public class AutoDriveTrain extends TimedCommand {
 
     @Override
     public void execute() {
-        // SmartDashboard.putNumber("STATE", 430 /*why 430*/);
         switch (state) {
             case DRIVE:
                 drive();

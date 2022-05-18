@@ -88,9 +88,11 @@ public class RobotContainer {
         Controller.init();
         configureButtonBindings();
 
+        // initalize subsystems
         driveTrain = new DriveTrain();
         shooter = new Shooter();
         climber = new Climber();
+        // initialize commands
         driveCommand = new DriveCommand(
             driveTrain,
             speedDriveTrain,
@@ -111,7 +113,6 @@ public class RobotContainer {
         );
 
         climberCommand = new ClimberCommand(climber, climberInput, limitClimber);
-        // var auto = new AutoCommandFactory(driveTrain, shooter);
         // close 1 ball auto
         autoCommand = new AutoDriveTrain(driveTrain, 3, true, DriveState.DRIVE, 0)
             .beforeStarting(new AutoShooter(shooter, 3, ShootState.NEAR, -1, true));
@@ -119,29 +120,6 @@ public class RobotContainer {
         // far 1 ball auto
         autoCommand2 = new AutoDriveTrain(driveTrain, 3, true, DriveState.DRIVE, 0)
             .beforeStarting(new AutoShooter(shooter, 2, ShootState.FAR, -1, true));
-
-        // 2 ball auto (pain)
-
-        // drive foward(?)
-        // autoCommand3 = new AutoDriveTrain(driveTrain, .25, false, DriveState.DRIVE, 0)
-        // // drive forward and intake
-        // .andThen(
-        // new AutoDriveTrain(driveTrain, 1.75, false, DriveState.DRIVE, 0)
-        // .alongWith(new AutoShooter(shooter, 1.75, ShootState.NOT_SHOOTING, -.8, false))
-        // )
-        // // drive back
-        // .andThen(new AutoDriveTrain(driveTrain, 2, true, DriveState.DRIVE, 0))
-        // // rotate (left?) around 180 deg
-        // .andThen(new AutoDriveTrain(driveTrain, 1.5, false, DriveState.TIMED_ROTATION, 0))
-        // // drive forward
-        // .andThen(new AutoDriveTrain(driveTrain, 2, false, DriveState.DRIVE, 0))
-        // // move cargo down (allow motors to spin up)
-        // .andThen(new AutoShooter(shooter, .25, ShootState.NOT_SHOOTING, 1, false))
-        // .andThen(new AutoDriveTrain(driveTrain, .20, true, DriveState.DRIVE, 0))
-        // .andThen(new AutoDriveTrain(driveTrain, .05, false, DriveState.DRIVE, 0))
-        // .andThen(new AutoShooter(shooter, .5, ShootState.NOT_SHOOTING, 0, false))
-        // // bring cargo up and run shooter
-        // .andThen(new AutoShooter(shooter, 3, ShootState.NEAR, -1, true));
 
         autoCommand3 = new AutoDriveTrain(driveTrain, .25, false, DriveState.DRIVE, 0)
             // drive forward and intake
@@ -157,36 +135,12 @@ public class RobotContainer {
                 new AutoShooter(shooter, .5, ShootState.NOT_SHOOTING, 0, false),
                 new AutoShooter(shooter, 3, ShootState.NEAR, -1, true)
             );
-
-        // try for 3 ball auto (lol no)
-        autoCommand4 = new WaitCommand(1);
-        // new AutoDriveTrain(
-        // driveTrain,
-        // 15,
-        // false,
-        // DriveState.TARGET_ROTATION,
-        // -40
-        // );
-
-
-        // experimental
-        // autoCommand4 = auto.shoot(3, ShootState.FAR) // shoot
-        // .andThen(
-        // auto.drive(1.8, false),
-        // auto.wait(.55),
-        // auto.turn(.5)
-        // );
-
-        // revBoard = new REVDigitBoard();
-
-        // new IndexCommand(indexInput, new Index());
-        m_chooser = new SendableChooser<Command>();
-        max_speed = new SendableChooser<Double>();
+        m_chooser = new SendableChooser<>();
+        max_speed = new SendableChooser<>();
 
         m_chooser.setDefaultOption("Close Shot", autoCommand);
         m_chooser.addOption("Far Shot", autoCommand2);
         m_chooser.addOption("Two Ball Auto", autoCommand3);
-        m_chooser.addOption("Three Ball Auto", autoCommand4);
 
         max_speed.setDefaultOption(".25", .25);
         max_speed.addOption(".3", .3);
@@ -214,12 +168,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
-        // backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
-        // forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
         joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
 
-
-        // either A button pressed
         intakeInput = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_LY);
         dumpShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_X);
         nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_LTRIGGER);
@@ -230,13 +180,8 @@ public class RobotContainer {
 
 
         climberInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
-        // both bumpers pressed
 
         limitClimber = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_START);
-
-        // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
-        // shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
-        // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
     }
 
     /**
@@ -257,17 +202,19 @@ public class RobotContainer {
      * 
      */
     public void startTeleop() {
-        // This makes sure that the autonomous stops running when teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove this line or comment it out.
         if (RUN_AUTO)
             autoCommand.cancel();
-
         RC_MAX_SPEED = max_speed.getSelected();
         driveCommand.schedule();
         shooterCommand.schedule();
         climberCommand.schedule();
     }
 
+    /**
+     * returns the selected autonomous command
+     * 
+     * @return the selected autonomous command
+     */
     public Command getAutonomousCommand() {
         return m_chooser.getSelected();
     }

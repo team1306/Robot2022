@@ -32,7 +32,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
     private WPI_TalonFX rightLeader;
     private WPI_TalonFX rightFollower;
-    // private AHRS gyro = new AHRS();
+
     private final DifferentialDriveOdometry m_odometry;
     private PIDController controller;
 
@@ -44,7 +44,7 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
 
     /**
-     * Initializing drive train and talonmFX settings
+     * Initializing drive train and talonFX settings
      */
     public DriveTrain() {
         leftLeader = initWPITalonFX(DRIVE_LEFT_LEADER_ID);
@@ -53,33 +53,18 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         rightFollower = initWPITalonFX(DRIVE_RIGHT_FOLLOWER_ID);
 
         accelerometer = new BuiltInAccelerometer();
-        // leftLeader.config_kP(0, .5);
-        // rightLeader.config_kP(0, .5);
 
         leftFollower.follow(leftLeader);
         rightFollower.follow(rightLeader);
 
         m_odometry = new DifferentialDriveOdometry(new Rotation2d());
 
-
-        // leftLeader.config_kP(0, .25);
-        // leftLeader.config_kI(0, 0);
-        // leftLeader.config_kD(0, 0);
-        // leftLeader.setControlFramePeriod(0, 20);
-        // leftLeader.configClosedloopRamp(1);
-
-        // rightLeader.config_kP(0, .25);
-        // rightLeader.config_kI(0, 0);
-        // rightLeader.config_kD(0, 0);
-        // rightLeader.setControlFramePeriod(0, 20);
-        // rightLeader.configClosedloopRamp(1);
-        // gyro.reset();
         previousRightPercentOutput = 0;
         previousLeftPercentOutput = 0;
     }
 
     /**
-     * Sets the talonmFX speeds for the given speed and rotation
+     * Sets the talonFX speeds for the given speed and rotation
      * 
      * @param speed    speed from a joystick input
      * @param rotation rotation from joystick triggers
@@ -110,9 +95,6 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
         leftMotorOutput = limitAcceleration(leftMotorOutput, previousLeftPercentOutput);
         rightMotorOutput = limitAcceleration(rightMotorOutput, previousRightPercentOutput);
-
-
-        System.out.printf("left: %.02f, right : %.02f\n", leftMotorOutput, rightMotorOutput);
 
         leftLeader.set(-leftMotorOutput);
         rightLeader.set(rightMotorOutput);
@@ -158,8 +140,8 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     /**
      * Test the lead motors and folowing motors test to see if initialization process for setting 'following' is correct
      * 
-     * @param left  left talonmFX output
-     * @param right right talonmFX output
+     * @param left  left talonFX output
+     * @param right right talonFX output
      */
     public void testDrive(double left, double right) {
         leftLeader.set(ControlMode.PercentOutput, left);
@@ -169,10 +151,10 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     /**
      * testing method for eaching individual talonmFX only works if constructor does not set follow
      * 
-     * @param leftFront   left front talonmFX output
-     * @param rightFront  right front talonmFX output
-     * @param leftFollow  left follow talonmFX output
-     * @param rightFollow right followe talonmFX output
+     * @param leftFront   left front talonFX output
+     * @param rightFront  right front talonFX output
+     * @param leftFollow  left follow talonFX output
+     * @param rightFollow right followe talonFX output
      */
     public void testMotors(
         double leftFront,
@@ -219,6 +201,9 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
 
     int disp, vel;
 
+    /**
+     * periodically update odometry
+     */
     @Override
     public void periodic() {
         // SmartDashboard.putNumber("Acceleration in x", accelerometer.getX());
@@ -232,10 +217,20 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         // SmartDashboard.putNumber("Movement in x", m_odometry.getPoseMeters().getX());
     }
 
+    /**
+     * returns current position in meters
+     * 
+     * @return current possition in meters
+     */
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
 
+    /**
+     * returns the speed of the wheel
+     * 
+     * @return the wheel speed in encoder ticks per 100 ms
+     */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         // encoder ticks per 100 ms
         // rotations per second
@@ -252,16 +247,28 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
         return new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
     }
 
+    /**
+     * resets the position of the odometry
+     * 
+     * @param pose new position of robot
+     */
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
         m_odometry.resetPosition(pose, new Rotation2d());
     }
 
+
+    /**
+     * resets encoders to 0
+     */
     public void resetEncoders() {
         leftLeader.setSelectedSensorPosition(0);
         rightLeader.setSelectedSensorPosition(0);
     }
 
+    /**
+     * tankdrive w/ given amount of volts
+     */
     public void tankDriveVolts(double lVolts, double rVolts) {
         leftLeader.set(ControlMode.PercentOutput, lVolts / 12.0 * (46.0 / 48.0));
         rightLeader.set(ControlMode.PercentOutput, rVolts / 12.0);
@@ -274,6 +281,8 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
      * the speed forward and rotational speed. Then compare those two speeds to the current speed of the robot, and find
      * the difference between the current speed between the target speed Adjust the target speed based on the current
      * speed and the difference. Basically arcadeDrive.
+     * 
+     * @deprecated
      */
     public void adjustedArcadeDrive(double speed, double rotation) {
         double maxInput = Math.copySign(Math.max(Math.abs(speed), Math.abs(rotation)), speed);

@@ -26,13 +26,11 @@ public interface Constants {
     int BACK_INDEX_ID = 3;
     int EXTERNAL_INTAKE_ID = 10;
 
-
     int DRIVE_RIGHT_LEADER_ID = 5;
     int DRIVE_RIGHT_FOLLOWER_ID = 6;
     int DRIVE_LEFT_LEADER_ID = 8;
     int DRIVE_LEFT_FOLLOWER_ID = 9;
 
-    // TODO set actual climber id
     int CLIMBER_MOTOR_ID = 0;
 
     double CLIMBER_VELOCITY = 0.5;

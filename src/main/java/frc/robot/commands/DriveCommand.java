@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.utils.UserAnalog;
 import frc.robot.RobotContainer;
@@ -20,12 +19,14 @@ public class DriveCommand extends CommandBase {
     private double max_spd = .65;
 
     /**
-     * initalizes drive command from given drivetrain, speed, and rotation
+     * initalizes drive command from given drivetrain, speed, and rotation currently actual speed is back speed - front
+     * speed, then multiplied by the maximum speed
      * 
-     * @param driveTrain    drivetrain to bind
-     * @param speed         initial speed
-     * @param leftRotation  initial left rotation
-     * @param rightRotation initial right rotation
+     * @param driveTrain       drivetrain to bind
+     * @param speed            initial speed
+     * @param backwardsTurbo   speed backwards
+     * @param forwardTurbo     speed forwards
+     * @param joystickRotation joystick input (currently unused)
      */
     public DriveCommand(
         DriveTrain driveTrain,

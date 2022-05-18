@@ -47,7 +47,9 @@ public class Climber extends SubsystemBase {
      * Moves the robot climber up and down when manual mode is on or the height is under the limit In order to start
      * contracting climber after reaching the max height, flip the value when it's over the limit
      * 
-     * @param analogInput the velocity at which the robot will move
+     * @param analogInput  the velocity at which the robot will move
+     * @param isManual     (unused)
+     * @param limitClimber whether climber is limited (unused)
      */
     public void extend(double userAnalog, boolean isManual, boolean limitClimber) {
         // if the button is pressed the climber should no longer be limited
@@ -64,6 +66,11 @@ public class Climber extends SubsystemBase {
         motor.set(ControlMode.PercentOutput, -userAnalog);
     }
 
+    /**
+     * calculate new height (unused)
+     * 
+     * @param velocityPercentage voltage
+     */
     public void calcHeight(double velocityPercentage) {
         height += velocityPercentage; // TODO: Convert percentage to meter or inch?
     }
