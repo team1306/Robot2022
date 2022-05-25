@@ -138,46 +138,6 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     }
 
     /**
-     * Test the lead motors and folowing motors test to see if initialization process for setting 'following' is correct
-     * 
-     * @param left  left talonFX output
-     * @param right right talonFX output
-     */
-    public void testDrive(double left, double right) {
-        leftLeader.set(ControlMode.PercentOutput, left);
-        rightLeader.set(ControlMode.PercentOutput, right);
-    }
-
-    /**
-     * testing method for eaching individual talonmFX only works if constructor does not set follow
-     * 
-     * @param leftFront   left front talonFX output
-     * @param rightFront  right front talonFX output
-     * @param leftFollow  left follow talonFX output
-     * @param rightFollow right followe talonFX output
-     */
-    public void testMotors(
-        double leftFront,
-        double rightFront,
-        double leftFollow,
-        double rightFollow
-    ) {
-        leftLeader.set(ControlMode.PercentOutput, leftFront);
-        rightLeader.set(ControlMode.PercentOutput, rightFront);
-
-        // experimental
-        leftFollower.follow(leftFollower);
-        rightFollower.follow(rightFollower);
-
-        leftFollower.set(ControlMode.PercentOutput, leftFollow);
-        rightFollower.set(ControlMode.PercentOutput, rightFollow);
-
-        // experimental
-        leftFollower.follow(leftLeader);
-        rightFollower.follow(rightLeader);
-    }
-
-    /**
      * take encoder ticks displacement of left wheels and convert into meters
      * 
      * @return displacement of left wheels in meters
@@ -264,16 +224,6 @@ public class DriveTrain extends SubsystemBase implements AutoCloseable {
     public void resetEncoders() {
         leftLeader.setSelectedSensorPosition(0);
         rightLeader.setSelectedSensorPosition(0);
-    }
-
-    /**
-     * tankdrive w/ given amount of volts
-     */
-    public void tankDriveVolts(double lVolts, double rVolts) {
-        leftLeader.set(ControlMode.PercentOutput, lVolts / 12.0 * (46.0 / 48.0));
-        rightLeader.set(ControlMode.PercentOutput, rVolts / 12.0);
-        // SmartDashboard.putNumber("lVolts", lVolts);
-        // SmartDashboard.putNumber("rVolts", rVolts);
     }
 
     /**

@@ -7,19 +7,20 @@
 
 package frc.robot;
 
+import java.util.Map;
 import java.util.ResourceBundle.Control;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.AutoDriveTrain;
-import frc.robot.commands.AutoShooter;
-import frc.robot.commands.AutonomousCommand;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ShooterCommand;
@@ -31,9 +32,6 @@ import frc.robot.utils.UserAnalog;
 import frc.robot.utils.UserDigital;
 import frc.robot.subsystems.Shooter;
 
-import static frc.robot.commands.AutoDriveTrain.DriveState;
-import static frc.robot.commands.AutoShooter.ShootState;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -43,18 +41,12 @@ import static frc.robot.commands.AutoShooter.ShootState;
 @SuppressWarnings("unused")
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private Command autoCommand;
-    private Command autoCommand2;
-    private Command autoCommand3;
-    private Command autoCommand4;
     private Command driveCommand;
     private DriveTrain driveTrain;
     private Shooter shooter;
     private Climber climber;
     private Command climberCommand;
     private Command shooterCommand;
-
-    private final boolean RUN_AUTO = true;
 
     // inputs for drive train
     private UserAnalog speedDriveTrain;
@@ -70,8 +62,7 @@ public class RobotContainer {
     private UserDigital limitClimber;
 
     // private REVDigitBoard revBoard;
-    private SendableChooser<Command> m_chooser;
-    private SendableChooser<Double> max_speed;
+    private NetworkTableEntry max_speed;
 
     public static double RC_MAX_SPEED;
 
@@ -106,59 +97,37 @@ public class RobotContainer {
             dumpShot,
             nearShot,
             farShot,
-            stall,
             intakeInput,
             kickerUp,
             kickerDown
         );
 
         climberCommand = new ClimberCommand(climber, climberInput, limitClimber);
-        // close 1 ball auto
-        autoCommand = new AutoDriveTrain(driveTrain, 3, true, DriveState.DRIVE, 0)
-            .beforeStarting(new AutoShooter(shooter, 3, ShootState.NEAR, -1, true));
 
-        // far 1 ball auto
-        autoCommand2 = new AutoDriveTrain(driveTrain, 3, true, DriveState.DRIVE, 0)
-            .beforeStarting(new AutoShooter(shooter, 2, ShootState.FAR, -1, true));
+        // max_speed = new SendableChooser<>();
 
-        autoCommand3 = new AutoDriveTrain(driveTrain, .25, false, DriveState.DRIVE, 0)
-            // drive forward and intake
-            .andThen(
-                new AutoDriveTrain(driveTrain, 1.75, false, DriveState.DRIVE, 0)
-                    .alongWith(new AutoShooter(shooter, 1.75, ShootState.NOT_SHOOTING, -.8, false)),
-                new AutoDriveTrain(driveTrain, 2, true, DriveState.DRIVE, 0),
-                new AutoDriveTrain(driveTrain, 1.5, false, DriveState.TIMED_ROTATION, 0),
-                new AutoDriveTrain(driveTrain, 2, false, DriveState.DRIVE, 0),
-                new AutoShooter(shooter, .25, ShootState.NOT_SHOOTING, 1, false),
-                new AutoDriveTrain(driveTrain, .20, true, DriveState.DRIVE, 0),
-                new AutoDriveTrain(driveTrain, .05, false, DriveState.DRIVE, 0),
-                new AutoShooter(shooter, .5, ShootState.NOT_SHOOTING, 0, false),
-                new AutoShooter(shooter, 3, ShootState.NEAR, -1, true)
-            );
-        m_chooser = new SendableChooser<>();
-        max_speed = new SendableChooser<>();
+        // max_speed.setDefaultOption(".25", .25);
+        // max_speed.addOption(".3", .3);
+        // max_speed.addOption(".35", .35);
+        // max_speed.addOption(".4", .4);
+        // max_speed.addOption(".45", .45);
+        // max_speed.addOption(".5 ", .5);
+        // max_speed.addOption(".65", .65);
+        // max_speed.addOption(".7", .7);
+        // max_speed.addOption(".75", .75);
+        // max_speed.addOption(".8", .8);
+        // max_speed.addOption(".85", .85);
+        // max_speed.addOption(".9", .9);
+        // max_speed.addOption(".95", .95);
+        // max_speed.addOption("1", 1.0);
 
-        m_chooser.setDefaultOption("Close Shot", autoCommand);
-        m_chooser.addOption("Far Shot", autoCommand2);
-        m_chooser.addOption("Two Ball Auto", autoCommand3);
+        max_speed = Shuffleboard.getTab("SmartDashboard")
+            .add("Max Speed", 1)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
+            .getEntry();
 
-        max_speed.setDefaultOption(".25", .25);
-        max_speed.addOption(".3", .3);
-        max_speed.addOption(".35", .35);
-        max_speed.addOption(".4", .4);
-        max_speed.addOption(".45", .45);
-        max_speed.addOption(".5 ", .5);
-        max_speed.addOption(".65", .65);
-        max_speed.addOption(".7", .7);
-        max_speed.addOption(".75", .75);
-        max_speed.addOption(".8", .8);
-        max_speed.addOption(".85", .85);
-        max_speed.addOption(".9", .9);
-        max_speed.addOption(".95", .95);
-        max_speed.addOption("1", 1.0);
-
-        SmartDashboard.putData(max_speed);
-        SmartDashboard.putData(m_chooser);
+        max_speed.setDouble(.25);
     }
 
     /**
@@ -182,27 +151,7 @@ public class RobotContainer {
         joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
 
         climberInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
-
-        var pstall = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_A);
-        var sstall = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
-        stall = () -> false;// sstall.get() || pstall.get();
-        // shooterMainInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LBUMPER);
-        // shooterSubInput = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_A);
-        // indexInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
-
         limitClimber = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_START);
-    }
-
-    /**
-     * called when autonomous is started should create all commands that are used in auto
-     */
-    public void startAuto() {
-        autoCommand = getAutonomousCommand();
-        if (RUN_AUTO) {
-            driveCommand.cancel();
-            autoCommand.schedule();
-        }
-        System.out.println("startAuto() IS RUNNING.");
     }
 
     /**
@@ -211,21 +160,11 @@ public class RobotContainer {
      * 
      */
     public void startTeleop() {
-        if (RUN_AUTO)
-            autoCommand.cancel();
-        RC_MAX_SPEED = max_speed.getSelected();
+        RC_MAX_SPEED = max_speed.getDouble(.25);
+        System.out.println("maximum speed " + RC_MAX_SPEED);
         driveCommand.schedule();
         shooterCommand.schedule();
         climberCommand.schedule();
-    }
-
-    /**
-     * returns the selected autonomous command
-     * 
-     * @return the selected autonomous command
-     */
-    public Command getAutonomousCommand() {
-        return m_chooser.getSelected();
     }
 
 }

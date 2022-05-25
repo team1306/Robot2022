@@ -13,11 +13,7 @@ public interface UserDigital {
      * @param flip      - if true, flips the threshold from above = true to above = false
      * @return the constructed object
      */
-    public static UserDigital fromAnalog(
-        UserAnalog analog,
-        double threshold,
-        boolean flip
-    ) {
+    public static UserDigital fromAnalog(UserAnalog analog, double threshold, boolean flip) {
         return () -> (analog.get() >= threshold) ^ flip;
     }
 

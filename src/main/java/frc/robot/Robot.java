@@ -28,7 +28,6 @@ import frc.robot.subsystems.DriveTrain;
 public class Robot extends TimedRobot {
 
     public static DriveTrain driveTrain;
-    public static RamseteCommand autocmd;
 
     private RobotContainer m_robotContainer;
 
@@ -79,15 +78,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {}
-
-    /**
-     * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
-     */
-    @Override
-    public void autonomousInit() {
-        System.out.println("autonomousInit() RAN");
-        m_robotContainer.startAuto();
-    }
 
     /**
      * This function is called periodically during autonomous.

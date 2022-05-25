@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.fasterxml.jackson.core.json.DupDetector;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +22,12 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
     // on the robot, "kicker" was connected to the controller w/ "ind"
     private final CANSparkMax frontShooter, shooterKicker, backShooter;
     private final WPI_TalonSRX frontIndex, backIndex;
-    private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3, NEAR_AUTO = 4, FAR_AUTO = 5;
+    // private final int OFF = 0, DUMP = 1, NEAR = 2, FAR = 3;
+
+    public enum State {
+        OFF, DUMP, NEAR, FAR
+    }
+
     private double previousIntakeFront = 0, previousIntakeBack = 0;
 
     /**
@@ -44,8 +50,8 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
      * @param stall      whether stalling or no
      * @param kicker     whether kicker is turning or no
      */
-    public void moveMotor(int shootState, double intake, boolean stall, double kicker) {
-
+    public void moveMotor(State shootState, double intake, double kicker) {
+        // deadzone
         int sign = 0;
         if (kicker > .05)
             sign = -1;
@@ -73,16 +79,6 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
                 backShooter.set(-1); // original (with no problems?) back = -.9, front = -.7
                 frontShooter.set(-.6);
                 break;
-            case NEAR_AUTO:
-                // System.out.print("near auto");
-                backShooter.set(-.5);
-                frontShooter.set(-.60);
-                kickerMag = .5;
-                break;
-            case FAR_AUTO:
-                backShooter.set(-1);
-                frontShooter.set(-.6);
-                kickerMag = .8;
             default:
                 throw new Error("invalid state");
         }
@@ -90,10 +86,11 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
         // desired right and left speeds
         double fspeed, bspeed;
-        if (stall) {
-            fspeed = 1;
-            bspeed = -1;
-        } else if (Math.abs(intake) > 0.05) {
+        // if (stall) {
+        // fspeed = 1;
+        // bspeed = -1;
+        // } else
+        if (Math.abs(intake) > 0.05) {
             fspeed = bspeed = intake;
         } else {
             fspeed = bspeed = 0;
