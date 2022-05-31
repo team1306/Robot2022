@@ -45,7 +45,7 @@ public class RobotContainer {
     private DriveTrain driveTrain;
     private Shooter shooter;
     private Climber climber;
-    private Command climberCommand;
+    // private Command climberCommand;
     private Command shooterCommand;
 
     // inputs for drive train
@@ -55,11 +55,12 @@ public class RobotContainer {
     private UserAnalog joystickRotationDriveTrain;
     // intake / shooter
     private UserDigital dumpShot, nearShot, farShot;
-    private UserDigital stall;
-    private UserAnalog intakeInput, kickerUp, kickerDown;
+    // private UserDigital stall;
+    private UserAnalog intakeInput;
+    // private UserAnalog kickerUp, kickerDown;
     // climber
-    private UserAnalog climberInput;
-    private UserDigital limitClimber;
+    // private UserAnalog climberInput;
+    // private UserDigital limitClimber;
 
     // private REVDigitBoard revBoard;
     private NetworkTableEntry max_speed;
@@ -97,12 +98,10 @@ public class RobotContainer {
             dumpShot,
             nearShot,
             farShot,
-            intakeInput,
-            kickerUp,
-            kickerDown
-        );
+            intakeInput
+          );
 
-        climberCommand = new ClimberCommand(climber, climberInput, limitClimber);
+        // climberCommand = new ClimberCommand(climber, climberInput, limitClimber);
 
         // max_speed = new SendableChooser<>();
 
@@ -134,24 +133,25 @@ public class RobotContainer {
      * Use this method to define your button->command mappings. Buttons can be created by instantiating a
      * {@link GenericHID} or one of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}),
      * and then passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * 
+     * Key-mapping: https://files.slack.com/files-pri/T039KM2HD-F03D53RR4Q4/image_from_ios.jpg
      */
     private void configureButtonBindings() {
         speedDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LY);
         joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
 
-        intakeInput = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_LY);
-        dumpShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_X);
-        nearShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_LTRIGGER);
-        farShot = Controller.simpleButton(Controller.SECONDARY, Controller.BUTTON_RTRIGGER);
-        kickerUp = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_RTRIGGER);
-        kickerDown = Controller.simpleAxis(Controller.SECONDARY, Controller.AXIS_LTRIGGER);
+        intakeInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
+        dumpShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_X);
+        nearShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_LTRIGGER);
+        farShot = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_RTRIGGER);
+        // kickerUp = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
+        // kickerDown = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
 
         backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
-        forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
-        joystickRotationDriveTrain = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LX);
+        // forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
 
-        climberInput = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RY);
-        limitClimber = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_START);
+        // climberInput = Controller.simpleAxis(Controller.PRIMARY, Controller);
+        // limitClimber = Controller.simpleButton(Controller.PRIMARY, Controller.BUTTON_START);
     }
 
     /**
@@ -164,7 +164,7 @@ public class RobotContainer {
         System.out.println("maximum speed " + RC_MAX_SPEED);
         driveCommand.schedule();
         shooterCommand.schedule();
-        climberCommand.schedule();
+        // climberCommand.schedule();
     }
 
 }
