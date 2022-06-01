@@ -13,8 +13,8 @@ public class DriveCommand extends CommandBase {
     private UserAnalog speed;
     // private UserAnalog rightSpeed;
     private DriveTrain driveTrain;
-    private UserAnalog backwardsTurbo;
-    private UserAnalog forwardTurbo;
+    // private UserAnalog backwardsTurbo;
+    // private UserAnalog forwardTurbo;
     private UserAnalog joystickRotation;
     private double max_spd = .65;
 
@@ -31,15 +31,15 @@ public class DriveCommand extends CommandBase {
     public DriveCommand(
         DriveTrain driveTrain,
         UserAnalog speed,
-        UserAnalog backwardsTurbo,
-        UserAnalog forwardTurbo,
+        // UserAnalog backwardsTurbo,
+        // UserAnalog forwardTurbo,
         UserAnalog joystickRotation
     ) {
         this.speed = speed;
         this.driveTrain = driveTrain;
         this.addRequirements(driveTrain);
-        this.backwardsTurbo = backwardsTurbo;
-        this.forwardTurbo = forwardTurbo;
+        // this.backwardsTurbo = backwardsTurbo;
+        // this.forwardTurbo = forwardTurbo;
         this.joystickRotation = joystickRotation;
     }
 
@@ -50,16 +50,16 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
         double spd = speed.get();
+        spd *= Math.abs(spd);
         double rotation = -joystickRotation.get();
 
         // RC_MAX_SPEED is the max speed set in Shuffle Board
         max_spd = RobotContainer.RC_MAX_SPEED > 1 ? .75 : RobotContainer.RC_MAX_SPEED;
 
-        if (Math.abs(forwardTurbo.get() - backwardsTurbo.get()) > .05) {
-            spd = max_spd * (backwardsTurbo.get() - forwardTurbo.get());
-        } else {
+        if (Math.abs(spd) < .05) {
             spd = 0;
         }
+        spd = spd * max_spd;
 
         if (Math.abs(rotation) < .05) {
             rotation = 0;

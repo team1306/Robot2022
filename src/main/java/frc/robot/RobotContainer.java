@@ -50,8 +50,8 @@ public class RobotContainer {
 
     // inputs for drive train
     private UserAnalog speedDriveTrain;
-    private UserAnalog backwardsTurbo;
-    private UserAnalog forwardTurbo;
+    // private UserAnalog backwardsTurbo;
+    // private UserAnalog forwardTurbo;
     private UserAnalog joystickRotationDriveTrain;
     // intake / shooter
     private UserDigital dumpShot, nearShot, farShot;
@@ -85,21 +85,9 @@ public class RobotContainer {
         shooter = new Shooter();
         climber = new Climber();
         // initialize commands
-        driveCommand = new DriveCommand(
-            driveTrain,
-            speedDriveTrain,
-            backwardsTurbo,
-            forwardTurbo,
-            joystickRotationDriveTrain
-        );
+        driveCommand = new DriveCommand(driveTrain, speedDriveTrain, joystickRotationDriveTrain);
 
-        shooterCommand = new ShooterCommand(
-            shooter,
-            dumpShot,
-            nearShot,
-            farShot,
-            intakeInput
-          );
+        shooterCommand = new ShooterCommand(shooter, dumpShot, nearShot, farShot, intakeInput);
 
         // climberCommand = new ClimberCommand(climber, climberInput, limitClimber);
 
@@ -147,7 +135,7 @@ public class RobotContainer {
         // kickerUp = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
         // kickerDown = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
 
-        backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
+        // backwardsTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_LTRIGGER);
         // forwardTurbo = Controller.simpleAxis(Controller.PRIMARY, Controller.AXIS_RTRIGGER);
 
         // climberInput = Controller.simpleAxis(Controller.PRIMARY, Controller);
